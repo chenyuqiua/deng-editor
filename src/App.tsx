@@ -1,11 +1,9 @@
-
 function App() {
-
   return (
-   <div className="flex flex-col items-center justify-center w-fit">
-    <div>test</div>
-    <div>tailwind</div>
-   </div>
+    <div className="flex w-fit flex-col items-center justify-center">
+      <div>test</div>
+      <div>tailwind</div>
+    </div>
   )
 }
 
