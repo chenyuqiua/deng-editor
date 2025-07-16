@@ -16,6 +16,13 @@ export const Stage = memo((props: IProps) => {
       height: 200,
       fps: 30,
     },
+    timeline: {
+      assets: {},
+      elements: {},
+      tracks: [],
+      fonts: [],
+    },
+    tracks: [],
   }
 
   return (
