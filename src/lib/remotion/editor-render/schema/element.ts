@@ -15,46 +15,44 @@ export const BaseElementSchema = z.object({
   name: z.string().optional(),
 })
 
-export const DisplayElementSchema = BaseElementSchema.extend(
-  z.object({
-    /**
-     * display size width, undefined if width is auto
-     */
-    width: z.number().optional(),
-    /**
-     * display size width, undefined if height is auto
-     */
-    height: z.number().optional(),
-    /** right is positive */
-    x: z.number(),
-    /** down is positive */
-    y: z.number(),
-    scaleX: z.number(),
-    scaleY: z.number(),
-    /** right rotate is positive */
-    rotate: z.number(),
+export const DisplayElementSchema = BaseElementSchema.extend({
+  /**
+   * display size width, undefined if width is auto
+   */
+  width: z.number().optional(),
+  /**
+   * display size width, undefined if height is auto
+   */
+  height: z.number().optional(),
+  /** right is positive */
+  x: z.number(),
+  /** down is positive */
+  y: z.number(),
+  scaleX: z.number(),
+  scaleY: z.number(),
+  /** right rotate is positive */
+  rotate: z.number(),
 
-    anchor: PointSchema.partial().optional(),
+  anchor: PointSchema.partial().optional(),
 
-    /** @link https://www.figma.com/design/0Sdnz2WXtpX3xV72CtIPkJ/editor-tech-design?node-id=34-10&t=c5iv1f1cTu4JRwql-4 */
-    crop: RectSchema.optional(),
-    /**
-     * a path or shape name: like circle; circle:50%,50%;  path:z1...;
-     * @link https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path
-     */
-    shape: z.string().optional(),
-    /** @link https://developer.mozilla.org/en-US/docs/Web/CSS/filter */
-    filter: z.string().optional(),
-    blendMode: z.string().optional(),
-    /** opacity 0-1 */
-    opacity: z.number().optional(),
-    assetFit: z.enum(['cover', 'contain', 'fill', 'contain_blur']).optional(),
-    animation: AllAnimationSchema.optional(),
-    /** full screen mask, value as style */
-    mask: z.string().optional(),
-    background: z.string().optional(),
-  })
-)
+  /** @link https://www.figma.com/design/0Sdnz2WXtpX3xV72CtIPkJ/editor-tech-design?node-id=34-10&t=c5iv1f1cTu4JRwql-4 */
+  crop: RectSchema.optional(),
+  /**
+   * a path or shape name: like circle; circle:50%,50%;  path:z1...;
+   * @link https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path
+   */
+  shape: z.string().optional(),
+  /** @link https://developer.mozilla.org/en-US/docs/Web/CSS/filter */
+  filter: z.string().optional(),
+  blendMode: z.string().optional(),
+  /** opacity 0-1 */
+  opacity: z.number().optional(),
+  assetFit: z.enum(['cover', 'contain', 'fill', 'contain_blur']).optional(),
+  animation: AllAnimationSchema.optional(),
+  /** full screen mask, value as style */
+  mask: z.string().optional(),
+  background: z.string().optional(),
+})
 
 export const ImageElementSchema = DisplayElementSchema.extend({
   type: z.literal('image'),
@@ -87,6 +85,7 @@ export const AllElementSchema = z.discriminatedUnion('type', [
 
 export type BaseElement = z.infer<typeof BaseElementSchema>
 export type DisplayElement = z.infer<typeof DisplayElementSchema>
+
 export type ImageElement = z.infer<typeof ImageElementSchema>
 export type TextElement = z.infer<typeof TextElementSchema>
 export type AudioElement = z.infer<typeof AudioElementSchema>

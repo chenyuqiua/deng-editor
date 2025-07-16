@@ -9,8 +9,7 @@ export const SizeSchema = z.object({
   width: z.number(),
   height: z.number(),
 })
-
-export const RectSchema = PointSchema.extend(SizeSchema)
+export const RectSchema = PointSchema.extend(SizeSchema.shape)
 
 export type Point = z.infer<typeof PointSchema>
 export type Size = z.infer<typeof SizeSchema>
