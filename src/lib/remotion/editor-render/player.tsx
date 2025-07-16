@@ -1,12 +1,12 @@
-import { memo, useState } from 'react'
 import {
   Player as RemotionPlayer,
   type PlayerRef as RemotionPlayerRef,
 } from '@remotion/player'
+import { memo, useState } from 'react'
 import { RenderPropsSchema, Renderer } from './renderer'
 
 export const EditorPlayer = memo(() => {
-  const [_, setPlayer] = useState<RemotionPlayerRef | null>(null)
+  const [player, setPlayer] = useState<RemotionPlayerRef | null>(null)
   const width = 400
   const height = 200
 

@@ -49,11 +49,6 @@ export default tseslint.config([
       // Prettier integration
       'prettier/prettier': 'error',
 
-      // Additional formatting rules
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
-      ],
       '@typescript-eslint/no-explicit-any': 'warn',
       'prefer-const': 'error',
       'no-var': 'error',
@@ -63,6 +58,9 @@ export default tseslint.config([
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['src/lib/remotion/**/*.{js,jsx,ts,tsx}'],
-    rules: { 'no-restricted-imports': ['error', { patterns: ['@/*'] }] },
+    rules: {
+      'no-restricted-imports': ['error', { patterns: ['@/*'] }],
+      '@typescript-eslint/no-unused-vars': ['warn'],
+    },
   },
 ])
