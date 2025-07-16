@@ -3,6 +3,8 @@ import { AbsoluteFill } from 'remotion'
 import z from 'zod'
 import { DraftDataSchema } from './schema/draft'
 import { useGetElements } from './hook/use-get-elements'
+import { AudioElement, DisplayElement } from './component/container'
+import { getAssetByElement } from './util/draft'
 export const RenderPropsSchema = z.object({ draft: DraftDataSchema })
 
 export const Renderer = memo((props: z.infer<typeof RenderPropsSchema>) => {
@@ -12,11 +14,16 @@ export const Renderer = memo((props: z.infer<typeof RenderPropsSchema>) => {
 
   return (
     <AbsoluteFill>
-      {displayElements.map(i => {
-        return <div key={i.id}>{i.type}</div>
+      {displayElements.map(element => {
+        const asset = getAssetByElement(draft, element)
+        return (
+          <DisplayElement key={element.id} element={element} asset={asset} />
+        )
       })}
-      {audioElements.map(i => {
-        return <div key={i.id}>{i.type}</div>
+      {audioElements.map(element => {
+        const asset = getAssetByElement(draft, element)
+        if (!asset) return null
+        return <AudioElement key={element.id} element={element} asset={asset} />
       })}
     </AbsoluteFill>
   )

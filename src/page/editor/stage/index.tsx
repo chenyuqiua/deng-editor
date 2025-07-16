@@ -37,7 +37,7 @@ export const Stage = memo((props: IProps) => {
         test_audio_1: {
           type: 'audio',
           id: 'test_audio_1',
-          assetId: 'test_image_1',
+          assetId: 'test_audio_1',
           start: 0,
           length: 2,
         },
