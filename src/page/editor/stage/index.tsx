@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { EditorPlayer } from '../../../lib/remotion/editor-render/player'
 import { cn } from '../../../util/css'
-import type { DraftDataType } from '../../../lib/remotion/editor-render/schema/draft'
+import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
+import { EditorPlayer } from '@/lib/remotion/editor-render/player'
 
 interface IProps {
   className?: string
