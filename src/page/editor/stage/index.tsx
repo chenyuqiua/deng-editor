@@ -10,6 +10,7 @@ export const Stage = memo((props: IProps) => {
   const { className } = props
 
   const draft = {
+    name: 'test',
     meta: {
       width: 400,
       height: 200,

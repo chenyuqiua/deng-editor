@@ -8,8 +8,8 @@ import {
   useState,
   type ComponentPropsWithoutRef,
 } from 'react'
-import type { DraftDataType } from '../schema/draft'
 import { RenderPropsSchema, Renderer } from './renderer'
+import type { DraftDataType } from './schema/draft'
 
 type EditorPlayerProps = Omit<
   ComponentPropsWithoutRef<typeof RemotionPlayer>,
