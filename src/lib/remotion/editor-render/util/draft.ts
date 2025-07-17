@@ -33,10 +33,10 @@ export const shallowWalkTracksElement = (
  * @param type 要匹配的类型
  * @returns 是否匹配
  */
-export const checkElementType = (
+export const checkElementType = <T extends AllElementTypeAttribute>(
   element: { type: AllElementTypeAttribute | string } | undefined,
-  type: AllElementTypeAttribute
-) => {
+  type: T
+): element is AllElement & { type: T } => {
   if (!element) return false
   return element.type === type
 }
@@ -54,4 +54,19 @@ export const getAssetByElement = (
   const assetId = element.assetId
   if (!assetId) return undefined
   return draft.timeline.assets[assetId]
+}
+
+export const getTrimProps = (element: AllElement, fps: number) => {
+  const target = { startFrom: undefined, endAt: undefined, ...element }
+  const res: Partial<{ startFrom: number; endAt: number }> = {}
+
+  if (target.startFrom !== undefined) {
+    res.startFrom = Math.floor(target.startFrom * fps)
+  }
+
+  if (target.endAt !== undefined) {
+    res.endAt = Math.ceil(target.endAt * fps) + 1 // need add 1 frame for end, else will be white screen on end
+  }
+
+  return res
 }

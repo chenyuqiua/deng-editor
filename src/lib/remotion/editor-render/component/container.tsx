@@ -1,6 +1,9 @@
 import { memo, type ReactNode } from 'react'
 import type { AllAsset } from '../schema/asset'
-import type { AllElement } from '../schema/element'
+import type {
+  AllElement,
+  AudioElement as AudioElementType,
+} from '../schema/element'
 import type { AllElementTypeAttribute } from '../schema/util'
 import { AudioRenderer } from './audio-renderer'
 import { ImageRenderer } from './image-renderer'
@@ -23,7 +26,7 @@ export const DisplayElement = memo((props: IDisplayElementProps) => {
 })
 
 interface IAudioElementProps {
-  element: AllElement
+  element: AudioElementType
   asset: AllAsset
 }
 

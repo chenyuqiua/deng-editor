@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import type { DraftDataType } from '../schema/draft'
 import { checkElementType, shallowWalkTracksElement } from '../util/draft'
-import type { AllElement } from '../schema/element'
+import type { AllElement, AudioElement } from '../schema/element'
 
 export const useGetElements = (draft: DraftDataType) => {
   return useMemo(() => {
     const displayElements: AllElement[] = []
-    const audioElements: AllElement[] = []
+    const audioElements: AudioElement[] = []
     shallowWalkTracksElement(draft, draft.timeline.tracks, element => {
       if (checkElementType(element, 'audio')) {
         audioElements.push(element)
