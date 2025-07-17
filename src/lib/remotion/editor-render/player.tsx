@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { RenderPropsSchema, Renderer } from './renderer'
 import type { DraftDataType } from './schema/draft'
+import { calcDraftDurationInFrames } from './util/draft'
 
 type EditorPlayerProps = Omit<
   ComponentPropsWithoutRef<typeof RemotionPlayer>,
@@ -35,6 +36,8 @@ export const EditorPlayer = memo(
     const [player, setPlayer] = useState<RemotionPlayerRef | null>(null)
     const { width, height, fps } = draft.meta
 
+    const durationInFrames = calcDraftDurationInFrames(draft)
+
     return (
       <RemotionPlayer
         ref={setPlayer}
@@ -43,6 +46,7 @@ export const EditorPlayer = memo(
         component={Renderer}
         compositionWidth={width}
         compositionHeight={height}
+        fps={fps}
         style={{
           maxHeight: '100%',
           maxWidth: '100%',
@@ -50,8 +54,7 @@ export const EditorPlayer = memo(
           aspectRatio: `${width} / ${height}`,
           ...style,
         }}
-        durationInFrames={60}
-        fps={fps}
+        durationInFrames={durationInFrames}
         acknowledgeRemotionLicense
         {...rest}
       />

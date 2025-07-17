@@ -1,0 +1,81 @@
+import type { DraftDataType } from '../schema/draft'
+
+export const testDraft: DraftDataType = {
+  name: 'test',
+  meta: {
+    width: 400,
+    height: 200,
+    fps: 30,
+  },
+  timeline: {
+    assets: {
+      test_image_1: {
+        type: 'image',
+        width: 200,
+        height: 600,
+        id: 'test_image_1',
+        src: 'https://cdn.pixabay.com/photo/2025/06/10/11/21/view-9651981_640.jpg',
+      },
+      test_image_2: {
+        type: 'image',
+        width: 400,
+        height: 800,
+        id: 'test_image_2',
+        src: 'https://cdn.pixabay.com/photo/2023/05/11/16/25/hall-7986771_640.jpg',
+      },
+      test_audio_1: {
+        id: 'test_audio_1',
+        type: 'audio',
+        src: 'https://dpbavq092lwjh.cloudfront.net/accent_preview_/el-89ef22bc-f051-48e5-82df-70a828406b4d_s.mp3',
+        duration: 2,
+      },
+    },
+    elements: {
+      test_audio_1: {
+        type: 'audio',
+        id: 'test_audio_1',
+        assetId: 'test_audio_1',
+        start: 2,
+        length: 2,
+      },
+      test_image_1: {
+        type: 'image',
+        id: 'test_image_1',
+        assetId: 'test_image_1',
+        start: 0,
+        length: 1,
+        width: 200,
+        height: 300,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        rotate: 0,
+      },
+      test_image_2: {
+        type: 'image',
+        id: 'test_image_2',
+        assetId: 'test_image_2',
+        start: 1,
+        length: 1,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        rotate: 0,
+      },
+    },
+    tracks: [
+      {
+        id: 'track-1',
+        type: 'audio',
+        clips: [
+          { elementId: 'test_audio_1' },
+          { elementId: 'test_image_1' },
+          { elementId: 'test_image_2' },
+        ],
+      },
+    ],
+    fonts: [],
+  },
+}

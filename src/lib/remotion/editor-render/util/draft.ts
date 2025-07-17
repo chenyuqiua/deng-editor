@@ -70,3 +70,27 @@ export const getTrimProps = (element: AllElement, fps: number) => {
 
   return res
 }
+
+/**
+ * @description 计算草稿元素的时长，单位为秒
+ * @param draft 草稿数据
+ * @returns 草稿元素的时长，单位为秒
+ */
+export const calcDraftDurationInSeconds = (draft: DraftDataType) => {
+  let duration = 0
+  shallowWalkTracksElement(draft, draft.timeline.tracks, element => {
+    duration = Math.max(duration, element.start + element.length)
+  })
+  return duration
+}
+
+/**
+ * @description 计算草稿元素的时长，单位为帧
+ * @param draft 草稿数据
+ * @returns 草稿元素的时长，单位为帧
+ */
+export const calcDraftDurationInFrames = (draft: DraftDataType) => {
+  const durationSeconds = calcDraftDurationInSeconds(draft)
+  const { fps } = draft.meta
+  return Math.ceil(durationSeconds * fps)
+}
