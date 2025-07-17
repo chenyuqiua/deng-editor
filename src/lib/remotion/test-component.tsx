@@ -24,9 +24,7 @@ export const TestComponent = memo(() => {
         >
           <Img
             draggable={false}
-            src={
-              'https://cdn.pixabay.com/photo/2025/06/10/11/21/view-9651981_640.jpg'
-            }
+            src={'https://cdn.pixabay.com/photo/2025/06/10/11/21/view-9651981_640.jpg'}
             style={{
               userSelect: 'none',
               position: 'relative',

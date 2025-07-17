@@ -21,11 +21,7 @@ export default tseslint.config([
       'react-refresh': reactRefresh,
       prettier: prettierPlugin,
     },
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended,
-      prettierConfig,
-    ],
+    extends: [js.configs.recommended, ...tseslint.configs.recommended, prettierConfig],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -41,10 +37,7 @@ export default tseslint.config([
       ...reactHooks.configs['recommended-latest'].rules,
 
       // React Refresh rules
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
       // Prettier integration
       'prettier/prettier': 'error',

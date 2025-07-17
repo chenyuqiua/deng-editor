@@ -16,9 +16,7 @@ export const Renderer = memo((props: z.infer<typeof RenderPropsSchema>) => {
     <AbsoluteFill>
       {displayElements.map(element => {
         const asset = getAssetByElement(draft, element)
-        return (
-          <DisplayElement key={element.id} element={element} asset={asset} />
-        )
+        return <DisplayElement key={element.id} element={element} asset={asset} />
       })}
       {audioElements.map(element => {
         const asset = getAssetByElement(draft, element)

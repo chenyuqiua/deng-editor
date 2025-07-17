@@ -31,10 +31,7 @@ export const AudioAssetSchema = BaseAssetSchema.extend({
   duration: z.number(),
 })
 
-export const AllAssetSchema = z.discriminatedUnion('type', [
-  ImageAssetSchema,
-  AudioAssetSchema,
-])
+export const AllAssetSchema = z.discriminatedUnion('type', [ImageAssetSchema, AudioAssetSchema])
 
 export type BaseAsset = z.infer<typeof BaseAssetSchema>
 export type SizeAsset = z.infer<typeof SizeAssetSchema>

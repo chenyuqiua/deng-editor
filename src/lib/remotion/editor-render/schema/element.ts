@@ -89,9 +89,7 @@ export const AllDisplayElementSchema = z.discriminatedUnion('type', [
 ])
 
 // 方便未来扩展其他元素audio类型
-export const AllAudioElementSchema = z.discriminatedUnion('type', [
-  AudioElementSchema,
-])
+export const AllAudioElementSchema = z.discriminatedUnion('type', [AudioElementSchema])
 
 export type BaseElement = z.infer<typeof BaseElementSchema>
 export type DisplayElement = z.infer<typeof DisplayElementSchema>

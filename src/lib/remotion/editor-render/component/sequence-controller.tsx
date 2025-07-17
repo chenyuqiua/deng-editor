@@ -17,7 +17,5 @@ export const SequenceController = memo((props: IProps) => {
 
   if (element.hidden || durationFrame <= 0) return null
 
-  return (
-    <Sequence from={startFrame} durationInFrames={durationFrame} {...rest} />
-  )
+  return <Sequence from={startFrame} durationInFrames={durationFrame} {...rest} />
 })

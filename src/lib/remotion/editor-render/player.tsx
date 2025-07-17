@@ -1,13 +1,5 @@
-import {
-  Player as RemotionPlayer,
-  type PlayerRef as RemotionPlayerRef,
-} from '@remotion/player'
-import {
-  forwardRef,
-  memo,
-  useState,
-  type ComponentPropsWithoutRef,
-} from 'react'
+import { Player as RemotionPlayer, type PlayerRef as RemotionPlayerRef } from '@remotion/player'
+import { forwardRef, memo, useState, type ComponentPropsWithoutRef } from 'react'
 import { RenderPropsSchema, Renderer } from './renderer'
 import type { DraftDataType } from './schema/draft'
 import { calcDraftDurationInFrames } from './util/draft'

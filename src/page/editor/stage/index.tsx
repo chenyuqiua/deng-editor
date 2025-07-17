@@ -11,10 +11,8 @@ export const Stage = memo((props: IProps) => {
   const { className } = props
 
   return (
-    <div
-      className={cn('flex size-full items-center justify-center', className)}
-    >
-      <EditorPlayer draft={testDraft} autoPlay loop />
+    <div className={cn('flex size-full items-center justify-center', className)}>
+      <EditorPlayer draft={testDraft} autoPlay />
     </div>
   )
 })
