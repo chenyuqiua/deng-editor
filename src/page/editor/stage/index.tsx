@@ -1,7 +1,7 @@
 import { testDraft } from '@/lib/remotion/editor-render/mock/test-draft'
 import { EditorPlayer } from '@/lib/remotion/editor-render/player'
 import { memo } from 'react'
-import { cn } from '../../../util/css'
+import { cn } from '../../../common/util/css'
 
 interface IProps {
   className?: string

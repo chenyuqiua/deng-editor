@@ -20,13 +20,16 @@
     "@remotion/cli": "4.0.324",
     "@remotion/eslint-plugin": "^4.0.324",
     "@tailwindcss/vite": "^4.1.11",
+    "clsx": "^2.1.1",
+    "immer": "^10.1.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "remotion": "4.0.324",
+    "tailwind-merge": "^3.1.0",
     "tailwindcss": "^4.1.11",
+    "use-zustand": "^0.2.0",
     "zod": "^4.0.5",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.1.0"
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
