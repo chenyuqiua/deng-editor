@@ -83,6 +83,16 @@ export const AllElementSchema = z.discriminatedUnion('type', [
   AudioElementSchema,
 ])
 
+export const AllDisplayElementSchema = z.discriminatedUnion('type', [
+  ImageElementSchema,
+  TextElementSchema,
+])
+
+// 方便未来扩展其他元素audio类型
+export const AllAudioElementSchema = z.discriminatedUnion('type', [
+  AudioElementSchema,
+])
+
 export type BaseElement = z.infer<typeof BaseElementSchema>
 export type DisplayElement = z.infer<typeof DisplayElementSchema>
 
@@ -90,3 +100,5 @@ export type ImageElement = z.infer<typeof ImageElementSchema>
 export type TextElement = z.infer<typeof TextElementSchema>
 export type AudioElement = z.infer<typeof AudioElementSchema>
 export type AllElement = z.infer<typeof AllElementSchema>
+export type AllDisplayElement = z.infer<typeof AllDisplayElementSchema>
+export type AllAudioElement = z.infer<typeof AllAudioElementSchema>

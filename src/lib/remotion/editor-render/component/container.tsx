@@ -1,42 +1,38 @@
-import { memo, type ReactNode } from 'react'
+import { memo } from 'react'
 import type { AllAsset } from '../schema/asset'
-import type {
-  AllElement,
-  AudioElement as AudioElementType,
-} from '../schema/element'
-import type { AllElementTypeAttribute } from '../schema/util'
+import type { AllAudioElement, AllDisplayElement } from '../schema/element'
 import { AudioRenderer } from './audio-renderer'
 import { ImageRenderer } from './image-renderer'
 import { TextRenderer } from './text-renderer'
 
 interface IDisplayElementProps {
-  element: AllElement
+  element: AllDisplayElement
   asset?: AllAsset
 }
 
 export const DisplayElement = memo((props: IDisplayElementProps) => {
   const { element, asset } = props
 
-  const map: Partial<Record<AllElementTypeAttribute, ReactNode>> = {
-    image: <ImageRenderer element={element} asset={asset} />,
-    text: <TextRenderer element={element} />,
-  }
+  const isImage = element.type === 'image' && asset?.type === 'image'
+  const isText = element.type === 'text'
 
-  return map[element.type] || null
+  if (isImage) return <ImageRenderer element={element} asset={asset} />
+  if (isText) return <TextRenderer element={element} />
+
+  return null
 })
 
 interface IAudioElementProps {
-  element: AudioElementType
+  element: AllAudioElement
   asset: AllAsset
 }
 
 export const AudioElement = memo((props: IAudioElementProps) => {
   const { element, asset } = props
 
-  // 方便未来扩展其他元素类型
-  const map: Partial<Record<AllElementTypeAttribute, ReactNode>> = {
-    audio: <AudioRenderer element={element} asset={asset} />,
-  }
+  const isAudio = element.type === 'audio' && asset?.type === 'audio'
 
-  return map[element.type] || null
+  if (isAudio) return <AudioRenderer element={element} asset={asset} />
+
+  return null
 })
