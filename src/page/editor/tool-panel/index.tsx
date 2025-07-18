@@ -2,6 +2,7 @@ import { testDraft } from '@/lib/remotion/editor-render/mock/test-draft'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
 import { useDraftService, usePlayerService } from '../hook/service'
+import { IconPark } from '@/lib/remotion/iconpark'
 
 export const ToolPanel = memo(() => {
   const draftService = useDraftService()
@@ -10,6 +11,7 @@ export const ToolPanel = memo(() => {
 
   return (
     <div className="flex flex-col gap-2">
+      <IconPark icon="all-application" />
       ToolPanel
       <div>{`${JSON.stringify(draft.name)}`}</div>
       <button
