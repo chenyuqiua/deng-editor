@@ -31,4 +31,6 @@ export const DraftDataSchema = z.object({
 })
 
 export type FontType = z.infer<typeof FontSchema>
+export type MetaType = z.infer<typeof MetaSchema>
+export type TimelineType = z.infer<typeof TimelineSchema>
 export type DraftDataType = z.infer<typeof DraftDataSchema>

@@ -5,8 +5,11 @@ import { PlayerService } from './player-service'
 import { IPlayerService } from './player-service.type'
 
 export const getAllServicesForRegister = (): [ServiceIdentifier<unknown>, unknown][] => {
+  const draftService = new DraftService()
+  const playerService = new PlayerService(draftService)
+
   return [
-    [IDraftService, new DraftService()],
-    [IPlayerService, new PlayerService()],
+    [IDraftService, draftService],
+    [IPlayerService, playerService],
   ]
 }
