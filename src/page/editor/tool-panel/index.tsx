@@ -3,6 +3,7 @@ import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
 import { useDraftService, usePlayerService } from '../hook/service'
 import { IconPark } from '@/lib/iconpark'
+import { Button } from '@/component/ui/button'
 
 export const ToolPanel = memo(() => {
   const draftService = useDraftService()
@@ -13,8 +14,8 @@ export const ToolPanel = memo(() => {
     <div className="flex flex-col gap-2">
       <IconPark icon="all-application" />
       ToolPanel
-      <div>{`${JSON.stringify(draft.name)}`}</div>
-      <button
+      <Button>{`${JSON.stringify(draft.name)}`}</Button>
+      <Button
         onClick={() => {
           draftService.setState(s => {
             s.draft.name = '123321'
@@ -22,8 +23,8 @@ export const ToolPanel = memo(() => {
         }}
       >
         btn
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => {
           draftService.setState(s => {
             s.draft = testDraft
@@ -31,14 +32,15 @@ export const ToolPanel = memo(() => {
         }}
       >
         set mock draft
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="secondary"
         onClick={() => {
           playerService.toggle()
         }}
       >
         play
-      </button>
+      </Button>
     </div>
   )
 })
