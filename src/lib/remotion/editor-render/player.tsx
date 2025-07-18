@@ -2,10 +2,10 @@ import { Player as RemotionPlayer, type PlayerRef as RemotionPlayerRef } from '@
 import {
   forwardRef,
   memo,
-  useState,
-  type ComponentPropsWithoutRef,
   useEffect,
   useImperativeHandle,
+  useState,
+  type ComponentPropsWithoutRef,
 } from 'react'
 import { RenderPropsSchema, Renderer } from './renderer'
 import type { DraftDataType } from './schema/draft'
@@ -67,6 +67,8 @@ export const EditorPlayer = memo(
         player.removeEventListener('ended', handleEnd)
       }
     }, [onPlayStateChange, onTimeUpdate, onEnd])
+
+    if (durationInFrames <= 0) return null
 
     return (
       <RemotionPlayer

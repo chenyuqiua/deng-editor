@@ -1,6 +1,6 @@
 import { memo } from 'react'
+import { useDraftSelector } from '../hook/draft'
 import { useDraftService } from '../hook/service'
-import { useDraftSelector } from '../hook/draft-state'
 
 export const ToolPanel = memo(() => {
   const draftService = useDraftService()
