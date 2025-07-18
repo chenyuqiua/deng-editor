@@ -1,4 +1,4 @@
-import { Script } from '../../../component/script'
+import { Script } from '@/component/script'
 
 /**
  * inject iconpark script

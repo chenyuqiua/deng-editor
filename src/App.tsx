@@ -1,4 +1,4 @@
-import { IconParkProvider } from './lib/remotion/iconpark/provider'
+import { IconParkProvider } from './lib/iconpark/provider'
 import { EditorMainPage } from './page/editor'
 
 function App() {

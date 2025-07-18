@@ -2,7 +2,7 @@ import { testDraft } from '@/lib/remotion/editor-render/mock/test-draft'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
 import { useDraftService, usePlayerService } from '../hook/service'
-import { IconPark } from '@/lib/remotion/iconpark'
+import { IconPark } from '@/lib/iconpark'
 
 export const ToolPanel = memo(() => {
   const draftService = useDraftService()
