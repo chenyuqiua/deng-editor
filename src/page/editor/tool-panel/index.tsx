@@ -12,7 +12,7 @@ export const ToolPanel = memo(() => {
 
   return (
     <div className="flex flex-col gap-2">
-      <IconPark icon="all-application" />
+      <IconPark icon="align-top" color="#fff" className="text-white" />
       ToolPanel
       <Button>{`${JSON.stringify(draft.name)}`}</Button>
       <Button

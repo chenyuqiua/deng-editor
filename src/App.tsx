@@ -3,7 +3,7 @@ import { EditorMainPage } from './page/editor'
 
 function App() {
   return (
-    <IconParkProvider jsUrl="https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/icons_40263_1.7e52233aca30e9af3bfa0f3aff0eac50.js">
+    <IconParkProvider jsUrl="https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/icons_40263_79.b132e7fe5f1aa6d9acaf1bae401e1b95.js">
       <EditorMainPage />
     </IconParkProvider>
   )
