@@ -1,6 +1,6 @@
 import type { AllAsset } from '../schema/asset'
 import type { DraftDataType } from '../schema/draft'
-import type { AllElement } from '../schema/element'
+import type { AllElement, AllDisplayElement } from '../schema/element'
 import type { Track } from '../schema/track'
 import type { AllElementTypeAttribute } from '../schema/util'
 
@@ -93,4 +93,14 @@ export const calcDraftDurationInFrames = (draft: DraftDataType) => {
   const durationSeconds = calcDraftDurationInSeconds(draft)
   const { fps } = draft.meta
   return Math.ceil(durationSeconds * fps)
+}
+
+/**
+ * @description 检查element是否为显示元素
+ * @param element 要检查的element
+ * @returns 是否为显示元素
+ */
+export function isDisplayElement(element: AllElement): element is AllDisplayElement {
+  const notDisplayElementType: AllElementTypeAttribute[] = ['audio']
+  return !notDisplayElementType.includes(element.type)
 }

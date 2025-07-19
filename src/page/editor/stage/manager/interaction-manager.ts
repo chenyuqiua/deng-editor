@@ -120,7 +120,17 @@ export class InteractionManager {
   }
 
   private _onPointerDown(e: PointerEvent) {
-    console.log(e, 'pointerdown')
+    // TODO: 功能还不完善
+    const playerPoint = this._playerService.clientPointToPlayerPoint({
+      x: e.clientX,
+      y: e.clientY,
+    })
+
+    if (!playerPoint) return
+    const draftElement = this._playerService.findElementsByPoint(playerPoint).at(0)
+    if (!draftElement) return
+
+    this._updateClickMoveableTarget(draftElement.id)
   }
 
   private _updateMoveableOnSizeChange() {
@@ -149,25 +159,31 @@ export class InteractionManager {
       return
     }
 
-    this._updateClickMoveableTarget()
+    this._updateClickMoveableTarget(selectElement.id)
   }
 
   private _refreshMoveableListeners() {
     console.log('refreshMoveableListeners')
   }
 
-  private _updateClickMoveableTarget() {
-    // TODO: 更新点击移动的元素 目前这里的代码只是为了测试
+  private _updateClickMoveableTarget(elementId: string) {
     if (!this._clickMoveable) return
-    const domEl = document.querySelector('.test_moveable_target')
     const moveable = this._clickMoveable
+    const domEl = this._playerService.getElementDomById(elementId)
+    const draftEl = this._draftService.getElementById(elementId)
     if (!domEl) return
-    moveable.target = domEl as HTMLElement
-
-    moveable.scalable = true
-    moveable.keepRatio = true
-    moveable.resizable = false
-    moveable.renderDirections = ['nw', 'ne', 'sw', 'se']
+    moveable.target = domEl
+    if (draftEl.type === 'text') {
+      moveable.keepRatio = false
+      moveable.resizable = true
+      moveable.scalable = false
+      moveable.renderDirections = ['w', 'e']
+    } else {
+      moveable.scalable = true
+      moveable.keepRatio = true
+      moveable.resizable = false
+      moveable.renderDirections = ['nw', 'ne', 'sw', 'se']
+    }
     moveable.updateRect()
   }
 }

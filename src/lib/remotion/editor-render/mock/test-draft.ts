@@ -2,6 +2,7 @@ import type { DraftDataType } from '../schema/draft'
 
 export const testDraft: DraftDataType = {
   name: 'test',
+  background: '#000',
   meta: {
     width: 400,
     height: 200,
@@ -69,8 +70,8 @@ export const testDraft: DraftDataType = {
         id: 'test_text_1',
         start: 0,
         length: 1,
-        x: 0,
-        y: 0,
+        x: -50,
+        y: -50,
         scaleX: 1,
         scaleY: 1,
         rotate: 0,
@@ -80,7 +81,6 @@ export const testDraft: DraftDataType = {
           fontFamily: 'Arial',
           fontWeight: 'normal',
           fontStyle: 'normal',
-          textAlign: 'left',
           textDecoration: 'none',
           textTransform: 'none',
         },
@@ -91,10 +91,10 @@ export const testDraft: DraftDataType = {
         id: 'track-1',
         type: 'audio',
         clips: [
-          { elementId: 'test_audio_1' },
           { elementId: 'test_image_1' },
-          { elementId: 'test_image_2' },
           { elementId: 'test_text_1' },
+          { elementId: 'test_image_2' },
+          { elementId: 'test_audio_1' },
         ],
       },
     ],

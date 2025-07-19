@@ -2,7 +2,10 @@ import { BasicState } from '@/common/class/basic-state'
 import type { EditorPlayerRef } from '@/lib/remotion/editor-render/player'
 import type { DraftService } from './draft-service'
 import type { IPlayerService } from './player-service.type'
-import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
+import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
+import type { Point } from '@/lib/remotion/editor-render/schema/common'
+import { isDisplayElement, shallowWalkTracksElement } from '@/lib/remotion/editor-render/util/draft'
+import { pointRotate } from '../util/interaction'
 
 const initialState = {
   isPlaying: false,
@@ -115,7 +118,91 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
 
   getElementDomById(elementId?: string) {
     if (!elementId) return undefined
-    return this._context?.box[elementId]?.ref?.current
+    return this._context?.box[elementId]?.ref?.current || undefined
+  }
+
+  clientPointToPlayerPoint(clientPoint: Point) {
+    const playerNode = this.player?.getContainerNode()?.children[0] as HTMLElement | undefined
+    const scale = this.player?.getScale()
+    if (!playerNode || !scale) {
+      return
+    }
+    const rect = playerNode.getBoundingClientRect()
+
+    // 转换为画布坐标
+    const point = {
+      x: clientPoint.x - rect.left,
+      y: clientPoint.y - rect.top,
+    }
+
+    // 不在画布范围内直接return
+    if (point.x < 0 || point.x > rect.width) {
+      return
+    }
+    if (point.y < 0 || point.y > rect.height) {
+      return
+    }
+
+    // 将坐标系原点由左上角改为中心点, 并等比缩放
+    return {
+      x: (point.x - rect.width / 2) / scale,
+      y: (point.y - rect.height / 2) / scale,
+    }
+  }
+
+  findElementsByPoint(point: Point) {
+    const scale = this._player?.getScale()
+    const time = this.state.currentTime
+    if (!scale || time < 0) return []
+
+    const elements: AllDisplayElement[] = []
+    const draft = this._draftService.state.draft
+    shallowWalkTracksElement(draft, draft.timeline.tracks, el => {
+      if (
+        !isDisplayElement(el) ||
+        !this.checkElementDisplayInCurrentTime(el) ||
+        !this.hitTest(point, el, scale)
+      ) {
+        return
+      }
+
+      elements.push(el)
+    })
+
+    console.log(...elements, 'elements')
+    return elements
+  }
+
+  hitTest(point: Point, element: AllDisplayElement, playerScale?: number) {
+    const scale = playerScale ?? this.player?.getScale()
+    if (!scale) return false
+
+    const elementDom = this.context?.box[element.id]
+    if (!elementDom?.ref?.current) return false
+    const rect = elementDom?.ref.current?.getBoundingClientRect()
+    if (!rect) return false
+
+    const p1 = {
+      x: point.x - element.x,
+      y: point.y - element.y,
+    }
+
+    const style = window.getComputedStyle(elementDom.ref.current)
+    const size = {
+      width: Math.abs(Number(style.width.replace('px', '')) * element.scaleX),
+      height: Math.abs(Number(style.height.replace('px', '')) * element.scaleY),
+    }
+
+    const anchorX = (element.anchor?.x || 0) / 100
+    const anchorY = (element.anchor?.y || 0) / 100
+    const p2 = pointRotate(p1, -((element.rotate / 180) * Math.PI))
+
+    return (
+      p2.x >= size.width * (-0.5 - anchorX) &&
+      p2.x <= size.width * (0.5 - anchorX) &&
+      p2.y >= size.height * (-0.5 - anchorY) &&
+      p2.y <= size.height * (0.5 - anchorY)
+    )
   }
 
   private _onPlay(): void {

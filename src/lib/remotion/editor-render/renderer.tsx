@@ -13,7 +13,7 @@ export const Renderer = memo((props: z.infer<typeof RenderPropsSchema>) => {
   const { displayElements, audioElements } = useGetElements(draft)
 
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ backgroundColor: draft.background || 'transparent' }}>
       {displayElements.map(element => {
         const asset = getAssetByElement(draft, element)
         return <DisplayElement key={element.id} element={element} asset={asset} />

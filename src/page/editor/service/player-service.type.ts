@@ -2,7 +2,8 @@ import type { EditorPlayerRef } from '@/lib/remotion/editor-render/player'
 import type { StoreApi } from 'zustand'
 import { createDecorator } from '../bootstrap/instantiation'
 import type { PlayerStoreStateType } from './player-service'
-import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
+import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
+import type { Point } from '@/lib/remotion/editor-render/schema/common'
 
 export const IPlayerService = createDecorator<IPlayerService>('PlayerService')
 export interface IPlayerService {
@@ -27,4 +28,18 @@ export interface IPlayerService {
    * @returns 是否在当前时间显示
    */
   checkElementDisplayInCurrentTime: (element: AllElement) => boolean
+  /**
+   * @description 将客户端坐标转换为画布坐标, 也就是remotion的中心点坐标
+   * @param point 客户端坐标
+   * @returns 在画布中的坐标, 如果不在画布中则返回undefined
+   */
+  clientPointToPlayerPoint: (point: Point) => Point | undefined
+  hitTest: (point: Point, element: AllDisplayElement, playerScale?: number) => boolean
+  /**
+   * @description 获取当前点击的元素, 只能获取到当前时间显示的元素
+   * @param point 当前点击的坐标, 需要传入播放器坐标
+   * @returns 当前点击的元素数组
+   */
+  findElementsByPoint: (point: Point) => AllDisplayElement[]
+  getElementDomById: (elementId: string) => HTMLElement | undefined
 }
