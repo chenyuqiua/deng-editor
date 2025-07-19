@@ -9,6 +9,7 @@ export interface IPlayerService {
   readonly store: StoreApi<PlayerStoreStateType>
   state: PlayerStoreStateType
   player: EditorPlayerRef['player']
+  context: EditorPlayerRef['context'] | null
   isPlaying: boolean
 
   setState: (updater: (state: PlayerStoreStateType) => void) => void
@@ -16,6 +17,7 @@ export interface IPlayerService {
     listener: (data: PlayerStoreStateType, preData: PlayerStoreStateType) => void
   ) => () => void
   setPlayer: (player: EditorPlayerRef['player'] | null) => void
+  setContext: (context: EditorPlayerRef['context'] | null) => void
   play: () => void
   pause: () => void
   toggle: () => void

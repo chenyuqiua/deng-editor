@@ -3,6 +3,7 @@ import { useVideoConfig } from 'remotion'
 import { PreMountSeconds } from '../constant/remotion-config'
 import type { TextElement } from '../schema/element'
 import { SequenceController } from './sequence-controller'
+import { VisualContainer } from './visual-container'
 
 interface IProps {
   element: TextElement
@@ -14,7 +15,9 @@ export const TextRenderer = memo((props: IProps) => {
 
   return (
     <SequenceController element={element} premountFor={PreMountSeconds * fps}>
-      <div style={element.style}>{element.text}</div>
+      <VisualContainer element={element}>
+        <div style={element.style}>{element.text}</div>
+      </VisualContainer>
     </SequenceController>
   )
 })

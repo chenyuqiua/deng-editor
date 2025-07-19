@@ -8,8 +8,9 @@ export const BaseElementSchema = z.object({
   start: z.number(),
   length: z.number(),
   assetId: z.string().optional(),
-  // parent: z.string().optional(),
-  // children: z.array(z.string()).optional(),
+  // parent和children暂时没有用, 为后续拓展预留这个结构
+  parent: z.string().optional(),
+  children: z.array(z.string()).optional(),
   hidden: z.boolean().optional(),
   /** display in timeline clip */
   name: z.string().optional(),

@@ -23,6 +23,7 @@ export const Stage = memo((props: IProps) => {
           ref={editorPlayerRef => {
             if (!editorPlayerRef) return
             playerService.setPlayer(editorPlayerRef?.player)
+            playerService.setContext(editorPlayerRef?.context)
           }}
         />
         <StageInteraction />

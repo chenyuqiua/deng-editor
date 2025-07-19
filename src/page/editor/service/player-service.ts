@@ -13,6 +13,7 @@ export type PlayerStoreStateType = typeof initialState
 
 export class PlayerService extends BasicState<PlayerStoreStateType> implements IPlayerService {
   private _player: EditorPlayerRef['player'] | null = null
+  private _context: EditorPlayerRef['context'] | null = null
   private _playerEventListenerDisposers: (() => void)[] = []
 
   constructor(private readonly _draftService: DraftService) {
@@ -21,6 +22,10 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
 
   get player(): EditorPlayerRef['player'] | null {
     return this._player
+  }
+
+  get context(): EditorPlayerRef['context'] | null {
+    return this._context
   }
 
   get isPlaying() {
@@ -98,10 +103,19 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
     })
   }
 
+  setContext(context: EditorPlayerRef['context'] | null): void {
+    this._context = context
+  }
+
   checkElementDisplayInCurrentTime(element: AllElement) {
     const { start, length } = element
     const time = this.state.currentTime
     return time >= start && time <= start + length
+  }
+
+  getElementDomById(elementId?: string) {
+    if (!elementId) return undefined
+    return this._context?.box[elementId]?.ref?.current
   }
 
   private _onPlay(): void {

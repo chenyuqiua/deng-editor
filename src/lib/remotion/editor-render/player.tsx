@@ -10,6 +10,11 @@ import {
 import { RenderPropsSchema, Renderer } from './renderer'
 import type { DraftDataType } from './schema/draft'
 import { calcDraftDurationInFrames } from './util/draft'
+import {
+  RendererContextProvider,
+  getContextValue,
+  type RendererContextValue,
+} from './react-context'
 
 type EditorPlayerProps = Omit<
   ComponentPropsWithoutRef<typeof RemotionPlayer>,
@@ -32,12 +37,14 @@ type EditorPlayerProps = Omit<
 
 export type EditorPlayerRef = {
   player: RemotionPlayerRef | null
+  context: RendererContextValue
 }
 
 export const EditorPlayer = memo(
   forwardRef<EditorPlayerRef, EditorPlayerProps>((props, ref) => {
     const { draft, style, onPlayStateChange, onTimeUpdate, onEnd, ...rest } = props
     const [player, setPlayer] = useState<RemotionPlayerRef | null>(null)
+    const [context] = useState(() => getContextValue())
     const { width, height, fps } = draft.meta
 
     const durationInFrames = calcDraftDurationInFrames(draft)
@@ -45,8 +52,9 @@ export const EditorPlayer = memo(
       ref,
       () => ({
         player,
+        context,
       }),
-      [player]
+      [player, context]
     )
 
     useEffect(() => {
@@ -71,25 +79,27 @@ export const EditorPlayer = memo(
     if (durationInFrames <= 0) return null
 
     return (
-      <RemotionPlayer
-        ref={setPlayer}
-        schema={RenderPropsSchema}
-        inputProps={{ draft }}
-        component={Renderer}
-        compositionWidth={width}
-        compositionHeight={height}
-        fps={fps}
-        style={{
-          maxHeight: '100%',
-          maxWidth: '100%',
-          width: '100%',
-          aspectRatio: `${width} / ${height}`,
-          ...style,
-        }}
-        durationInFrames={durationInFrames}
-        acknowledgeRemotionLicense
-        {...rest}
-      />
+      <RendererContextProvider value={context}>
+        <RemotionPlayer
+          ref={setPlayer}
+          schema={RenderPropsSchema}
+          inputProps={{ draft }}
+          component={Renderer}
+          compositionWidth={width}
+          compositionHeight={height}
+          fps={fps}
+          style={{
+            maxHeight: '100%',
+            maxWidth: '100%',
+            width: '100%',
+            aspectRatio: `${width} / ${height}`,
+            ...style,
+          }}
+          durationInFrames={durationInFrames}
+          acknowledgeRemotionLicense
+          {...rest}
+        />
+      </RendererContextProvider>
     )
   })
 )
