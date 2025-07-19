@@ -169,7 +169,6 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
       elements.push(el)
     })
 
-    console.log(...elements, 'elements')
     return elements
   }
 
