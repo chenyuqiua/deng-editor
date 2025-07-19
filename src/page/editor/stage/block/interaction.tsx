@@ -13,9 +13,5 @@ export const StageInteraction = memo(() => {
     }
   }, [])
 
-  return (
-    <div className="absolute inset-0" ref={interactionRef}>
-      <div className="test_moveable_target">StageInteraction</div>
-    </div>
-  )
+  return <div ref={interactionRef} className="absolute top-0 left-0 size-full"></div>
 })
