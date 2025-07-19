@@ -3,6 +3,8 @@ import { memo } from 'react'
 import { cn } from '../../../common/util/css'
 import { useDraftSelector } from '../hook/draft'
 import { usePlayerService } from '../hook/service'
+import { StageInteraction } from './block/interaction'
+import { StageBootstrap } from './bootstarp/bootstarp'
 
 interface IProps {
   className?: string
@@ -14,14 +16,17 @@ export const Stage = memo((props: IProps) => {
   const playerService = usePlayerService()
 
   return (
-    <div className={cn('flex size-full items-center justify-center', className)}>
-      <EditorPlayer
-        draft={draft}
-        ref={editorPlayerRef => {
-          if (!editorPlayerRef) return
-          playerService.setPlayer(editorPlayerRef?.player)
-        }}
-      />
-    </div>
+    <StageBootstrap>
+      <div className={cn('relative flex size-full items-center justify-center', className)}>
+        <EditorPlayer
+          draft={draft}
+          ref={editorPlayerRef => {
+            if (!editorPlayerRef) return
+            playerService.setPlayer(editorPlayerRef?.player)
+          }}
+        />
+        <StageInteraction />
+      </div>
+    </StageBootstrap>
   )
 })

@@ -15,4 +15,12 @@ export class BasicState<T extends object> {
   setState(updater: (state: T) => void) {
     this.store.setState(produce(this.state, updater))
   }
+
+  /** Remember to clear the event listener when lifecycle finish.(e.g. react useEffect unmount) */
+  onStateChange(listener: (data: T, preData: T) => void) {
+    const dispose = this.store.subscribe(listener)
+    return () => {
+      dispose()
+    }
+  }
 }

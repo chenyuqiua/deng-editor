@@ -1,13 +1,14 @@
 import { testDraft } from '@/lib/remotion/editor-render/mock/test-draft'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
-import { useDraftService, usePlayerService } from '../hook/service'
+import { useDraftService, useEditorService, usePlayerService } from '../hook/service'
 import { IconPark } from '@/lib/iconpark'
 import { Button } from '@/component/ui/button'
 
 export const ToolPanel = memo(() => {
   const draftService = useDraftService()
   const playerService = usePlayerService()
+  const editorService = useEditorService()
   const draft = useDraftSelector(s => s.draft)
 
   return (
@@ -32,6 +33,15 @@ export const ToolPanel = memo(() => {
         }}
       >
         set mock draft
+      </Button>
+      <Button
+        onClick={() => {
+          editorService.setState(s => {
+            s.selectElementId = 'test_image_1'
+          })
+        }}
+      >
+        set select element id
       </Button>
       <Button
         variant="secondary"

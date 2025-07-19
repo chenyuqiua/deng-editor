@@ -2,6 +2,7 @@ import { BasicState } from '@/common/class/basic-state'
 import type { EditorPlayerRef } from '@/lib/remotion/editor-render/player'
 import type { DraftService } from './draft-service'
 import type { IPlayerService } from './player-service.type'
+import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
 
 const initialState = {
   isPlaying: false,
@@ -95,6 +96,12 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
     this._playerEventListenerDisposers.push(() => {
       this._player?.removeEventListener('resume', handleResume)
     })
+  }
+
+  checkElementDisplayInCurrentTime(element: AllElement) {
+    const { start, length } = element
+    const time = this.state.currentTime
+    return time >= start && time <= start + length
   }
 
   private _onPlay(): void {

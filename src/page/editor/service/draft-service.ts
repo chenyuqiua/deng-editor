@@ -1,6 +1,8 @@
 import { BasicState } from '@/common/class/basic-state'
 import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
 import type { IDraftService } from './draft-service.type'
+import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
+import { getElementById } from '../util/draft'
 
 const initialState = {
   draft: {
@@ -36,5 +38,9 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
 
   get duration() {
     return this.state.duration
+  }
+
+  getElementById = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
+    return getElementById(this.draft, id, type)
   }
 }
