@@ -11,6 +11,7 @@ import type {
   ElementOfType,
 } from '@/lib/remotion/editor-render/schema/util'
 import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
+import type { Track } from '@/lib/remotion/editor-render/schema/track'
 
 export const IDraftService = createDecorator<IDraftService>('DraftService')
 export interface IDraftService {
@@ -26,7 +27,8 @@ export interface IDraftService {
   onStateChange: (
     listener: (data: DraftStoreStateType, preData: DraftStoreStateType) => void
   ) => () => void
-  getElementById: <T extends AllElementTypeAttribute>(id: string, type?: T) => ElementOfType<T>
+  getElement: <T extends AllElementTypeAttribute>(id: string, type?: T) => ElementOfType<T>
+  getTrack: (id: string) => Track | undefined
   updateElement: <T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) => void
   updateDisplayElement: (id: string, element: Partial<AllDisplayElement>) => void
 }

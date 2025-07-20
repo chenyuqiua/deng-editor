@@ -115,7 +115,7 @@ export function refreshClickMoveableListeners(
     if (_.isEqual(diff, getInitialDiff())) return
 
     const draftService = getService(IDraftService)
-    const draftEl = draftService.getElementById(selectedElementId)
+    const draftEl = draftService.getElement(selectedElementId)
     if (!draftEl || !isDisplayElement(draftEl)) return
 
     const data = {

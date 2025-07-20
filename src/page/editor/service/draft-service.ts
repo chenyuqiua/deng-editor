@@ -44,8 +44,12 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
     return this.state.duration
   }
 
-  getElementById = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
+  getElement = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
     return getElementById(this.draft, id, type)
+  }
+
+  getTrack = (id: string) => {
+    return this.draft.timeline.tracks.find(i => i.id === id)
   }
 
   updateElement<T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) {
@@ -57,7 +61,7 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
   }
 
   updateDisplayElement(id: string, element: Partial<AllDisplayElement>) {
-    const fullElem = this.getElementById(id)
+    const fullElem = this.getElement(id)
     if (!isDisplayElement(fullElem)) {
       throw new ElementTypeError(fullElem, 'DisplayElement')
     }

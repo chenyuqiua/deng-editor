@@ -214,7 +214,7 @@ export class InteractionManager {
     if (!this._clickMoveable) return
 
     const selectElement = this._selectElementId
-      ? this._draftService.getElementById(this._selectElementId)
+      ? this._draftService.getElement(this._selectElementId)
       : undefined
 
     if (
@@ -234,7 +234,7 @@ export class InteractionManager {
     if (!this._clickMoveable) return
     const moveable = this._clickMoveable
     const domEl = this._playerService.getElementDomById(elementId)
-    const draftEl = this._draftService.getElementById(elementId)
+    const draftEl = this._draftService.getElement(elementId)
     if (!domEl) return
     moveable.target = domEl
     if (draftEl.type === 'text') {
