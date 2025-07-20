@@ -4,15 +4,21 @@ import { useDraftSelector } from '../hook/draft'
 import { useDraftService, useEditorService, usePlayerService } from '../hook/service'
 import { IconPark } from '@/lib/iconpark'
 import { Button } from '@/component/ui/button'
+import { cn } from '@/lib/utils'
 
-export const ToolPanel = memo(() => {
+interface IProps {
+  className?: string
+}
+
+export const ToolPanel = memo((props: IProps) => {
+  const { className } = props
   const draftService = useDraftService()
   const playerService = usePlayerService()
   const editorService = useEditorService()
   const draft = useDraftSelector(s => s.draft)
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={cn('flex flex-col gap-2', className)}>
       <IconPark icon="align-top" color="#fff" className="text-white" />
       ToolPanel
       <Button>{`${JSON.stringify(draft.name)}`}</Button>
