@@ -88,11 +88,15 @@ export const testDraft: DraftDataType = {
     },
     tracks: [
       {
+        id: 'track-2',
+        type: 'caption',
+        clips: [{ elementId: 'test_text_1' }],
+      },
+      {
         id: 'track-1',
         type: 'audio',
         clips: [
           { elementId: 'test_image_1' },
-          { elementId: 'test_text_1' },
           { elementId: 'test_image_2' },
           { elementId: 'test_audio_1' },
         ],

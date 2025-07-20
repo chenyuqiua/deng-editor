@@ -29,11 +29,6 @@ export class InteractionManager {
   init(options: InitOptions) {
     const { interactionRef } = options
 
-    this._disposers.push(
-      this._draftService.onStateChange(state => {
-        console.log(state, state.draft.timeline.elements, 'draft state change')
-      })
-    )
     this._disposers.push(this._playerService.onStateChange(this._onPlayerStateChange.bind(this)))
     this._disposers.push(this._editorService.onStateChange(this._onEditorStateChange.bind(this)))
 
@@ -123,11 +118,34 @@ export class InteractionManager {
   }
 
   private _onPointerMove(e: PointerEvent) {
-    console.log(e, 'pointermove')
+    let currentDomEl: HTMLElement | null | undefined = null
+
+    if (!this._isPlaying) {
+      const playerPoint = this._playerService.clientPointToPlayerPoint({
+        x: e.clientX,
+        y: e.clientY,
+      })
+      if (playerPoint) {
+        const draftItem = this._playerService.findElementsByPoint(playerPoint).at(0)
+        if (draftItem) {
+          currentDomEl = this._playerService.getElementDomById(draftItem.id)
+        }
+      }
+    }
+
+    if (this._clickMoveable?.target === currentDomEl || this._clickMoveable?.isDragging()) {
+      currentDomEl = null
+    }
+
+    if (this._hoverMoveable && this._hoverMoveable?.target !== currentDomEl) {
+      this._hoverMoveable.target = currentDomEl
+    }
   }
 
-  private _onPointerLeave(e: PointerEvent) {
-    console.log(e, 'pointerleave')
+  private _onPointerLeave() {
+    if (!this._hoverMoveable) return
+    this._hoverMoveable.target = null
+    this._hoverMoveable.updateRect()
   }
 
   private _onPointerDown(e: PointerEvent) {
