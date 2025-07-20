@@ -6,9 +6,7 @@ import type { IPlayerService } from '../../service/player-service.type'
 import { observeElementSize } from '@/common/util/dom'
 import type { EditorStoreStateType } from '../../service/editor-service'
 import type { IEditorService } from '../../service/editor-service.type'
-import { isHitControlBox } from '../../util/interaction'
-import _ from 'lodash'
-import { isDisplayElement } from '@/lib/remotion/editor-render/util/draft'
+import { isHitControlBox, refreshClickMoveableListeners } from '../../util/interaction'
 
 type InitOptions = {
   interactionRef: RefObject<HTMLDivElement | null>
@@ -31,6 +29,11 @@ export class InteractionManager {
   init(options: InitOptions) {
     const { interactionRef } = options
 
+    this._disposers.push(
+      this._draftService.onStateChange(state => {
+        console.log(state, state.draft.timeline.elements, 'draft state change')
+      })
+    )
     this._disposers.push(this._playerService.onStateChange(this._onPlayerStateChange.bind(this)))
     this._disposers.push(this._editorService.onStateChange(this._onEditorStateChange.bind(this)))
 
@@ -98,6 +101,10 @@ export class InteractionManager {
   destroy() {
     this._disposers.forEach(disposer => disposer())
     this._disposers = []
+    this._hoverMoveable?.destroy()
+    this._clickMoveable?.destroy()
+    this._hoverMoveable = null
+    this._clickMoveable = null
   }
 
   private _onPlayerStateChange(state: PlayerStoreStateType, preState: PlayerStoreStateType) {
@@ -111,7 +118,8 @@ export class InteractionManager {
 
     this._selectElementId = state.selectElementId
     this._updateClickMoveableByState()
-    this._refreshClickMoveableListeners()
+    // this._refreshClickMoveableListeners()
+    refreshClickMoveableListeners(this._clickMoveable, state.selectElementId)
   }
 
   private _onPointerMove(e: PointerEvent) {
@@ -222,145 +230,5 @@ export class InteractionManager {
       moveable.renderDirections = ['nw', 'ne', 'sw', 'se']
     }
     moveable.updateRect()
-  }
-
-  private _refreshClickMoveableListeners() {
-    const moveable = this._clickMoveable
-    const selectedElementId = this._selectElementId
-    if (!moveable || !selectedElementId) return
-    moveable.off()
-    console.log('refreshMoveableListeners', moveable.draggable)
-
-    const getInitialDiff = () => {
-      return {
-        x: 0,
-        y: 0,
-        rotate: 0,
-        scaleX: 1,
-        scaleY: 1,
-        width: 0,
-        height: 0,
-      }
-    }
-
-    const startData = { transform: '', width: 0, height: 0 }
-    let diff = getInitialDiff()
-
-    const handleStart = () => {
-      console.log('handleStart')
-      const targetEl = moveable.target as HTMLElement
-      if (!targetEl) return
-
-      // 保存初始数据
-      const rect = moveable.getRect()
-      startData.width = rect.offsetWidth
-      startData.height = rect.offsetHeight
-      startData.transform = targetEl.style.transform
-
-      // 初始化差值
-      diff = getInitialDiff()
-    }
-    // 这里只将变动更新到视图上, 对draft的更新需要等待dragEnd事件
-    const handleUpdate = () => {
-      const targetEl = moveable.target as HTMLElement
-      if (!targetEl) return
-
-      console.log(startData.transform, 'startData.transform')
-      const [t1, t2] = startData.transform.split(' scale')
-
-      // 保留原有的 translate 和 rotate, 但是会用新的对其覆盖
-      targetEl.style.transform = `translate(${diff.x}px, ${diff.y}px) ${t1} rotate(${diff.rotate}deg) scale${t2} scale(${diff.scaleX},${diff.scaleY})`
-
-      // 对resize的宽高进行处理
-      if (moveable.resizable && Array.isArray(moveable.renderDirections)) {
-        const renderDirections = moveable.renderDirections
-        if (renderDirections.includes('w') || renderDirections.includes('e')) {
-          targetEl.style.width = `${startData.width + diff.width}px`
-        }
-
-        if (renderDirections.includes('n') || renderDirections.includes('s')) {
-          targetEl.style.height = `${startData.height + diff.height}px`
-        }
-      }
-    }
-    const handleEnd = () => {
-      if (_.isEqual(diff, getInitialDiff())) return
-
-      const draftEl = this._draftService.getElementById(selectedElementId)
-      if (!draftEl || !isDisplayElement(draftEl)) return
-
-      const data = {
-        x: draftEl.x,
-        y: draftEl.y,
-        width: draftEl.width,
-        height: draftEl.height,
-        rotate: draftEl.rotate,
-        scaleX: draftEl.scaleX,
-        scaleY: draftEl.scaleY,
-      }
-
-      if (moveable.resizable && Array.isArray(moveable.renderDirections)) {
-        const renderDirections = moveable.renderDirections
-        if (renderDirections.includes('w') || renderDirections.includes('e')) {
-          data.width = (data.width || startData.width) + diff.width
-        }
-
-        if (renderDirections.includes('n') || renderDirections.includes('s')) {
-          data.height = (data.height || startData.height) + diff.height
-        }
-      }
-
-      data.x += diff.x
-      data.y += diff.y
-      data.rotate += diff.rotate
-      data.scaleX *= diff.scaleX
-      data.scaleY *= diff.scaleY
-
-      this._draftService.updateDisplayElement(selectedElementId, data)
-    }
-
-    moveable
-      .on('dragStart', handleStart)
-      .on('rotateStart', handleStart)
-      .on('resizeStart', handleStart)
-      .on('scaleStart', handleStart)
-      .on('dragEnd', handleEnd)
-      .on('rotateEnd', handleEnd)
-      .on('resizeEnd', handleEnd)
-      .on('scaleEnd', handleEnd)
-
-    /*
-      rotate -> data.delta -> 旋转角度的增量
-      scale -> data.delta[0] -> x轴上缩放的增量
-      scale -> data.delta[1] -> y轴上缩放的增量
-      resize -> data.delta[0] -> 宽度增量
-      resize -> data.delta[1] -> 高度增量
-      data.drag.delta[0] -> 元素的中心点x的增量
-      data.drag.delta[1] -> 元素的中心点y的增量
-    */
-    moveable.on('drag', data => {
-      diff.x += data.delta[0]
-      diff.y += data.delta[1]
-      console.log(data.delta[0], data.delta[1], 'drag')
-      handleUpdate()
-    })
-    moveable.on('rotate', data => {
-      diff.rotate += data.delta
-      handleUpdate()
-    })
-    moveable.on('scale', data => {
-      diff.scaleX *= data.delta[0]
-      diff.scaleY *= data.delta[1]
-      diff.x += data.drag.delta[0]
-      diff.y += data.drag.delta[1]
-      handleUpdate()
-    })
-    moveable.on('resize', data => {
-      diff.width += data.delta[0]
-      diff.height += data.delta[1]
-      diff.x += data.drag.delta[0]
-      diff.y += data.drag.delta[1]
-      handleUpdate()
-    })
   }
 }
