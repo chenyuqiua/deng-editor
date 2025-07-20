@@ -185,7 +185,7 @@ export class InteractionManager {
       }
     }
 
-    // 如果选中了当前元素, 激活拖拽
+    // 如果点击的元素是已经被选中的元素, 那么直接激活拖拽并return
     if ((!playerPoint && isHitControlBox(moveable, e)) || (domEl && domEl === moveable?.target)) {
       startDrag()
       return
@@ -197,7 +197,8 @@ export class InteractionManager {
     */
     this._editorService.setSelectElementId(draftItem?.id)
 
-    // TODO: 也许需要对hover_moveable进行处理
+    // 激活拖拽, 实现点拖
+    startDrag()
   }
 
   private _updateMoveableOnSizeChange() {
