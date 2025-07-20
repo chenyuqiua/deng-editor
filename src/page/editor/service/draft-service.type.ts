@@ -10,6 +10,7 @@ import type {
   AllElementTypeAttribute,
   ElementOfType,
 } from '@/lib/remotion/editor-render/schema/util'
+import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
 
 export const IDraftService = createDecorator<IDraftService>('DraftService')
 export interface IDraftService {
@@ -26,4 +27,6 @@ export interface IDraftService {
     listener: (data: DraftStoreStateType, preData: DraftStoreStateType) => void
   ) => () => void
   getElementById: <T extends AllElementTypeAttribute>(id: string, type?: T) => ElementOfType<T>
+  updateElement: <T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) => void
+  updateDisplayElement: (id: string, element: Partial<AllDisplayElement>) => void
 }

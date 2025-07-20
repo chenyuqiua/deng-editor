@@ -34,7 +34,7 @@ export function isHitControlBox(moveable: Moveable, event: MouseEvent) {
   // 旋转回正
   const relativePointWithCorrect = pointRotate(relativePoint, (-rect.rotation / 180) * Math.PI)
 
-  // 判断是否在举行框内
+  // 判断是否在矩形框内
   return !(
     Math.abs(relativePointWithCorrect.x) >= boxWidth / 2 ||
     Math.abs(relativePointWithCorrect.y) >= boxHeight / 2

@@ -36,9 +36,7 @@ export const ToolPanel = memo(() => {
       </Button>
       <Button
         onClick={() => {
-          editorService.setState(s => {
-            s.selectElementId = 'test_image_1'
-          })
+          editorService.setSelectElementId('test_image_1')
         }}
       >
         set select element id

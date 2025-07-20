@@ -3,6 +3,10 @@ import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
 import type { IDraftService } from './draft-service.type'
 import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
 import { getElementById } from '../util/draft'
+import { isDisplayElement } from '@/lib/remotion/editor-render/util/draft'
+import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
+import { ElementTypeError } from '../error/element-type-error'
+import { ElementNotFoundError } from '../error/element-not-found-error'
 
 const initialState = {
   draft: {
@@ -42,5 +46,21 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
 
   getElementById = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
     return getElementById(this.draft, id, type)
+  }
+
+  updateElement<T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) {
+    this.setState(state => {
+      const rawElement = getElementById(state.draft, id)
+      if (!rawElement) throw new ElementNotFoundError({ id })
+      Object.assign(rawElement, element)
+    })
+  }
+
+  updateDisplayElement(id: string, element: Partial<AllDisplayElement>) {
+    const fullElem = this.getElementById(id)
+    if (!isDisplayElement(fullElem)) {
+      throw new ElementTypeError(fullElem, 'DisplayElement')
+    }
+    this.updateElement(id, element)
   }
 }

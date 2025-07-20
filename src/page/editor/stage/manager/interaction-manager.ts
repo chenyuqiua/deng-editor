@@ -7,6 +7,8 @@ import { observeElementSize } from '@/common/util/dom'
 import type { EditorStoreStateType } from '../../service/editor-service'
 import type { IEditorService } from '../../service/editor-service.type'
 import { isHitControlBox } from '../../util/interaction'
+import _ from 'lodash'
+import { isDisplayElement } from '@/lib/remotion/editor-render/util/draft'
 
 type InitOptions = {
   interactionRef: RefObject<HTMLDivElement | null>
@@ -121,8 +123,9 @@ export class InteractionManager {
   }
 
   private _onPointerDown(e: PointerEvent) {
+    const moveable = this._clickMoveable
     // 只处理左键点击
-    if (this._isPlaying || e.button !== 0 || !this._clickMoveable) return
+    if (this._isPlaying || e.button !== 0 || !moveable) return
 
     let domEl: HTMLElement | undefined | null = undefined
     let draftItem: { id: string } | undefined = undefined
@@ -144,8 +147,8 @@ export class InteractionManager {
 
       setTimeout(() => {
         if (stop) return
-        if (!this._clickMoveable?.target) return
-        this._clickMoveable.dragStart(e)
+        if (!moveable?.target) return
+        moveable.dragStart(e)
       }, 10)
     }
 
@@ -157,10 +160,7 @@ export class InteractionManager {
     }
 
     // 如果选中了当前元素, 激活拖拽
-    if (
-      (!playerPoint && isHitControlBox(this._clickMoveable, e)) ||
-      (domEl && domEl === this._clickMoveable?.target)
-    ) {
+    if ((!playerPoint && isHitControlBox(moveable, e)) || (domEl && domEl === moveable?.target)) {
       startDrag()
       return
     }
@@ -169,9 +169,7 @@ export class InteractionManager {
      更新selectElementId调用_updateClickMoveableByState来更新 click_moveable
      这里无需再对click_moveable进行更新
     */
-    this._editorService.setState(s => {
-      s.selectElementId = draftItem?.id
-    })
+    this._editorService.setSelectElementId(draftItem?.id)
 
     // TODO: 也许需要对hover_moveable进行处理
   }
@@ -228,7 +226,8 @@ export class InteractionManager {
 
   private _refreshClickMoveableListeners() {
     const moveable = this._clickMoveable
-    if (!moveable) return
+    const selectedElementId = this._selectElementId
+    if (!moveable || !selectedElementId) return
     moveable.off()
     console.log('refreshMoveableListeners', moveable.draggable)
 
@@ -269,8 +268,10 @@ export class InteractionManager {
       console.log(startData.transform, 'startData.transform')
       const [t1, t2] = startData.transform.split(' scale')
 
+      // 保留原有的 translate 和 rotate, 但是会用新的对其覆盖
       targetEl.style.transform = `translate(${diff.x}px, ${diff.y}px) ${t1} rotate(${diff.rotate}deg) scale${t2} scale(${diff.scaleX},${diff.scaleY})`
-      console.log(targetEl.style.transform, 'targetEl.style.transform')
+
+      // 对resize的宽高进行处理
       if (moveable.resizable && Array.isArray(moveable.renderDirections)) {
         const renderDirections = moveable.renderDirections
         if (renderDirections.includes('w') || renderDirections.includes('e')) {
@@ -283,7 +284,39 @@ export class InteractionManager {
       }
     }
     const handleEnd = () => {
-      console.log('handleEnd')
+      if (_.isEqual(diff, getInitialDiff())) return
+
+      const draftEl = this._draftService.getElementById(selectedElementId)
+      if (!draftEl || !isDisplayElement(draftEl)) return
+
+      const data = {
+        x: draftEl.x,
+        y: draftEl.y,
+        width: draftEl.width,
+        height: draftEl.height,
+        rotate: draftEl.rotate,
+        scaleX: draftEl.scaleX,
+        scaleY: draftEl.scaleY,
+      }
+
+      if (moveable.resizable && Array.isArray(moveable.renderDirections)) {
+        const renderDirections = moveable.renderDirections
+        if (renderDirections.includes('w') || renderDirections.includes('e')) {
+          data.width = (data.width || startData.width) + diff.width
+        }
+
+        if (renderDirections.includes('n') || renderDirections.includes('s')) {
+          data.height = (data.height || startData.height) + diff.height
+        }
+      }
+
+      data.x += diff.x
+      data.y += diff.y
+      data.rotate += diff.rotate
+      data.scaleX *= diff.scaleX
+      data.scaleY *= diff.scaleY
+
+      this._draftService.updateDisplayElement(selectedElementId, data)
     }
 
     moveable

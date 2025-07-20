@@ -11,4 +11,5 @@ export interface IEditorService {
   onStateChange: (
     listener: (data: EditorStoreStateType, preData: EditorStoreStateType) => void
   ) => () => void
+  setSelectElementId: (id?: string) => void
 }

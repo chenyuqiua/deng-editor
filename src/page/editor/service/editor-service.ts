@@ -10,4 +10,10 @@ export class EditorService extends BasicState<EditorStoreStateType> implements I
   constructor() {
     super(initialState)
   }
+
+  setSelectElementId(id?: string) {
+    this.setState(s => {
+      s.selectElementId = id
+    })
+  }
 }
