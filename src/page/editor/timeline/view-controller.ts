@@ -25,7 +25,7 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     if (pixelRange.start < 0) return
     const timeRange = this._transformPixelRangeToTimeRange(pixelRange)
 
-    const resizeEditableRange = this._getResizeEditableRange({
+    const resizeEditableRange = this._calcResizeEditableRange({
       timeRange,
       clipElementId,
       direction: 'left',
@@ -39,8 +39,8 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     }
   }
 
-  // 在track上获取可编辑范围
-  private _getResizeEditableRange(props: {
+  // 计算在track上可的编辑范围
+  private _calcResizeEditableRange(props: {
     timeRange: { start: number; length: number }
     clipElementId: string
     direction?: 'left' | 'right'
@@ -55,8 +55,8 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     const trackRanges = this._getAllTrackRangesExceptSelf(clipElementId)
     if (!trackRanges) return undefined
 
-    const leftBoundRange = _.findLast(trackRanges, r => r.start < timeRange.start)
-    const rightBoundRange = trackRanges.find(r => r.end > timeRange.end)
+    const leftBound = _.findLast(trackRanges, r => r.start < timeRange.start)?.end
+    const rightBound = trackRanges.find(r => r.end > timeRange.end)?.start
 
     // TODO:
     // const inTargetRangeRanges = trackRanges.filter(
@@ -75,11 +75,11 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
       end: timeRange.end,
     }
 
-    if (rightBoundRange) {
-      ansRange.end = Math.min(rightBoundRange.start, timeRange.end)
+    if (rightBound) {
+      ansRange.end = Math.min(rightBound, timeRange.end)
     }
-    if (leftBoundRange) {
-      ansRange.start = Math.max(leftBoundRange.end, timeRange.start)
+    if (leftBound) {
+      ansRange.start = Math.max(leftBound, timeRange.start)
     }
 
     return ansRange
