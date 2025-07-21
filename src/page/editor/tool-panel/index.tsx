@@ -1,10 +1,10 @@
-import { testDraft } from '@/lib/remotion/editor-render/mock/test-draft'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
 import { useDraftService, useEditorService, usePlayerService } from '../hook/service'
 import { IconPark } from '@/lib/iconpark'
 import { Button } from '@/component/ui/button'
 import { cn } from '@/lib/utils'
+import { onlyTextDraft } from '@/lib/remotion/editor-render/mock/only-text-draft'
 
 interface IProps {
   className?: string
@@ -34,7 +34,7 @@ export const ToolPanel = memo((props: IProps) => {
       <Button
         onClick={() => {
           draftService.setState(s => {
-            s.draft = testDraft
+            s.draft = onlyTextDraft
           })
         }}
       >

@@ -1,19 +1,22 @@
+import { cn } from '@/lib/utils'
 import { memo, useEffect, useRef, type PropsWithChildren } from 'react'
 
 type ResizeListener = (leftOffset: number, rightOffset: number) => void
-type IProps = PropsWithChildren<{
-  leftHandle?: React.ReactNode
-  rightHandle?: React.ReactNode
-  // onResizing和onResizeComplete的区别是，onResizing是实时回调，onResizeComplete是结束后最终结果的回调
-  onResizing?: ResizeListener
-  onResizeComplete?: ResizeListener
-}>
+type IProps = React.HTMLAttributes<HTMLDivElement> &
+  PropsWithChildren<{
+    leftHandle?: React.ReactNode
+    rightHandle?: React.ReactNode
+    // onResizing和onResizeComplete的区别是，onResizing是实时回调，onResizeComplete是结束后最终结果的回调
+    onResizing?: ResizeListener
+    onResizeComplete?: ResizeListener
+  }>
 
 const LEFT_HANDLER_ID = '__resize-wrapper-left-handler'
 const RIGHT_HANDLER_ID = '__resize-wrapper-right-handler'
 
 export const ResizeWrapper = memo((props: IProps) => {
-  const { children, leftHandle, rightHandle, onResizing, onResizeComplete } = props
+  const { children, leftHandle, rightHandle, onResizing, onResizeComplete, className, ...rest } =
+    props
 
   const leftHandleRef = useRef<HTMLDivElement>(null)
   const rightHandleRef = useRef<HTMLDivElement>(null)
@@ -74,7 +77,7 @@ export const ResizeWrapper = memo((props: IProps) => {
   return (
     <>
       {/* <div className="fixed top-0 left-0 z-[9999] h-screen w-screen cursor-ew-resize"></div> */}
-      <div className="relative">
+      <div className={cn('relative', className)} {...rest}>
         <div
           ref={leftHandleRef}
           id={LEFT_HANDLER_ID}

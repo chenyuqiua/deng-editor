@@ -27,8 +27,9 @@ export interface IDraftService {
   onStateChange: (
     listener: (data: DraftStoreStateType, preData: DraftStoreStateType) => void
   ) => () => void
-  getElement: <T extends AllElementTypeAttribute>(id: string, type?: T) => ElementOfType<T>
-  getTrack: (id: string) => Track | undefined
+  getElementById: <T extends AllElementTypeAttribute>(id: string, type?: T) => ElementOfType<T>
+  getTrackById: (id: string) => Track | undefined
+  getTrackByElementId: (id: string) => Track | undefined
   updateElement: <T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) => void
   updateDisplayElement: (id: string, element: Partial<AllDisplayElement>) => void
 }

@@ -1,12 +1,12 @@
 import { BasicState } from '@/common/class/basic-state'
 import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
-import type { IDraftService } from './draft-service.type'
-import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
-import { getElementById } from '../util/draft'
-import { isDisplayElement } from '@/lib/remotion/editor-render/util/draft'
 import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
-import { ElementTypeError } from '../error/element-type-error'
+import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
+import { isDisplayElement } from '@/lib/remotion/editor-render/util/draft'
 import { ElementNotFoundError } from '../error/element-not-found-error'
+import { ElementTypeError } from '../error/element-type-error'
+import { getElementById, getTrackByElementId } from '../util/draft'
+import type { IDraftService } from './draft-service.type'
 
 const initialState = {
   draft: {
@@ -44,12 +44,16 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
     return this.state.duration
   }
 
-  getElement = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
+  getElementById = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
     return getElementById(this.draft, id, type)
   }
 
-  getTrack = (id: string) => {
+  getTrackById = (id: string) => {
     return this.draft.timeline.tracks.find(i => i.id === id)
+  }
+
+  getTrackByElementId = (id: string) => {
+    return getTrackByElementId(this.draft, id)
   }
 
   updateElement<T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) {
@@ -61,7 +65,7 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
   }
 
   updateDisplayElement(id: string, element: Partial<AllDisplayElement>) {
-    const fullElem = this.getElement(id)
+    const fullElem = this.getElementById(id)
     if (!isDisplayElement(fullElem)) {
       throw new ElementTypeError(fullElem, 'DisplayElement')
     }

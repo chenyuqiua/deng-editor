@@ -1,9 +1,11 @@
 import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
-import { ElementNotFoundError } from '../error/element-not-found-error'
 import type {
   AllElementTypeAttribute,
   ElementOfType,
 } from '@/lib/remotion/editor-render/schema/util'
+import { ElementNotFoundError } from '../error/element-not-found-error'
+import type { Track } from '@/lib/remotion/editor-render/schema/track'
+import { shallowWalkTracksElement } from '@/lib/remotion/editor-render/util/draft'
 
 /**
  * @description 根据id获取元素, 如果type不为空, 则需要匹配type
@@ -22,4 +24,16 @@ export const getElementById = <T extends AllElementTypeAttribute>(
 
   if (type && element.type !== type) throw new ElementNotFoundError({ id, type })
   return element as ElementOfType<T>
+}
+
+export function getTrackByElementId(draft: DraftDataType, elementId: string) {
+  const element = getElementById(draft, elementId)
+  let track = undefined as Track | undefined
+  shallowWalkTracksElement(draft, draft.timeline.tracks, (el, _track) => {
+    if (el === element) {
+      track = _track
+      return true
+    }
+  })
+  return track
 }

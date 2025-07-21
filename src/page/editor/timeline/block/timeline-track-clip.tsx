@@ -1,7 +1,7 @@
 import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { TrackClip } from '@/lib/remotion/editor-render/schema/track'
 import { cn } from '@/lib/utils'
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import { useZustand } from 'use-zustand'
 import { ResizeWrapper } from '../../component/resize-wrapper'
 import { useDraftSelector } from '../../hook/draft'
@@ -34,11 +34,34 @@ export const TimelineTrackClip = memo((props: IProps) => {
 
   const clipElement = useDraftSelector(s => getElementById(s.draft, clip.elementId))
   const pixelPerSecond = useZustand(vc.store, s => s.pixelPerSecond)
+  const [innerRange, setInnerRange] = useState<{ start: number; width: number } | undefined>(
+    undefined
+  )
 
-  const clipWidth = clipElement.length * pixelPerSecond
+  const clipWidth = innerRange?.width || clipElement.length * pixelPerSecond
+
+  const handleResizeInPixel = (left: number, right: number) => {
+    const params = {
+      offset: { left, right },
+      clipElementId: clip.elementId,
+    }
+    const pixelRange = vc.getClipPixelRange(params)
+    if (!pixelRange) return
+    setInnerRange(pixelRange)
+  }
+
+  console.log(innerRange?.start, clipElement.start * pixelPerSecond, 123321)
 
   return (
-    <ResizeWrapper>
+    <ResizeWrapper
+      onResizing={handleResizeInPixel}
+      className="absolute w-fit"
+      style={{
+        height: 'calc(100% - 4px)',
+        left: `${innerRange?.start || clipElement.start * pixelPerSecond}px`,
+        top: 2,
+      }}
+    >
       <div
         className="box-border h-full"
         style={{

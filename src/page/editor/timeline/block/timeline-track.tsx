@@ -10,7 +10,7 @@ export const TimelineTrack = memo((props: IProps) => {
   const { track } = props
 
   return (
-    <div className="flex bg-[#2f2f2f]">
+    <div className="relative flex h-10 w-full bg-[#2f2f2f]">
       {track?.clips.map(clip => (
         <TimelineTrackClip key={clip.elementId} clip={clip} />
       ))}
