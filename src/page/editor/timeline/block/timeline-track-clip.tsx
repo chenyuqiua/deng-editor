@@ -1,10 +1,14 @@
 import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { TrackClip } from '@/lib/remotion/editor-render/schema/track'
 import { cn } from '@/lib/utils'
-import React, { memo, useMemo } from 'react'
+import React, { memo } from 'react'
+import { useZustand } from 'use-zustand'
 import { ResizeWrapper } from '../../component/resize-wrapper'
+import { useDraftSelector } from '../../hook/draft'
 import { useEditorSelector } from '../../hook/editor'
-import { useDraftService, useEditorService } from '../../hook/service'
+import { useEditorService } from '../../hook/service'
+import { getElementById } from '../../util/draft'
+import { useTimelineViewController } from '../bootstarp/react-context'
 import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './timeline-thumbnail'
 
 interface IProps {
@@ -24,11 +28,14 @@ const getElementThumbnail = (element: AllElement): React.ReactNode => {
 export const TimelineTrackClip = memo((props: IProps) => {
   const { clip } = props
 
-  const draftService = useDraftService()
   const editorService = useEditorService()
-
   const selectElementId = useEditorSelector(s => s.selectElementId)
-  const clipElement = useMemo(() => draftService.getElement(clip.elementId), [clip.elementId])
+  const vc = useTimelineViewController()
+
+  const clipElement = useDraftSelector(s => getElementById(s.draft, clip.elementId))
+  const pixelPerSecond = useZustand(vc.store, s => s.pixelPerSecond)
+
+  const clipWidth = clipElement.length * pixelPerSecond
 
   return (
     <ResizeWrapper>
@@ -36,7 +43,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
         className="box-border h-full"
         style={{
           overflow: 'hidden',
-          width: `${100}px`,
+          width: `${clipWidth}px`,
         }}
       >
         <div
