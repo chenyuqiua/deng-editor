@@ -16,7 +16,8 @@ export const useGetElements = (draft: DraftDataType) => {
     })
 
     return {
-      displayElements,
+      // 因为 remotion 的渲染顺序是自下而上的，所以需要反转一下, 让数组前面的元素在上面
+      displayElements: displayElements.reverse(),
       audioElements,
     }
   }, [draft])
