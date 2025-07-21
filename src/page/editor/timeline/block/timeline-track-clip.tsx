@@ -1,8 +1,8 @@
+import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { TrackClip } from '@/lib/remotion/editor-render/schema/track'
 import React, { memo, useMemo } from 'react'
-import { TextThumbnail, ImageThumbnail, AudioThumbnail } from './timeline-Thumbnail'
 import { useDraftService } from '../../hook/service'
-import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
+import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './timeline-thumbnail'
 
 interface IProps {
   clip: TrackClip
