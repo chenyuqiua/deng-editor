@@ -10,7 +10,11 @@ export const TextThumbnail = memo((props: ElementThumbnailProps) => {
   const draftService = useDraftService()
   const element = useMemo(() => draftService.getElementById(elementId, 'text'), [elementId])
 
-  return <div className="w-full bg-[#924e3c] px-2 select-none">{element.text}</div>
+  return (
+    <div className="flex size-full items-center overflow-hidden bg-[#924e3c] px-2 text-nowrap">
+      {element.text}
+    </div>
+  )
 })
 
 export const ImageThumbnail = memo((props: ElementThumbnailProps) => {

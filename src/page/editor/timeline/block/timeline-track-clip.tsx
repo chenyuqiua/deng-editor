@@ -23,7 +23,7 @@ const getElementThumbnail = (element: AllElement): React.ReactNode => {
     audio: <AudioThumbnail elementId={element.id} />,
   }
 
-  return map[element.type]
+  return <div className="size-full select-none">{map[element.type]}</div>
 }
 
 export const TimelineTrackClip = memo((props: IProps) => {
@@ -71,11 +71,9 @@ export const TimelineTrackClip = memo((props: IProps) => {
       onResizeComplete={handleResizeComplete}
       leftHandle={<div className="h-full w-1" />}
       rightHandle={<div className="h-full w-1" />}
-      className="absolute w-fit"
+      className="absolute top-[2px] h-[calc(100%-4px)] w-fit"
       style={{
-        height: 'calc(100% - 4px)',
         left: `${innerRange?.start || clipElement.start * pixelPerSecond}px`,
-        top: 2,
       }}
     >
       <div
@@ -87,7 +85,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
       >
         <div
           className={cn(
-            'overflow-hidden rounded-sm',
+            'size-full overflow-hidden rounded-sm',
             'transition-[border-color] duration-150 ease-in-out',
             'border-2 border-solid border-transparent hover:border-[#47E7FF]',
             selectElementId === clip.elementId && 'border-[#47E7FF]'
