@@ -7,6 +7,7 @@ import { ResizeWrapper } from '../../component/resize-wrapper'
 import { useDraftSelector } from '../../hook/draft'
 import { useEditorSelector } from '../../hook/editor'
 import { useEditorService } from '../../hook/service'
+import type { PixelRange } from '../../type/timeline'
 import { getElementById } from '../../util/draft'
 import { useTimelineViewController } from '../bootstarp/react-context'
 import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './timeline-thumbnail'
@@ -34,9 +35,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
 
   const clipElement = useDraftSelector(s => getElementById(s.draft, clip.elementId))
   const pixelPerSecond = useZustand(vc.store, s => s.pixelPerSecond)
-  const [innerRange, setInnerRange] = useState<{ start: number; width: number } | undefined>(
-    undefined
-  )
+  const [innerRange, setInnerRange] = useState<PixelRange | undefined>(undefined)
 
   const clipWidth = innerRange?.width || clipElement.length * pixelPerSecond
 

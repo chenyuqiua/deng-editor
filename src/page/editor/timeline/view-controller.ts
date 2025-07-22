@@ -1,6 +1,7 @@
 import { BasicState } from '@/common/class/basic-state'
 import _ from 'lodash'
 import type { IDraftService } from '../service/draft-service.type'
+import type { PixelRange, TimeRange } from '../type/timeline'
 
 const initialState = {
   // 1秒在Timeline上占多少像素
@@ -14,7 +15,10 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     super(initialState)
   }
 
-  getClipPixelRange(props: { offset: { left: number; right: number }; clipElementId: string }) {
+  getClipPixelRange(props: {
+    offset: { left: number; right: number }
+    clipElementId: string
+  }): PixelRange | undefined {
     const { offset, clipElementId } = props
 
     const clipElement = this._draftService.getElementById(clipElementId)
@@ -25,7 +29,7 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     if (pixelRange.start < 0) return
     const timeRange = this._transformPixelRangeToTimeRange(pixelRange)
 
-    const resizeEditableRange = this._calcResizeEditableRange({
+    const resizeEditableRange = this._calcResizeEditableTimeRange({
       timeRange,
       clipElementId,
       direction: 'left',
@@ -39,18 +43,14 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     }
   }
 
-  // 计算在track上可的编辑范围
-  private _calcResizeEditableRange(props: {
-    timeRange: { start: number; length: number }
+  // 计算在track上可编辑的时间范围
+  private _calcResizeEditableTimeRange(props: {
+    timeRange: TimeRange
     clipElementId: string
     direction?: 'left' | 'right'
-  }) {
-    const { timeRange: _range, clipElementId } = props
-    if (!_range || _range.start > _range.start + _range.length) return undefined
-    const timeRange = {
-      start: _range.start,
-      end: _range.start + _range.length,
-    }
+  }): TimeRange | undefined {
+    const { timeRange, clipElementId } = props
+    if (!timeRange || timeRange.start > timeRange.end) return undefined
 
     const trackRanges = this._getAllTrackRangesExceptSelf(clipElementId)
     if (!trackRanges) return undefined
@@ -58,19 +58,7 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     const leftBound = _.findLast(trackRanges, r => r.start < timeRange.start)?.end
     const rightBound = trackRanges.find(r => r.end > timeRange.end)?.start
 
-    // TODO:
-    // const inTargetRangeRanges = trackRanges.filter(
-    //   usedRange => usedRange.start >= timeRange.start && usedRange.end <= timeRange.end
-    // )
-    // if (inTargetRangeRanges.length > 0) {
-    //   if (direction === 'left') {
-    //     leftBoundRange = inTargetRangeRanges.at(-1)
-    //   } else {
-    //     rightBoundRange = inTargetRangeRanges[0]
-    //   }
-    // }
-
-    const ansRange = {
+    const ansRange: TimeRange = {
       start: Math.max(0, timeRange.start),
       end: timeRange.end,
     }
@@ -105,13 +93,13 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
   }
 
   // 将像素范围的变化转换为时间范围的变化
-  private _transformPixelRangeToTimeRange(props: { start: number; width: number }) {
+  private _transformPixelRangeToTimeRange(props: PixelRange): TimeRange {
     const { start, width } = props
     const pixelPerSecond = this.state.pixelPerSecond
 
     return {
       start: start / pixelPerSecond,
-      length: width / pixelPerSecond,
+      end: (start + width) / pixelPerSecond,
     }
   }
 
@@ -119,7 +107,7 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
   private _calcFrameAlignedPixelBounds(props: {
     offset: { left: number; right: number }
     clipElementId: string
-  }) {
+  }): PixelRange {
     const { offset, clipElementId } = props
 
     const clipElement = this._draftService.getElementById(clipElementId)
