@@ -2,11 +2,15 @@ import { BasicState } from '@/common/class/basic-state'
 import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
 import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
-import { isDisplayElement } from '@/lib/remotion/editor-render/util/draft'
+import {
+  calcDraftDurationInSeconds,
+  isDisplayElement,
+} from '@/lib/remotion/editor-render/util/draft'
 import { ElementNotFoundError } from '../error/element-not-found-error'
 import { ElementTypeError } from '../error/element-type-error'
 import { getElementById, getTrackByElementId } from '../util/draft'
 import type { IDraftService } from './draft-service.type'
+import _ from 'lodash'
 
 const initialState = {
   draft: {
@@ -22,6 +26,15 @@ export type DraftStoreStateType = typeof initialState
 export class DraftService extends BasicState<DraftStoreStateType> implements IDraftService {
   constructor() {
     super(initialState)
+    this.onStateChange(
+      _.debounce(state => {
+        // TODO: frameDuration 需要更新
+        const duration = calcDraftDurationInSeconds(state.draft)
+        this.setState(s => {
+          s.duration = duration
+        })
+      }, 200)
+    )
   }
 
   get draft() {

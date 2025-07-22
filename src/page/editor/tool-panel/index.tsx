@@ -21,8 +21,9 @@ export const ToolPanel = memo((props: IProps) => {
     <div className={cn('flex flex-col gap-2', className)}>
       <IconPark icon="align-top" color="#fff" className="text-white" />
       ToolPanel
-      <Button>{`${JSON.stringify(draft.name)}`}</Button>
+      <Button className="w-fit">{`${JSON.stringify(draft.name)}`}</Button>
       <Button
+        className="w-fit"
         onClick={() => {
           draftService.setState(s => {
             s.draft.name = '123321'
@@ -32,6 +33,7 @@ export const ToolPanel = memo((props: IProps) => {
         btn
       </Button>
       <Button
+        className="w-fit"
         onClick={() => {
           draftService.setState(s => {
             s.draft = onlyTextDraft
@@ -41,6 +43,7 @@ export const ToolPanel = memo((props: IProps) => {
         set mock draft
       </Button>
       <Button
+        className="w-fit"
         onClick={() => {
           editorService.setSelectElementId('test_image_1')
         }}
@@ -48,6 +51,7 @@ export const ToolPanel = memo((props: IProps) => {
         set select element id
       </Button>
       <Button
+        className="w-fit"
         variant="secondary"
         onClick={() => {
           playerService.toggle()

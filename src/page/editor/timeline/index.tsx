@@ -18,7 +18,7 @@ export const Timeline = memo((props: IProps) => {
     <TimelineBootstrap>
       <div className={cn('flex w-full flex-col border-t-[1px] border-t-gray-100', className)}>
         <TimelineAction />
-        <div className="flex flex-col">
+        <div className="flex max-w-full flex-col overflow-x-scroll">
           <TimelineRuler>
             {tracks.map(track => (
               <TimelineTrack key={track.id} track={track} />
