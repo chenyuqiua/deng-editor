@@ -15,6 +15,16 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     super(initialState)
   }
 
+  getClipTimeRange(props: {
+    offset: { left: number; right: number }
+    clipElementId: string
+  }): TimeRange | undefined {
+    const pixelRange = this.getClipPixelRange(props)
+    if (!pixelRange) return undefined
+
+    return this._transformPixelRangeToTimeRange(pixelRange)
+  }
+
   getClipPixelRange(props: {
     offset: { left: number; right: number }
     clipElementId: string

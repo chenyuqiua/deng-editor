@@ -6,7 +6,7 @@ import { useZustand } from 'use-zustand'
 import { ResizeWrapper } from '../../component/resize-wrapper'
 import { useDraftSelector } from '../../hook/draft'
 import { useEditorSelector } from '../../hook/editor'
-import { useEditorService } from '../../hook/service'
+import { useDraftService, useEditorService } from '../../hook/service'
 import type { PixelRange } from '../../type/timeline'
 import { getElementById } from '../../util/draft'
 import { useTimelineViewController } from '../bootstarp/react-context'
@@ -30,6 +30,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
   const { clip } = props
 
   const editorService = useEditorService()
+  const draftService = useDraftService()
   const selectElementId = useEditorSelector(s => s.selectElementId)
   const vc = useTimelineViewController()
 
@@ -49,11 +50,25 @@ export const TimelineTrackClip = memo((props: IProps) => {
     setInnerRange(pixelRange)
   }
 
-  console.log(innerRange?.start, clipElement.start * pixelPerSecond, 123321)
+  const handleResizeComplete = (left: number, right: number) => {
+    console.log('resize complete', left, right)
+    const timeRange = vc.getClipTimeRange({
+      offset: { left, right },
+      clipElementId: clip.elementId,
+    })
+    if (!timeRange) return
+
+    draftService.updateElement(clip.elementId, {
+      start: timeRange.start,
+      length: timeRange.end - timeRange.start,
+    })
+    setInnerRange(undefined)
+  }
 
   return (
     <ResizeWrapper
       onResizing={handleResizeInPixel}
+      onResizeComplete={handleResizeComplete}
       className="absolute w-fit"
       style={{
         height: 'calc(100% - 4px)',

@@ -57,10 +57,14 @@ export const ResizeWrapper = memo((props: IProps) => {
 
     const startResize = () => {
       document.addEventListener('pointermove', handlePointerMove)
-      document.addEventListener('pointerup', e => {
-        handlePointerUp(e)
-        document.removeEventListener('pointermove', handlePointerMove)
-      })
+      document.addEventListener(
+        'pointerup',
+        e => {
+          handlePointerUp(e)
+          document.removeEventListener('pointermove', handlePointerMove)
+        },
+        { once: true }
+      )
     }
 
     leftHandleEl.addEventListener('pointerdown', handlePointerDown)
