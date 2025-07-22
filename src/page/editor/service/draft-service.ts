@@ -26,13 +26,17 @@ export type DraftStoreStateType = typeof initialState
 export class DraftService extends BasicState<DraftStoreStateType> implements IDraftService {
   constructor() {
     super(initialState)
+
+    // 监听 draft.timeline.elements 变化，自动更新 duration
     this.onStateChange(
-      _.debounce(state => {
+      _.debounce((state: typeof initialState, preState: typeof initialState) => {
         // TODO: frameDuration 需要更新
-        const duration = calcDraftDurationInSeconds(state.draft)
-        this.setState(s => {
-          s.duration = duration
-        })
+        if (!_.isEqual(state.draft.timeline.elements, preState.draft.timeline.elements)) {
+          const duration = calcDraftDurationInSeconds(state.draft)
+          this.setState(s => {
+            s.duration = duration
+          })
+        }
       }, 200)
     )
   }
