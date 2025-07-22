@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
-import { memo, useEffect, useRef, type PropsWithChildren } from 'react'
+import { flushSync } from 'react-dom'
+import { memo, useEffect, useRef, type PropsWithChildren, useState } from 'react'
 
 type ResizeListener = (leftOffset: number, rightOffset: number) => void
 type IProps = React.HTMLAttributes<HTMLDivElement> &
@@ -17,6 +18,8 @@ const RIGHT_HANDLER_ID = '__resize-wrapper-right-handler'
 export const ResizeWrapper = memo((props: IProps) => {
   const { children, leftHandle, rightHandle, onResizing, onResizeComplete, className, ...rest } =
     props
+
+  const [isResizing, setIsResizing] = useState(false)
 
   const leftHandleRef = useRef<HTMLDivElement>(null)
   const rightHandleRef = useRef<HTMLDivElement>(null)
@@ -45,6 +48,9 @@ export const ResizeWrapper = memo((props: IProps) => {
       startOffset = e.clientX
       currentHandlerId = (e.currentTarget as HTMLDivElement | null)?.id
       startResize()
+      flushSync(() => {
+        setIsResizing(true)
+      })
     }
 
     const handlePointerMove = (e: MouseEvent) => {
@@ -53,6 +59,9 @@ export const ResizeWrapper = memo((props: IProps) => {
 
     const handlePointerUp = (e: MouseEvent) => {
       calcOffset(e, onResizeComplete)
+      flushSync(() => {
+        setIsResizing(false)
+      })
     }
 
     const startResize = () => {
@@ -80,21 +89,23 @@ export const ResizeWrapper = memo((props: IProps) => {
 
   return (
     <>
-      {/* <div className="fixed top-0 left-0 z-[9999] h-screen w-screen cursor-ew-resize"></div> */}
+      {isResizing && (
+        <div className="fixed top-0 left-0 z-[1900] h-screen w-screen cursor-ew-resize" />
+      )}
       <div className={cn('relative', className)} {...rest}>
         <div
           ref={leftHandleRef}
           id={LEFT_HANDLER_ID}
           className="absolute top-0 left-0 h-full w-fit cursor-ew-resize"
         >
-          {leftHandle || <div className="h-full w-1 bg-red-500" />}
+          {leftHandle}
         </div>
         <div
           ref={rightHandleRef}
           id={RIGHT_HANDLER_ID}
           className="absolute top-0 right-0 h-full w-fit cursor-ew-resize"
         >
-          {rightHandle || <div className="h-full w-1 bg-red-500" />}
+          {rightHandle}
         </div>
         {children}
       </div>

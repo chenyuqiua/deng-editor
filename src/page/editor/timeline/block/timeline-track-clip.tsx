@@ -69,6 +69,8 @@ export const TimelineTrackClip = memo((props: IProps) => {
     <ResizeWrapper
       onResizing={handleResizeInPixel}
       onResizeComplete={handleResizeComplete}
+      leftHandle={<div className="h-full w-1" />}
+      rightHandle={<div className="h-full w-1" />}
       className="absolute w-fit"
       style={{
         height: 'calc(100% - 4px)',
