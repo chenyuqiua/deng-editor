@@ -15,7 +15,6 @@ export const TimelineAction = memo(() => {
   const displayDuration = Math.max(duration, minDuration)
 
   const throttleUpdatePixelPerSecond = _.throttle(vc.updatePixelPerSecond.bind(vc), 100)
-  console.log(scaleWidth, duration, 'min')
 
   return (
     <div className="flex h-12 items-center">
@@ -26,7 +25,6 @@ export const TimelineAction = memo(() => {
           max={1000}
           value={[pixelPerSecond]}
           onValueChange={([newVal]) => {
-            // console.log(newVal, 'newVal')
             if (!isNaN(newVal)) {
               throttleUpdatePixelPerSecond(newVal)
             }

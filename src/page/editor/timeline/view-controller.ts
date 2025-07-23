@@ -62,7 +62,6 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
   }
 
   updateScaleWidth(newVal: number) {
-    console.log(newVal, 'newVal')
     this.setState(s => {
       s.scaleWidth = newVal
     })
