@@ -5,7 +5,26 @@ import { useTimelineViewController } from '../bootstarp/react-context'
 import { useSize } from '@/common/hook/use-size'
 import _ from 'lodash'
 
-// const MAX_DURATION = 5 * 60
+type ScaleIntervalConfigType = { interval: number; intervalCount: number }
+
+const scaleIntervalConfig: ScaleIntervalConfigType[] = [
+  { interval: 0.1, intervalCount: 3 },
+  { interval: 0.5, intervalCount: 5 },
+  { interval: 1, intervalCount: 5 },
+  { interval: 2, intervalCount: 4 },
+  { interval: 5, intervalCount: 5 },
+  { interval: 10, intervalCount: 5 },
+  { interval: 30, intervalCount: 6 },
+  { interval: 60, intervalCount: 6 },
+  { interval: 120, intervalCount: 4 },
+]
+
+function getMatchedScaleSection(pixelPerSecond: number): ScaleIntervalConfigType {
+  const section = scaleIntervalConfig.find(item => {
+    return item.interval * pixelPerSecond > 96
+  })
+  return section ? section : (scaleIntervalConfig.at(-1) as ScaleIntervalConfigType)
+}
 
 export const TimelineScale = memo((props: PropsWithChildren) => {
   const { children } = props
@@ -19,10 +38,9 @@ export const TimelineScale = memo((props: PropsWithChildren) => {
   const minDuration = Math.ceil((size?.width ?? 0) / pixelPerSecond)
   // 多展示1秒的位置
   const displayDuration = Math.max(duration + 1, minDuration)
-  const interval = 0.5
-  const intervalCount = 4
+  const { interval, intervalCount } = getMatchedScaleSection(pixelPerSecond)
 
-  const intervalArray = Array(displayDuration / interval).fill(null)
+  const intervalArray = Array(Math.ceil(displayDuration / interval)).fill(null)
   const dotArray = Array(intervalCount).fill(null)
 
   const throttleUpdateScaleWidth = _.throttle(vc.updateScaleWidth.bind(vc), 100)
