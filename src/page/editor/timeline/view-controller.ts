@@ -6,6 +6,8 @@ import type { PixelRange, TimeRange } from '../type/timeline'
 const initialState = {
   // 1秒在Timeline上占多少像素
   pixelPerSecond: 300,
+  // 时间刻度尺容器的宽度
+  scaleWidth: 0,
 }
 
 type TimelineViewControllerState = typeof initialState
@@ -51,6 +53,19 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
       start: start * pixelPerSecond,
       width: (end - start) * pixelPerSecond,
     }
+  }
+
+  updatePixelPerSecond(newVal: number) {
+    this.setState(s => {
+      s.pixelPerSecond = newVal
+    })
+  }
+
+  updateScaleWidth(newVal: number) {
+    console.log(newVal, 'newVal')
+    this.setState(s => {
+      s.scaleWidth = newVal
+    })
   }
 
   // 计算在track上可编辑的时间范围

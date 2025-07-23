@@ -3,7 +3,7 @@ import { useDraftSelector } from '../hook/draft'
 import { TimelineBootstrap } from './bootstarp/bootstarp'
 import { TimelineTrack } from './block/timeline-track'
 import { TimelineAction } from './block/timeline-action'
-import { TimelineRuler } from './block/timeline-ruler'
+import { TimelineScale } from './block/timeline-scale'
 import { cn } from '@/lib/utils'
 
 interface IProps {
@@ -18,14 +18,12 @@ export const Timeline = memo((props: IProps) => {
     <TimelineBootstrap>
       <div className={cn('flex w-full flex-col border-t-[1px] border-t-gray-100', className)}>
         <TimelineAction />
-        <div className="flex max-w-full flex-col overflow-x-scroll">
-          <TimelineRuler>
-            {tracks.map(track => (
-              <TimelineTrack key={track.id} track={track} />
-            ))}
-            <div>test</div>
-          </TimelineRuler>
-        </div>
+        <TimelineScale>
+          {tracks.map(track => (
+            <TimelineTrack key={track.id} track={track} />
+          ))}
+          <div>test</div>
+        </TimelineScale>
       </div>
     </TimelineBootstrap>
   )

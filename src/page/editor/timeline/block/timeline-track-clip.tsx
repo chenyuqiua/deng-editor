@@ -51,7 +51,6 @@ export const TimelineTrackClip = memo((props: IProps) => {
   }
 
   const handleResizeComplete = (left: number, right: number) => {
-    console.log('resize complete', left, right)
     const timeRange = vc.getClipTimeRange({
       offset: { left, right },
       clipElementId: clip.elementId,

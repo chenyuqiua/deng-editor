@@ -202,7 +202,6 @@ export class InteractionManager {
   }
 
   private _updateMoveableOnSizeChange() {
-    console.log('updateMoveableOnSizeChange')
     // wait for the dom update
     setTimeout(() => {
       this._hoverMoveable?.updateRect()

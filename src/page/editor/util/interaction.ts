@@ -74,7 +74,6 @@ export function refreshClickMoveableListeners(
   let diff = getInitialDiff()
 
   const handleStart = () => {
-    console.log('handleStart')
     const targetEl = moveable.target as HTMLElement
     if (!targetEl) return
 
@@ -92,7 +91,6 @@ export function refreshClickMoveableListeners(
     const targetEl = moveable.target as HTMLElement
     if (!targetEl) return
 
-    console.log(startData.transform, 'startData.transform')
     const [t1, t2] = startData.transform.split(' scale')
 
     // 保留原有的 translate 和 rotate, 但是会用新的对其覆盖
@@ -170,7 +168,6 @@ export function refreshClickMoveableListeners(
   moveable.on('drag', data => {
     diff.x += data.delta[0]
     diff.y += data.delta[1]
-    console.log(data.delta[0], data.delta[1], 'drag')
     handleUpdate()
   })
   moveable.on('rotate', data => {
