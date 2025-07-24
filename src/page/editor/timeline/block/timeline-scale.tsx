@@ -1,9 +1,11 @@
-import { Fragment, memo, useRef, type PropsWithChildren, useEffect } from 'react'
+import { useSize } from '@/common/hook/use-size'
+import { cn } from '@/lib/utils'
+import _ from 'lodash'
+import { Fragment, memo, useEffect, useRef, type PropsWithChildren } from 'react'
 import { useZustand } from 'use-zustand'
 import { useDraftSelector } from '../../hook/draft'
+import { useDraftService } from '../../hook/service'
 import { useTimelineViewController } from '../bootstarp/react-context'
-import { useSize } from '@/common/hook/use-size'
-import _ from 'lodash'
 
 type ScaleIntervalConfigType = { interval: number; intervalCount: number }
 
@@ -29,6 +31,7 @@ function getMatchedScaleSection(pixelPerSecond: number): ScaleIntervalConfigType
 export const TimelineScale = memo((props: PropsWithChildren) => {
   const { children } = props
   const vc = useTimelineViewController()
+  const draftService = useDraftService()
   const duration = useDraftSelector(s => s.duration)
   const pixelPerSecond = useZustand(vc.store, s => s.pixelPerSecond)
 
@@ -74,15 +77,22 @@ export const TimelineScale = memo((props: PropsWithChildren) => {
                   if (dotIndex === 0) return null
                   const dotInterval = interval / intervalCount
                   const dotTime = time + dotInterval * dotIndex
+                  const selfWidth = pixelPerSecond * dotInterval
+                  const isShowText = selfWidth > 80
 
                   return (
                     <div
                       key={dotIndex}
-                      className="absolute left-0 size-[2px] rounded-full bg-gray-800"
+                      className={cn(
+                        'absolute left-0',
+                        !isShowText && 'size-[2px] rounded-full bg-gray-800'
+                      )}
                       style={{
                         transform: `translateX(-50%) translateX(${pixelPerSecond * dotTime}px)`,
                       }}
-                    />
+                    >
+                      {isShowText && <span>{Math.floor(dotTime * draftService.fps)}f</span>}
+                    </div>
                   )
                 })}
               </Fragment>
