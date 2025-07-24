@@ -4,6 +4,7 @@ import _ from 'lodash'
 import { Fragment, memo, useEffect, useRef, type PropsWithChildren } from 'react'
 import { useZustand } from 'use-zustand'
 import { useDraftSelector } from '../../hook/draft'
+import { usePlayerSelector } from '../../hook/player'
 import { useDraftService } from '../../hook/service'
 import { useTimelineViewController } from '../bootstarp/react-context'
 
@@ -28,11 +29,22 @@ function getMatchedScaleSection(pixelPerSecond: number): ScaleIntervalConfigType
   return section ? section : (scaleIntervalConfig.at(-1) as ScaleIntervalConfigType)
 }
 
+function FrameBlock(props: React.HTMLAttributes<HTMLDivElement>) {
+  const { className, children, ...rest } = props
+  return (
+    <div className={cn('absolute top-0 left-0 h-full bg-white/1', className)} {...rest}>
+      {children}
+    </div>
+  )
+}
+
 export const TimelineScale = memo((props: PropsWithChildren) => {
   const { children } = props
   const vc = useTimelineViewController()
   const draftService = useDraftService()
   const duration = useDraftSelector(s => s.duration)
+  const isPlaying = usePlayerSelector(s => s.isPlaying)
+  const currentTime = usePlayerSelector(s => s.currentTime)
   const pixelPerSecond = useZustand(vc.store, s => s.pixelPerSecond)
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -45,6 +57,7 @@ export const TimelineScale = memo((props: PropsWithChildren) => {
 
   const intervalArray = Array(Math.ceil(displayDuration / interval)).fill(null)
   const dotArray = Array(intervalCount).fill(null)
+  const pixelPerFrame = pixelPerSecond / draftService.fps
 
   const throttleUpdateScaleWidth = _.throttle(vc.updateScaleWidth.bind(vc), 100)
 
@@ -53,6 +66,7 @@ export const TimelineScale = memo((props: PropsWithChildren) => {
     throttleUpdateScaleWidth(size.width)
   }, [size?.width])
 
+  console.log(pixelPerFrame, 'pixelPerFrame')
   return (
     <div className="flex max-w-full flex-col overflow-x-scroll" ref={containerRef}>
       <div
@@ -60,6 +74,7 @@ export const TimelineScale = memo((props: PropsWithChildren) => {
         style={{ width: `${displayDuration * pixelPerSecond}px` }}
       >
         <div className="relative flex h-5 w-full items-center justify-center bg-white/35 select-none">
+          {/* 时间刻度尺 */}
           {intervalArray.map((_, intervalIndex) => {
             const time = intervalIndex * interval
 
@@ -78,26 +93,69 @@ export const TimelineScale = memo((props: PropsWithChildren) => {
                   const dotInterval = interval / intervalCount
                   const dotTime = time + dotInterval * dotIndex
                   const selfWidth = pixelPerSecond * dotInterval
-                  const isShowText = selfWidth > 80
+                  const isShowFrame = selfWidth > 80
 
                   return (
-                    <div
-                      key={dotIndex}
-                      className={cn(
-                        'absolute left-0',
-                        !isShowText && 'size-[2px] rounded-full bg-gray-800'
+                    <>
+                      <div
+                        key={dotIndex}
+                        className={cn(
+                          'absolute left-0',
+                          !isShowFrame && 'size-[2px] rounded-full bg-gray-800'
+                        )}
+                        style={{
+                          transform: `translateX(-50%) translateX(${pixelPerSecond * dotTime}px)`,
+                        }}
+                      >
+                        {isShowFrame && <span>{Math.floor(dotTime * draftService.fps)}f</span>}
+                      </div>
+
+                      {/* 当前时间 前后各绘制一帧的宽度 用于预览 */}
+                      {!isPlaying && isShowFrame && (
+                        <>
+                          {Math.ceil(currentTime * draftService.fps) > 0 && (
+                            <FrameBlock
+                              style={{
+                                width: pixelPerFrame,
+                                left:
+                                  (Math.ceil(currentTime * draftService.fps) - 1) * pixelPerFrame,
+                              }}
+                            />
+                          )}
+                          <FrameBlock
+                            style={{
+                              width: pixelPerFrame,
+                              left: Math.ceil(currentTime * draftService.fps) * pixelPerFrame,
+                            }}
+                          />
+                        </>
                       )}
-                      style={{
-                        transform: `translateX(-50%) translateX(${pixelPerSecond * dotTime}px)`,
-                      }}
-                    >
-                      {isShowText && <span>{Math.floor(dotTime * draftService.fps)}f</span>}
-                    </div>
+                    </>
                   )
                 })}
               </Fragment>
             )
           })}
+
+          {/* 当前时间 前后各绘制一帧的宽度 用于预览 */}
+          {!isPlaying && pixelPerFrame > 80 && (
+            <>
+              {Math.ceil(currentTime * draftService.fps) > 0 && (
+                <FrameBlock
+                  style={{
+                    width: pixelPerFrame,
+                    left: (Math.ceil(currentTime * draftService.fps) - 1) * pixelPerFrame,
+                  }}
+                />
+              )}
+              <FrameBlock
+                style={{
+                  width: pixelPerFrame,
+                  left: Math.ceil(currentTime * draftService.fps) * pixelPerFrame,
+                }}
+              />
+            </>
+          )}
         </div>
 
         {children}
