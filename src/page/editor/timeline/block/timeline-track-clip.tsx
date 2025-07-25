@@ -6,9 +6,9 @@ import { useZustand } from 'use-zustand'
 import { ResizeWrapper } from '../../component/resize-wrapper'
 import { useDraftSelector } from '../../hook/draft'
 import { useEditorSelector } from '../../hook/editor'
-import { useDraftService, useEditorService } from '../../hook/service'
 import type { PixelRange } from '../../type/timeline'
 import { getElementById } from '../../util/draft'
+import { getDraftService, getEditorService } from '../../util/service'
 import { useTimelineViewController } from '../bootstarp/react-context'
 import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './timeline-thumbnail'
 
@@ -29,8 +29,8 @@ const getElementThumbnail = (element: AllElement): React.ReactNode => {
 export const TimelineTrackClip = memo((props: IProps) => {
   const { clip } = props
 
-  const editorService = useEditorService()
-  const draftService = useDraftService()
+  const editorService = getEditorService()
+  const draftService = getDraftService()
   const selectElementId = useEditorSelector(s => s.selectElementId)
   const vc = useTimelineViewController()
 

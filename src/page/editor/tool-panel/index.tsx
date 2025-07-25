@@ -4,7 +4,7 @@ import { IconPark } from '@/lib/iconpark'
 import { onlyTextDraft } from '@/lib/remotion/editor-render/mock/only-text-draft'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
-import { useDraftService, useEditorService, usePlayerService } from '../hook/service'
+import { getDraftService, getEditorService, getPlayerService } from '../util/service'
 
 interface IProps {
   className?: string
@@ -12,9 +12,9 @@ interface IProps {
 
 export const ToolPanel = memo((props: IProps) => {
   const { className } = props
-  const draftService = useDraftService()
-  const playerService = usePlayerService()
-  const editorService = useEditorService()
+  const draftService = getDraftService()
+  const playerService = getPlayerService()
+  const editorService = getEditorService()
   const draft = useDraftSelector(s => s.draft)
 
   return (

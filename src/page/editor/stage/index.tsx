@@ -2,7 +2,7 @@ import { EditorPlayer } from '@/lib/remotion/editor-render/player'
 import { memo } from 'react'
 import { cn } from '../../../common/util/css'
 import { useDraftSelector } from '../hook/draft'
-import { usePlayerService } from '../hook/service'
+import { getPlayerService } from '../util/service'
 import { StageInteraction } from './block/interaction'
 import { StageBootstrap } from './bootstarp/bootstarp'
 
@@ -13,7 +13,7 @@ interface IProps {
 export const Stage = memo((props: IProps) => {
   const { className } = props
   const draft = useDraftSelector(s => s.draft)
-  const playerService = usePlayerService()
+  const playerService = getPlayerService()
 
   return (
     <StageBootstrap>

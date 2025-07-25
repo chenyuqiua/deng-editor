@@ -5,7 +5,7 @@ import { Fragment, memo, useEffect, useRef, type PropsWithChildren } from 'react
 import { useZustand } from 'use-zustand'
 import { useDraftSelector } from '../../hook/draft'
 import { usePlayerSelector } from '../../hook/player'
-import { useDraftService } from '../../hook/service'
+import { getDraftService } from '../../util/service'
 import { useTimelineViewController } from '../bootstarp/react-context'
 
 type ScaleIntervalConfigType = { interval: number; intervalCount: number }
@@ -41,7 +41,7 @@ function FrameBlock(props: React.HTMLAttributes<HTMLDivElement>) {
 export const TimelineScale = memo((props: PropsWithChildren<{ className?: string }>) => {
   const { children, className } = props
   const vc = useTimelineViewController()
-  const draftService = useDraftService()
+  const draftService = getDraftService()
   const duration = useDraftSelector(s => s.duration)
   const isPlaying = usePlayerSelector(s => s.isPlaying)
   const currentTime = usePlayerSelector(s => s.currentTime)

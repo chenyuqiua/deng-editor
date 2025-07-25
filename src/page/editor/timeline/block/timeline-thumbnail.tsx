@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { useDraftService } from '../../hook/service'
+import { getDraftService } from '../../util/service'
 
 export interface ElementThumbnailProps {
   elementId: string
@@ -7,7 +7,7 @@ export interface ElementThumbnailProps {
 
 export const TextThumbnail = memo((props: ElementThumbnailProps) => {
   const { elementId } = props
-  const draftService = useDraftService()
+  const draftService = getDraftService()
   const element = useMemo(() => draftService.getElementById(elementId, 'text'), [elementId])
 
   return (
@@ -19,7 +19,7 @@ export const TextThumbnail = memo((props: ElementThumbnailProps) => {
 
 export const ImageThumbnail = memo((props: ElementThumbnailProps) => {
   const { elementId } = props
-  const draftService = useDraftService()
+  const draftService = getDraftService()
   const element = useMemo(() => draftService.getElementById(elementId, 'image'), [elementId])
 
   return <div className="">{element.id}</div>
@@ -27,7 +27,7 @@ export const ImageThumbnail = memo((props: ElementThumbnailProps) => {
 
 export const AudioThumbnail = memo((props: ElementThumbnailProps) => {
   const { elementId } = props
-  const draftService = useDraftService()
+  const draftService = getDraftService()
   const element = useMemo(() => draftService.getElementById(elementId, 'audio'), [elementId])
 
   return <div className="">{element.id}</div>

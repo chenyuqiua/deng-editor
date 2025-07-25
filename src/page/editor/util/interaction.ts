@@ -1,9 +1,8 @@
 import type { Point } from '@/lib/remotion/editor-render/schema/common'
-import type Moveable from 'moveable'
 import { isDisplayElement } from '@/lib/remotion/editor-render/util/draft'
-import { getService } from '../bootstrap/context'
-import { IDraftService } from '../service/draft-service.type'
 import _ from 'lodash'
+import type Moveable from 'moveable'
+import { getDraftService } from './service'
 
 export function pointRotate(point: Point, rad: number) {
   const { x, y } = point
@@ -112,7 +111,7 @@ export function refreshClickMoveableListeners(
   const handleEnd = () => {
     if (_.isEqual(diff, getInitialDiff())) return
 
-    const draftService = getService(IDraftService)
+    const draftService = getDraftService()
     const draftEl = draftService.getElementById(selectedElementId)
     if (!draftEl || !isDisplayElement(draftEl)) return
 
