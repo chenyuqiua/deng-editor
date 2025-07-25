@@ -38,8 +38,8 @@ function FrameBlock(props: React.HTMLAttributes<HTMLDivElement>) {
   )
 }
 
-export const TimelineScale = memo((props: PropsWithChildren) => {
-  const { children } = props
+export const TimelineScale = memo((props: PropsWithChildren<{ className?: string }>) => {
+  const { children, className } = props
   const vc = useTimelineViewController()
   const draftService = useDraftService()
   const duration = useDraftSelector(s => s.duration)
@@ -68,7 +68,7 @@ export const TimelineScale = memo((props: PropsWithChildren) => {
 
   console.log(pixelPerFrame, 'pixelPerFrame')
   return (
-    <div className="flex max-w-full flex-col overflow-x-scroll" ref={containerRef}>
+    <div className={cn('flex max-w-full flex-col overflow-x-scroll', className)} ref={containerRef}>
       <div
         className="flex flex-col gap-2 overflow-hidden text-xs"
         style={{ width: `${displayDuration * pixelPerSecond}px` }}

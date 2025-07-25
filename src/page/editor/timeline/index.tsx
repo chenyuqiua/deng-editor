@@ -2,6 +2,7 @@ import { cn } from '@/common/util/css'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
 import { TimelineAction } from './block/timeline-action'
+import { TimeIndicator } from './block/timeline-indicator'
 import { TimelineScale } from './block/timeline-scale'
 import { TimelineTrack } from './block/timeline-track'
 import { TimelineBootstrap } from './bootstarp/bootstarp'
@@ -18,7 +19,8 @@ export const Timeline = memo((props: IProps) => {
     <TimelineBootstrap>
       <div className={cn('flex w-full flex-col border-t-[1px] border-t-gray-100', className)}>
         <TimelineAction />
-        <TimelineScale>
+        <TimelineScale className="relative">
+          <TimeIndicator />
           {tracks.map(track => (
             <TimelineTrack key={track.id} track={track} />
           ))}
