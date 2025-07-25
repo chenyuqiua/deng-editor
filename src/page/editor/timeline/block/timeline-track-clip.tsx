@@ -11,6 +11,7 @@ import { getElementById } from '../../util/draft'
 import { getDraftService, getEditorService } from '../../util/service'
 import { useTimelineViewController } from '../bootstarp/react-context'
 import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './timeline-thumbnail'
+import { useDrag } from 'react-dnd'
 
 interface IProps {
   clip: TrackClip
@@ -40,6 +41,13 @@ export const TimelineTrackClip = memo((props: IProps) => {
 
   const clipWidth = innerRange?.width || clipElement.length * pixelPerSecond
 
+  const [, drag] = useDrag(() => ({
+    type: 'clip',
+    item: {
+      clipElementId: clip.elementId,
+    },
+  }))
+
   const handleResizeInPixel = (left: number, right: number) => {
     const params = {
       offset: { left, right },
@@ -66,6 +74,9 @@ export const TimelineTrackClip = memo((props: IProps) => {
 
   return (
     <ResizeWrapper
+      ref={elem => {
+        if (elem) drag(elem)
+      }}
       onResizing={handleResizeInPixel}
       onResizeComplete={handleResizeComplete}
       leftHandle={<div className="h-full w-1" />}
