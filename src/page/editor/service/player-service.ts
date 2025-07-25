@@ -204,6 +204,13 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
     )
   }
 
+  seekToFrame(frame: number) {
+    if (!this._player) return
+    const durationInFrame = Math.ceil(this._draftService.state.duration * this._draftService.fps)
+    const validFrame = Math.min(durationInFrame, Math.max(0, Math.ceil(frame)))
+    this._player?.seekTo(validFrame)
+  }
+
   private _onPlay(): void {
     this.setState(state => {
       state.isPlaying = true

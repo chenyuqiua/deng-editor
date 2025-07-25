@@ -1,18 +1,26 @@
 import { Slider } from '@/component/ui/slider'
-import { memo } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useTimelineViewController } from '../bootstarp/react-context'
 import { useZustand } from 'use-zustand'
 import { useDraftSelector } from '../../hook/draft'
 import _ from 'lodash'
+import { useSize } from '@/common/hook/use-size'
 
 export const TimelineAction = memo(() => {
   const vc = useTimelineViewController()
   const pixelPerSecond = useZustand(vc.store, s => s.pixelPerSecond)
   const duration = useDraftSelector(s => s.duration)
-  const scaleWidth = useZustand(vc.store, s => s.scaleWidth)
+  const scaleDomRef = useRef<HTMLDivElement>(vc.scaleDom)
+  const { width: scaleWidth } = useSize(scaleDomRef) || { width: 0 }
   // 当前刻度尺宽度能够刚好容下的时间长度
   const minDuration = Math.ceil(scaleWidth / pixelPerSecond)
   const displayDuration = Math.max(duration, minDuration)
+
+  useEffect(() => {
+    if (vc.scaleDom) {
+      scaleDomRef.current = vc.scaleDom
+    }
+  }, [vc.scaleDom])
 
   const throttleUpdatePixelPerSecond = _.throttle(vc.updatePixelPerSecond.bind(vc), 100)
 

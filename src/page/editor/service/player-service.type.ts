@@ -34,6 +34,13 @@ export interface IPlayerService {
    * @returns 在画布中的坐标, 如果不在画布中则返回undefined
    */
   clientPointToPlayerPoint: (point: Point) => Point | undefined
+  /**
+   * @description 判断当前点击的坐标是否在元素的范围内
+   * @param point 当前点击的坐标, 需要传入播放器坐标
+   * @param element 判断的元素
+   * @param playerScale 播放器缩放比例, 默认使用当前播放器的缩放比例
+   * @returns 是否在元素的范围内
+   */
   hitTest: (point: Point, element: AllDisplayElement, playerScale?: number) => boolean
   /**
    * @description 获取当前点击的元素, 只能获取到当前时间显示的元素
@@ -42,4 +49,5 @@ export interface IPlayerService {
    */
   findElementsByPoint: (point: Point) => AllDisplayElement[]
   getElementDomById: (elementId: string) => HTMLElement | undefined
+  seekToFrame: (frame: number) => void
 }

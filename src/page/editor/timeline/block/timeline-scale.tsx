@@ -1,7 +1,6 @@
 import { useSize } from '@/common/hook/use-size'
 import { cn } from '@/common/util/css'
-import _ from 'lodash'
-import { Fragment, memo, useEffect, useRef, type PropsWithChildren } from 'react'
+import { Fragment, memo, useRef, type PropsWithChildren } from 'react'
 import { useZustand } from 'use-zustand'
 import { useDraftSelector } from '../../hook/draft'
 import { usePlayerSelector } from '../../hook/player'
@@ -59,16 +58,14 @@ export const TimelineScale = memo((props: PropsWithChildren<{ className?: string
   const dotArray = Array(intervalCount).fill(null)
   const pixelPerFrame = pixelPerSecond / draftService.fps
 
-  const throttleUpdateScaleWidth = _.throttle(vc.updateScaleWidth.bind(vc), 100)
-
-  useEffect(() => {
-    if (!size?.width) return
-    throttleUpdateScaleWidth(size.width)
-  }, [size?.width])
-
-  console.log(pixelPerFrame, 'pixelPerFrame')
   return (
-    <div className={cn('flex max-w-full flex-col overflow-x-scroll', className)} ref={containerRef}>
+    <div
+      className={cn('flex max-w-full flex-col overflow-x-scroll', className)}
+      ref={ref => {
+        containerRef.current = ref
+        vc.setScaleDom(ref)
+      }}
+    >
       <div
         className="flex flex-col gap-2 overflow-hidden text-xs"
         style={{ width: `${displayDuration * pixelPerSecond}px` }}
@@ -96,7 +93,7 @@ export const TimelineScale = memo((props: PropsWithChildren<{ className?: string
                   const isShowFrame = selfWidth > 80
 
                   return (
-                    <>
+                    <Fragment key={dotIndex}>
                       <div
                         key={dotIndex}
                         className={cn(
@@ -130,7 +127,7 @@ export const TimelineScale = memo((props: PropsWithChildren<{ className?: string
                           />
                         </>
                       )}
-                    </>
+                    </Fragment>
                   )
                 })}
               </Fragment>

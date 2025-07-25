@@ -6,15 +6,20 @@ import type { PixelRange, TimeRange } from '../type/timeline'
 const initialState = {
   // 1秒在Timeline上占多少像素
   pixelPerSecond: 300,
-  // 时间刻度尺容器的宽度
-  scaleWidth: 0,
 }
 
 type TimelineViewControllerState = typeof initialState
 
 export class TimelineViewController extends BasicState<TimelineViewControllerState> {
+  // 时间刻度尺容器的Dom元素
+  private _scaleDom: HTMLDivElement | null = null
+
   constructor(private readonly _draftService: IDraftService) {
     super(initialState)
+  }
+
+  get scaleDom() {
+    return this._scaleDom
   }
 
   getClipTimeRange(props: {
@@ -55,16 +60,27 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
     }
   }
 
+  // 根据当前鼠标的clientX, 计算出对应的帧数偏移量(时间游标移动的帧数时长)
+  getFrameOffset(clientX: number) {
+    const rect = this._scaleDom?.getBoundingClientRect()
+    if (!rect) return
+    const offset = Math.min(Math.max(0, clientX - rect.left), rect.width)
+    const frameOffset = Math.max(
+      0,
+      Math.round((offset / this.state.pixelPerSecond) * this._draftService.fps)
+    )
+
+    return frameOffset
+  }
+
   updatePixelPerSecond(newVal: number) {
     this.setState(s => {
       s.pixelPerSecond = newVal
     })
   }
 
-  updateScaleWidth(newVal: number) {
-    this.setState(s => {
-      s.scaleWidth = newVal
-    })
+  setScaleDom(dom: HTMLDivElement | null) {
+    this._scaleDom = dom
   }
 
   // 计算在track上可编辑的时间范围

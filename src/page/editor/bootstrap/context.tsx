@@ -16,11 +16,6 @@ function ensureContainer(): AppContainer {
   return appContainer
 }
 
-export function useServices<T>(id: ServiceIdentifier<T>) {
-  const container = ensureContainer()
-  return container.invokeFunction(id)
-}
-
 export function getService<T>(id: ServiceIdentifier<T>) {
   const container = ensureContainer()
   return container.invokeFunction(id)
