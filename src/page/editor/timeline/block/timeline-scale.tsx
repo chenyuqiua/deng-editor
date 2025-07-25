@@ -1,5 +1,5 @@
 import { useSize } from '@/common/hook/use-size'
-import { cn } from '@/lib/utils'
+import { cn } from '@/common/util/css'
 import _ from 'lodash'
 import { Fragment, memo, useEffect, useRef, type PropsWithChildren } from 'react'
 import { useZustand } from 'use-zustand'

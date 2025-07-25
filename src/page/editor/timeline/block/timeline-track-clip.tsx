@@ -1,6 +1,6 @@
+import { cn } from '@/common/util/css'
 import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { TrackClip } from '@/lib/remotion/editor-render/schema/track'
-import { cn } from '@/lib/utils'
 import React, { memo, useState } from 'react'
 import { useZustand } from 'use-zustand'
 import { ResizeWrapper } from '../../component/resize-wrapper'

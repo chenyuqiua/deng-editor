@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/common/util/css'
+import { memo, useEffect, useRef, useState, type PropsWithChildren } from 'react'
 import { flushSync } from 'react-dom'
-import { memo, useEffect, useRef, type PropsWithChildren, useState } from 'react'
 
 type ResizeListener = (leftOffset: number, rightOffset: number) => void
 type IProps = React.HTMLAttributes<HTMLDivElement> &

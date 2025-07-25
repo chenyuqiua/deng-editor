@@ -1,10 +1,10 @@
+import { cn } from '@/common/util/css'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
-import { TimelineBootstrap } from './bootstarp/bootstarp'
-import { TimelineTrack } from './block/timeline-track'
 import { TimelineAction } from './block/timeline-action'
 import { TimelineScale } from './block/timeline-scale'
-import { cn } from '@/lib/utils'
+import { TimelineTrack } from './block/timeline-track'
+import { TimelineBootstrap } from './bootstarp/bootstarp'
 
 interface IProps {
   className?: string
