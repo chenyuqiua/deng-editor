@@ -81,7 +81,7 @@ export const TimelineTrack = memo((props: IProps) => {
         <TimelineTrackClip key={clip.elementId} clip={clip} className="h-[calc(100%-4px)]" />
       ))}
       {isOver && canDrop && (
-        <ClipDragPlaceholder timeRange={movingRange} className="h-[calc(100%-4px)]" />
+        <ClipDragPlaceholder timeRange={movingRange} className="top-[2px] h-[calc(100%-4px)]" />
       )}
     </div>
   )

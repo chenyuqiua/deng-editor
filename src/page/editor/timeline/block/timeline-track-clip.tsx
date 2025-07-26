@@ -100,7 +100,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
           className={cn(
             'size-full overflow-hidden rounded-sm',
             'transition-[border-color] duration-150 ease-in-out',
-            'border-2 border-solid border-transparent hover:border-[#47E7FF]',
+            'border-2 border-solid border-white/36 hover:border-[#47E7FF]',
             selectElementId === clip.elementId && 'border-[#47E7FF]'
           )}
           onClick={() => {
