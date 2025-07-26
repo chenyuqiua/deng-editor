@@ -55,7 +55,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
       offset: { left, right },
       clipElementId: clip.elementId,
     }
-    const pixelRange = vc.rangeManager.calcClipPixelRange(params)
+    const pixelRange = vc.rangeManager.calcResizePixelRange(params)
     if (!pixelRange) return
     setInnerRange(pixelRange)
   }
