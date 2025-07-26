@@ -32,4 +32,5 @@ export interface IDraftService {
   getTrackByElementId: (id: string) => Track | undefined
   updateElement: <T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) => void
   updateDisplayElement: (id: string, element: Partial<AllDisplayElement>) => void
+  moveElementToTrack: (elementId: string, trackId: string) => void
 }

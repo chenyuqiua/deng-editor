@@ -11,6 +11,7 @@ import { ElementTypeError } from '../error/element-type-error'
 import { getElementById, getTrackByElementId } from '../util/draft'
 import type { IDraftService } from './draft-service.type'
 import _ from 'lodash'
+import { TrackNotFoundedError } from '../error/track-not-founded-error'
 
 const initialState = {
   draft: {
@@ -87,5 +88,28 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
       throw new ElementTypeError(fullElem, 'DisplayElement')
     }
     this.updateElement(id, element)
+  }
+
+  moveElementToTrack(elementId: string, trackId: string) {
+    const elementTrack = this.getTrackByElementId(elementId)
+    if (!elementTrack) throw new TrackNotFoundedError({})
+    if (elementTrack.id === trackId) return
+
+    const tracks = this.draft.timeline.tracks
+    const originTrackIndex = tracks.findIndex(i => i.id === elementTrack.id)
+    const targetTrackIndex = tracks.findIndex(i => i.id === trackId)
+    if (originTrackIndex === -1 || targetTrackIndex === -1) return
+
+    const clip = tracks[originTrackIndex].clips.find(i => i.elementId === elementId)
+    if (!clip) return
+
+    this.setState(state => {
+      const originTrack = state.draft.timeline.tracks[originTrackIndex]
+      const targetTrack = state.draft.timeline.tracks[targetTrackIndex]
+      if (!originTrack || !targetTrack) return
+
+      originTrack.clips = originTrack.clips.filter(i => i.elementId !== elementId)
+      targetTrack.clips.push(clip)
+    })
   }
 }

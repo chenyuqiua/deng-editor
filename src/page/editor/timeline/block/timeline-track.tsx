@@ -25,8 +25,13 @@ export const TimelineTrack = memo((props: IProps) => {
         trackId: track.id,
       })
       if (!dropTimeRange) return
+
       const elementTrack = draftService.getTrackByElementId(item.elementId)
       if (!elementTrack || !track) return
+
+      if (elementTrack.id !== track.id) {
+        draftService.moveElementToTrack(item.elementId, track.id)
+      }
       draftService.updateElement(item.elementId, {
         start: dropTimeRange.start,
         length: dropTimeRange.end - dropTimeRange.start,
