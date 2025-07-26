@@ -1,6 +1,7 @@
 import { cn } from '@/common/util/css'
 import { memo, useEffect, useRef, useState, type PropsWithChildren, forwardRef } from 'react'
 import { flushSync } from 'react-dom'
+import { ResizeCursorFullScreen } from './resize-cursor-full-screen'
 
 type ResizeListener = (leftOffset: number, rightOffset: number) => void
 type IProps = React.HTMLAttributes<HTMLDivElement> &
@@ -90,9 +91,7 @@ export const ResizeWrapper = memo(
 
     return (
       <>
-        {isResizing && (
-          <div className="fixed top-0 left-0 z-[1900] h-screen w-screen cursor-ew-resize" />
-        )}
+        <ResizeCursorFullScreen show={isResizing} />
         <div ref={ref} className={cn('relative', className)} {...rest}>
           <div
             ref={leftHandleRef}
