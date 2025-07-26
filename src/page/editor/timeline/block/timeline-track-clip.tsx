@@ -12,6 +12,7 @@ import { getDraftService, getEditorService } from '../../util/service'
 import { useTimelineViewController } from '../bootstarp/react-context'
 import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './timeline-thumbnail'
 import { useDrag } from 'react-dnd'
+import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 
 interface IProps {
   clip: TrackClip
@@ -42,10 +43,11 @@ export const TimelineTrackClip = memo((props: IProps) => {
   const clipWidth = innerRange?.width || clipElement.length * pixelPerSecond
 
   const [, drag] = useDrag(() => ({
-    type: 'clip',
-    item: {
-      clipElementId: clip.elementId,
-    },
+    type: EditorDragType.TrackClip,
+    item: clip as TrackClipDragItem,
+    collect: monitor => ({
+      isDragging: monitor.isDragging(),
+    }),
   }))
 
   const handleResizeInPixel = (left: number, right: number) => {
@@ -53,13 +55,13 @@ export const TimelineTrackClip = memo((props: IProps) => {
       offset: { left, right },
       clipElementId: clip.elementId,
     }
-    const pixelRange = vc.getClipPixelRange(params)
+    const pixelRange = vc.rangeManager.calcClipPixelRange(params)
     if (!pixelRange) return
     setInnerRange(pixelRange)
   }
 
   const handleResizeComplete = (left: number, right: number) => {
-    const timeRange = vc.getClipTimeRange({
+    const timeRange = vc.rangeManager.calcClipTimeRange({
       offset: { left, right },
       clipElementId: clip.elementId,
     })

@@ -60,7 +60,7 @@ export const TimelineScale = memo((props: PropsWithChildren<{ className?: string
 
   return (
     <div
-      className={cn('flex max-w-full flex-col overflow-x-scroll', className)}
+      className={cn('flex w-full flex-col overflow-x-scroll', className)}
       ref={ref => {
         containerRef.current = ref
         vc.setScaleDom(ref)

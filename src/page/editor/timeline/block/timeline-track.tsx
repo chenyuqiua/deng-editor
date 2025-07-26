@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { TimelineTrackClip } from './timeline-track-clip'
 import { useDrop } from 'react-dnd'
 import type { Track } from '@/lib/remotion/editor-render/schema/track'
+import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 
 interface IProps {
   track: Track
@@ -10,12 +11,16 @@ interface IProps {
 export const TimelineTrack = memo((props: IProps) => {
   const { track } = props
 
-  const [, drop] = useDrop(() => ({
-    accept: 'clip',
-    drop: () => {
-      console.log('drop')
+  const [obj, drop] = useDrop(() => ({
+    accept: EditorDragType.TrackClip,
+    drop: (item: TrackClipDragItem, monitor) => {
+      if (!monitor.canDrop()) return
+      console.log('drop', item)
     },
+    collect: monitor => ({ isOver: monitor.isOver(), canDrop: monitor.canDrop() }),
   }))
+
+  console.log('obj', obj)
 
   return (
     <div
