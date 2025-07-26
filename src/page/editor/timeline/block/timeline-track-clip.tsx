@@ -16,6 +16,7 @@ import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 
 interface IProps {
   clip: TrackClip
+  className?: string
 }
 
 const getElementThumbnail = (element: AllElement): React.ReactNode => {
@@ -29,7 +30,7 @@ const getElementThumbnail = (element: AllElement): React.ReactNode => {
 }
 
 export const TimelineTrackClip = memo((props: IProps) => {
-  const { clip } = props
+  const { clip, className } = props
 
   const editorService = getEditorService()
   const draftService = getDraftService()
@@ -83,7 +84,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
       onResizeComplete={handleResizeComplete}
       leftHandle={<div className="h-full w-1" />}
       rightHandle={<div className="h-full w-1" />}
-      className="absolute top-[2px] h-[calc(100%-4px)] w-fit"
+      className={cn('absolute top-[2px] h-full w-fit', className)}
       style={{
         left: `${innerRange?.start || clipElement.start * pixelPerSecond}px`,
       }}

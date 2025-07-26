@@ -1,10 +1,12 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { TimelineTrackClip } from './timeline-track-clip'
 import { useDrop } from 'react-dnd'
 import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 import { getDraftService } from '../../util/service'
 import { useTimelineViewController } from '../bootstarp/react-context'
+import type { TimeRange } from '../../type/timeline'
+import { ClipDragPlaceholder } from './clip-drag-placeholder'
 
 interface IProps {
   track: Track
@@ -15,16 +17,21 @@ export const TimelineTrack = memo((props: IProps) => {
   const vc = useTimelineViewController()
   const draftService = getDraftService()
 
-  const [, drop] = useDrop(() => ({
+  const [movingRange, setMovingRange] = useState<TimeRange>({
+    start: 0,
+    end: 0,
+  })
+
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: EditorDragType.TrackClip,
     drop: (item: TrackClipDragItem, monitor) => {
       if (!monitor.canDrop()) return
-      const dropTimeRange = vc.rangeManager.calcDropTimeRange({
+      const timeRange = vc.rangeManager.calcDropTimeRange({
         clipElementId: item.elementId,
         offsetLeft: monitor.getDifferenceFromInitialOffset()?.x,
         trackId: track.id,
       })
-      if (!dropTimeRange) return
+      if (!timeRange) return
 
       const elementTrack = draftService.getTrackByElementId(item.elementId)
       if (!elementTrack || !track) return
@@ -33,8 +40,8 @@ export const TimelineTrack = memo((props: IProps) => {
         draftService.moveElementToTrack(item.elementId, track.id)
       }
       draftService.updateElement(item.elementId, {
-        start: dropTimeRange.start,
-        length: dropTimeRange.end - dropTimeRange.start,
+        start: timeRange.start,
+        length: timeRange.end - timeRange.start,
       })
     },
     canDrop: (item: TrackClipDragItem, monitor) => {
@@ -49,6 +56,17 @@ export const TimelineTrack = memo((props: IProps) => {
 
       return true
     },
+    hover: (item: TrackClipDragItem, monitor) => {
+      if (!monitor.isOver() || !monitor.canDrop()) return
+      const timeRange = vc.rangeManager.calcDropTimeRange({
+        clipElementId: item.elementId,
+        offsetLeft: monitor.getDifferenceFromInitialOffset()?.x,
+        trackId: track.id,
+      })
+
+      if (!timeRange) return
+      setMovingRange(timeRange)
+    },
     collect: monitor => ({ isOver: monitor.isOver(), canDrop: monitor.canDrop() }),
   }))
 
@@ -60,8 +78,11 @@ export const TimelineTrack = memo((props: IProps) => {
       }}
     >
       {track?.clips.map(clip => (
-        <TimelineTrackClip key={clip.elementId} clip={clip} />
+        <TimelineTrackClip key={clip.elementId} clip={clip} className="h-[calc(100%-4px)]" />
       ))}
+      {isOver && canDrop && (
+        <ClipDragPlaceholder timeRange={movingRange} className="h-[calc(100%-4px)]" />
+      )}
     </div>
   )
 })

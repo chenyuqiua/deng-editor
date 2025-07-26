@@ -66,6 +66,26 @@ export const textAndImageDraft: DraftDataType = {
           textTransform: 'none',
         },
       },
+      test_text_3: {
+        type: 'text',
+        id: 'test_text_3',
+        start: 2,
+        length: 1,
+        x: 100,
+        y: 100,
+        scaleX: 1,
+        scaleY: 1,
+        rotate: 0,
+        text: '嘿嘿嘿嘿嘿',
+        style: {
+          fontSize: 16,
+          fontFamily: 'Arial',
+          fontWeight: 'normal',
+          fontStyle: 'normal',
+          textDecoration: 'none',
+          textTransform: 'none',
+        },
+      },
       test_image_1: {
         type: 'image',
         id: 'test_image_1',
@@ -98,13 +118,18 @@ export const textAndImageDraft: DraftDataType = {
     tracks: [
       {
         id: 'track-1',
-        type: 'audio',
+        type: 'caption',
         clips: [{ elementId: 'test_text_1' }, { elementId: 'test_text_2' }],
       },
       {
         id: 'track-2',
-        type: 'caption',
+        type: 'audio',
         clips: [{ elementId: 'test_image_1' }, { elementId: 'test_image_2' }],
+      },
+      {
+        id: 'track-3',
+        type: 'caption',
+        clips: [{ elementId: 'test_text_3' }],
       },
     ],
     fonts: [],
