@@ -1,7 +1,7 @@
 import { cn } from '@/common/util/css'
 import { Button } from '@/component/ui/button'
 import { IconPark } from '@/lib/iconpark'
-import { onlyTextDraft } from '@/lib/remotion/editor-render/mock/only-text-draft'
+import { textAndImageDraft } from '@/lib/remotion/editor-render/mock/text-and-image-draft'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
 import { getDraftService, getEditorService, getPlayerService } from '../util/service'
@@ -36,7 +36,7 @@ export const ToolPanel = memo((props: IProps) => {
         className="w-fit"
         onClick={() => {
           draftService.setState(s => {
-            s.draft = onlyTextDraft
+            s.draft = textAndImageDraft
           })
         }}
       >

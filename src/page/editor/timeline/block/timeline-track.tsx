@@ -37,6 +37,18 @@ export const TimelineTrack = memo((props: IProps) => {
         length: dropTimeRange.end - dropTimeRange.start,
       })
     },
+    canDrop: (item: TrackClipDragItem, monitor) => {
+      const elementTrack = draftService.getTrackByElementId(item.elementId)
+      const timeRange = vc.rangeManager.calcDropTimeRange({
+        clipElementId: item.elementId,
+        offsetLeft: monitor.getDifferenceFromInitialOffset()?.x,
+        trackId: track.id,
+      })
+
+      if (!elementTrack || !timeRange || elementTrack.type !== track.type) return false
+
+      return true
+    },
     collect: monitor => ({ isOver: monitor.isOver(), canDrop: monitor.canDrop() }),
   }))
 
