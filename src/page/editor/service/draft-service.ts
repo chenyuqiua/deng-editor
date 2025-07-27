@@ -1,14 +1,17 @@
 import { BasicState } from '@/common/class/basic-state'
 import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
 import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
-import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
+import type {
+  AllAssetTypeAttribute,
+  AllElementTypeAttribute,
+} from '@/lib/remotion/editor-render/schema/util'
 import {
   calcDraftDurationInSeconds,
   isDisplayElement,
 } from '@/lib/remotion/editor-render/util/draft'
 import { ElementNotFoundError } from '../error/element-not-found-error'
 import { ElementTypeError } from '../error/element-type-error'
-import { getElementById, getTrackByElementId } from '../util/draft'
+import { getAssetById, getElementById, getTrackByElementId } from '../util/draft'
 import type { IDraftService } from './draft-service.type'
 import _ from 'lodash'
 import { TrackNotFoundedError } from '../error/track-not-founded-error'
@@ -72,6 +75,10 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
 
   getTrackByElementId = (id: string) => {
     return getTrackByElementId(this.draft, id)
+  }
+
+  getAssetById = <T extends AllAssetTypeAttribute>(id: string, type?: T) => {
+    return getAssetById(this.draft, id, type)
   }
 
   updateElement<T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) {

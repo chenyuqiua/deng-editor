@@ -5,12 +5,11 @@ import React, { memo, useState } from 'react'
 import { useZustand } from 'use-zustand'
 import { ResizeWrapper } from '../../component/resize-wrapper'
 import { useDraftSelector } from '../../hook/draft'
-import { useEditorSelector } from '../../hook/editor'
 import type { PixelRange } from '../../type/timeline'
 import { getElementById } from '../../util/draft'
 import { getDraftService, getEditorService } from '../../util/service'
 import { useTimelineViewController } from '../bootstarp/react-context'
-import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './timeline-thumbnail'
+import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './thumbnail/timeline-thumbnail'
 import { useDrag } from 'react-dnd'
 import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 
@@ -34,7 +33,6 @@ export const TimelineTrackClip = memo((props: IProps) => {
 
   const editorService = getEditorService()
   const draftService = getDraftService()
-  const selectElementId = useEditorSelector(s => s.selectElementId)
   const vc = useTimelineViewController()
 
   const clipElement = useDraftSelector(s => getElementById(s.draft, clip.elementId))
@@ -43,7 +41,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
 
   const clipWidth = innerRange?.width || clipElement.length * pixelPerSecond
 
-  const [, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: EditorDragType.TrackClip,
     item: clip as TrackClipDragItem,
     collect: monitor => ({
@@ -84,7 +82,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
       onResizeComplete={handleResizeComplete}
       leftHandle={<div className="h-full w-1" />}
       rightHandle={<div className="h-full w-1" />}
-      className={cn('absolute top-[2px] h-full w-fit', className)}
+      className={cn('absolute top-[2px] h-full w-fit', isDragging && 'opacity-0', className)}
       style={{
         left: `${innerRange?.start || clipElement.start * pixelPerSecond}px`,
       }}
@@ -97,12 +95,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
         }}
       >
         <div
-          className={cn(
-            'size-full overflow-hidden rounded-sm',
-            'transition-[border-color] duration-150 ease-in-out',
-            'border-2 border-solid border-white/36 hover:border-[#47E7FF]',
-            selectElementId === clip.elementId && 'border-[#47E7FF]'
-          )}
+          className={cn('size-full')}
           onClick={() => {
             editorService.setSelectElementId(clip.elementId)
           }}
