@@ -1,9 +1,10 @@
-import React, { memo, useRef, type CSSProperties, type PropsWithChildren } from 'react'
-import type { AllDisplayElement } from '../schema/element'
+import React, { memo, useRef, type CSSProperties, type PropsWithChildren, useMemo } from 'react'
+import type { AllDisplayElement, DisplayElement } from '../schema/element'
 import { useRegisterBox } from '../react-context'
+import { useCurrentFrame, useVideoConfig } from 'remotion'
 
 type IProps = PropsWithChildren<{
-  element: AllDisplayElement
+  element: DisplayElement
   style?: CSSProperties
 }>
 
@@ -14,14 +15,18 @@ type IProps = PropsWithChildren<{
 export const VisualContainer = memo((props: IProps) => {
   const { element, style, children } = props
 
+  const { fps } = useVideoConfig()
+  const currentFrame = useCurrentFrame()
   const ref = useRef<HTMLDivElement>(null)
 
-  const elementX = element.x || 0
-  const elementY = element.y || 0
+  const elementX = element.x
+  const elementY = element.y
   const elementRotate = element.rotate || 0
   const elementScaleX = element.scaleX || 1
   const elementScaleY = element.scaleY || 1
   const elementOpacity = element.opacity || 1
+  const anchorX = element.anchor?.x || 0
+  const anchorY = element.anchor?.y || 0
 
   useRegisterBox({
     id: element.id,
@@ -30,7 +35,15 @@ export const VisualContainer = memo((props: IProps) => {
     children: element.children,
   })
 
+  const animationData = useMemo(() => {
+    return {
+      translateX: currentFrame * 1,
+      translateY: currentFrame * 1,
+    }
+  }, [currentFrame, fps])
+
   return (
+    // 外层div是用来展示元素所在的位置, 以及元素的样式
     <div
       ref={ref}
       // 坐标系的原点在画布的中心点, 所以也需要默认将元素的位置设置在画布的中心点
@@ -40,9 +53,9 @@ export const VisualContainer = memo((props: IProps) => {
         position: 'absolute',
         top: '50%',
         left: '50%',
-        transformOrigin: 'center',
+        transformOrigin: `${50 + anchorX}% ${50 + anchorY}%`,
         transform: [
-          `translate(-50%,-50%)`,
+          `translate(${-50 - anchorX}%,${-50 - anchorY}%)`,
           `translate(${elementX}px,${elementY}px)`,
           `rotate(${elementRotate}deg)`,
           `scale(${elementScaleX},${elementScaleY})`,
@@ -52,12 +65,16 @@ export const VisualContainer = memo((props: IProps) => {
         ...style,
       }}
     >
+      {/* 内层div是用来展示元素的动画所在的位置, 以及元素的样式 */}
       <div
         style={{
           width: '100%',
           height: '100%',
           transformOrigin: 'center',
           position: 'relative',
+          transform: [`translate(${animationData.translateX}%,${animationData.translateY}%)`].join(
+            ' '
+          ),
         }}
       >
         {children}
