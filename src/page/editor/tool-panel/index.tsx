@@ -1,10 +1,10 @@
 import { cn } from '@/common/util/css'
 import { Button } from '@/component/ui/button'
 import { IconPark } from '@/lib/iconpark'
-import { textAndImageDraft } from '@/lib/remotion/editor-render/mock/text-and-image-draft'
 import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
 import { getDraftService, getEditorService, getPlayerService } from '../util/service'
+import { animationDraft } from '@/lib/remotion/editor-render/mock/animation-draft'
 
 interface IProps {
   className?: string
@@ -36,7 +36,7 @@ export const ToolPanel = memo((props: IProps) => {
         className="w-fit"
         onClick={() => {
           draftService.setState(s => {
-            s.draft = textAndImageDraft
+            s.draft = animationDraft
           })
         }}
       >

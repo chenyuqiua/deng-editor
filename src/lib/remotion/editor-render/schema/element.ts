@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import z from 'zod'
-import { AllAnimationSchema } from './animation'
+import { AnimationDataSchema } from './animation'
 import { PointSchema, RectSchema } from './common'
 
 export const BaseElementSchema = z.object({
@@ -49,7 +49,7 @@ export const DisplayElementSchema = BaseElementSchema.extend({
   /** opacity 0-1 */
   opacity: z.number().optional(),
   assetFit: z.enum(['cover', 'contain', 'fill', 'contain_blur']).optional(),
-  animation: AllAnimationSchema.optional(),
+  animation: AnimationDataSchema.optional(),
   /** full screen mask, value as style */
   mask: z.string().optional(),
   background: z.string().optional(),
@@ -73,7 +73,7 @@ export const AudioElementSchema = BaseElementSchema.extend({
   startFrom: z.number().optional(),
   endAt: z.number().optional(),
   loop: z.boolean().optional(),
-  animation: AllAnimationSchema.optional(),
+  animation: AnimationDataSchema.optional(),
   /** 0-1 */
   volume: z.number().optional(),
 })

@@ -2,6 +2,8 @@ import React, { memo, useRef, type CSSProperties, type PropsWithChildren, useMem
 import type { AllDisplayElement, DisplayElement } from '../schema/element'
 import { useRegisterBox } from '../react-context'
 import { useCurrentFrame, useVideoConfig } from 'remotion'
+import { useFrameRange } from '../hook/use-frame-range'
+import { animations } from '../animation/conllection'
 
 type IProps = PropsWithChildren<{
   element: DisplayElement
@@ -35,12 +37,29 @@ export const VisualContainer = memo((props: IProps) => {
     children: element.children,
   })
 
+  const frameRange = useFrameRange({
+    start: element.start,
+    length: element.length,
+  })
+
+  const base: DisplayElement = useMemo(
+    () => ({
+      ...element,
+      start: frameRange.startFrame / fps,
+      length: frameRange.durationFrame / fps,
+      x: 0,
+      y: 0,
+      rotate: 0,
+      scaleX: 1,
+      scaleY: 1,
+      opacity: 1,
+    }),
+    [element, frameRange]
+  )
+
   const animationData = useMemo(() => {
-    return {
-      translateX: currentFrame * 1,
-      translateY: currentFrame * 1,
-    }
-  }, [currentFrame, fps])
+    return animations.getElementWithBoxAnimation(base, currentFrame / fps)
+  }, [base, currentFrame, fps])
 
   return (
     // 外层div是用来展示元素所在的位置, 以及元素的样式
@@ -72,9 +91,13 @@ export const VisualContainer = memo((props: IProps) => {
           height: '100%',
           transformOrigin: 'center',
           position: 'relative',
-          transform: [`translate(${animationData.translateX}%,${animationData.translateY}%)`].join(
-            ' '
-          ),
+          transform: [
+            `translate(${animationData.x}px,${animationData.y}px)`,
+            `translate(${animationData.translateX}%,${animationData.translateY}%)`,
+            `rotate(${animationData.rotate}deg)`,
+            `scale(${animationData.scaleX},${animationData.scaleY})`,
+          ].join(' '),
+          opacity: animationData.opacity,
         }}
       >
         {children}

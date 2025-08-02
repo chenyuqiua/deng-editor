@@ -7,18 +7,17 @@ export const AnimationSchema = z.object({
   start: z.number().optional(),
 })
 
-export const InAnimationSchema = AnimationSchema.extend({
-  type: z.literal('in'),
-})
-export const OutAnimationSchema = AnimationSchema.extend({
-  type: z.literal('out'),
-})
-export const LoopAnimationSchema = AnimationSchema.extend({
-  type: z.literal('loop'),
+export type AnimationType = z.infer<typeof AnimationSchema>
+
+export const AnimationDataSchema = z.object({
+  in: AnimationSchema.optional(),
+  out: AnimationSchema.optional(),
+  loop: AnimationSchema.optional(),
 })
 
 export const AllAnimationSchema = z.discriminatedUnion('type', [
-  InAnimationSchema,
-  OutAnimationSchema,
-  LoopAnimationSchema,
+  AnimationSchema.extend({ type: z.literal('in') }),
+  AnimationSchema.extend({ type: z.literal('out') }),
+  AnimationSchema.extend({ type: z.literal('loop') }),
 ])
+export type AllAnimationType = z.infer<typeof AllAnimationSchema>

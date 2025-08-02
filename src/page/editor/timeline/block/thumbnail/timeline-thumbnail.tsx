@@ -28,8 +28,6 @@ export const ImageThumbnail = memo((props: ElementThumbnailProps) => {
   const element = useMemo(() => draftService.getElementById(elementId, 'image'), [elementId])
   const asset = useMemo(() => draftService.getAssetById(element.assetId, 'image'), [elementId])
 
-  console.log(asset, 'asset')
-
   return (
     <ThumbnailStyleWrapper
       elementId={elementId}
