@@ -6,6 +6,7 @@ import { useDraftSelector } from '../hook/draft'
 import { getDraftService, getEditorService, getPlayerService } from '../util/service'
 import { animationDraft } from '@/lib/remotion/editor-render/mock/animation-draft'
 import { getAnimationList } from '../util/animition'
+import { Segment, SegmentItem } from '@/component/ui/segment'
 
 interface IProps {
   className?: string
@@ -78,6 +79,13 @@ export const ToolPanel = memo((props: IProps) => {
           </div>
         )
       })}
+      <div className="px-1">
+        <Segment value="out" className="w-full">
+          <SegmentItem value="in">In</SegmentItem>
+          <SegmentItem value="out">Out</SegmentItem>
+          <SegmentItem value="loop">Loop</SegmentItem>
+        </Segment>
+      </div>
     </div>
   )
 })
