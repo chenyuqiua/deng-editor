@@ -70,8 +70,6 @@ export const createAnimationCollection = () => {
           if (start > duration + oneFrameTime) continue
         }
 
-        console.log(start, 'start2')
-
         const animationTime =
           animItem.type !== 'loop' ? Math.min(start, duration) : start % duration
 

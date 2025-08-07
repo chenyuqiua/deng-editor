@@ -14,6 +14,7 @@ export const AnimationDataSchema = z.object({
   out: AnimationSchema.optional(),
   loop: AnimationSchema.optional(),
 })
+export type AnimationDataType = z.infer<typeof AnimationDataSchema>
 
 export const AllAnimationSchema = z.discriminatedUnion('type', [
   AnimationSchema.extend({ type: z.literal('in') }),
