@@ -5,6 +5,8 @@ import { memo } from 'react'
 import { useDraftSelector } from '../hook/draft'
 import { getDraftService, getEditorService, getPlayerService } from '../util/service'
 import { animationDraft } from '@/lib/remotion/editor-render/mock/animation-draft'
+import { getAnimationList } from '../util/animition'
+import { Segment, SegmentItem } from '@/component/ui/segment'
 
 interface IProps {
   className?: string
@@ -16,6 +18,9 @@ export const ToolPanel = memo((props: IProps) => {
   const playerService = getPlayerService()
   const editorService = getEditorService()
   const draft = useDraftSelector(s => s.draft)
+
+  const { inList, outList, loopList } = getAnimationList()
+  console.log(inList, outList, loopList)
 
   return (
     <div className={cn('flex flex-col gap-2', className)}>
@@ -59,6 +64,28 @@ export const ToolPanel = memo((props: IProps) => {
       >
         play
       </Button>
+      {inList.map(i => {
+        return (
+          <div
+            key={i.name}
+            className="cursor-pointer"
+            onClick={() => {
+              // const adnimation = pick(i, ['name', 'start', 'duration'])
+              // const type = 'in'
+              // draftService.updateElement('', { animation: { [type]: adnimation } })
+            }}
+          >
+            <img src={i.inIconUrl} alt={i.name} />
+          </div>
+        )
+      })}
+      <div className="px-1">
+        <Segment value="out" className="w-full">
+          <SegmentItem value="in">In</SegmentItem>
+          <SegmentItem value="out">Out</SegmentItem>
+          <SegmentItem value="loop">Loop</SegmentItem>
+        </Segment>
+      </div>
     </div>
   )
 })

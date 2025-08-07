@@ -99,6 +99,7 @@ export const VisualContainer = memo((props: IProps) => {
           ].join(' '),
           opacity: animationData.opacity,
         }}
+        className="rounded-xl text-sm"
       >
         {children}
       </div>
