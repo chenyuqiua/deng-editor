@@ -97,8 +97,10 @@ export class AnimationManager extends BasicState<AnimationManagerState> {
   private _setAnimationTemplateData(animationData: AnimationDataType | null) {
     const selectElementId = this._editorService.state.selectElementId
     assert(!!selectElementId, 'selectElementId is required')
-    this._playerService.context?.handler[selectElementId]?.['setTemplateData' as const]?.({
-      animation: animationData,
-    })
+    const setTemplateData =
+      this._playerService.context?.handler[selectElementId]?.['setTemplateData' as const]
+
+    if (!animationData) setTemplateData?.(null)
+    else setTemplateData?.({ animation: animationData })
   }
 }
