@@ -22,3 +22,5 @@ export const AllAnimationSchema = z.discriminatedUnion('type', [
   AnimationSchema.extend({ type: z.literal('loop') }),
 ])
 export type AllAnimationType = z.infer<typeof AllAnimationSchema>
+
+export type AnimationCategory = 'in' | 'out' | 'loop'

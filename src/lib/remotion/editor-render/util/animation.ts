@@ -1,5 +1,5 @@
 import { AnimationBase } from '../animation/animation-base'
-import type { AllAnimationType } from '../schema/animation'
+import type { AllAnimationType, AnimationCategory, AnimationType } from '../schema/animation'
 import type { DisplayElement } from '../schema/element'
 
 export const getElementWithBoxAnimation = <T extends DisplayElement>(
@@ -24,6 +24,15 @@ export const createAnimationCollection = () => {
     return animations[name]
   }
 
+  function getAnimationInstance(name: string, type: AnimationCategory) {
+    // 解析动画名称，支持多个动画组合（用分号分隔）
+    // 例如："fade-in;slide-in" 会同时应用淡入和滑动效果
+    return name
+      .split(';')
+      .map(name => get(name.trim()) || get(`${name.trim()}-${type}`))
+      .filter(Boolean)
+  }
+
   /**
    *
    * @param element 要计算动画的元素
@@ -42,12 +51,7 @@ export const createAnimationCollection = () => {
     ].filter(i => Boolean(i.name))
 
     for (const animItem of list) {
-      // 解析动画名称，支持多个动画组合（用分号分隔）
-      // 例如："fade-in;slide-in" 会同时应用淡入和滑动效果
-      const animInstances = animItem.name
-        .split(';')
-        .map(name => get(name.trim()) || get(`${name.trim()}-${animItem.type}`))
-        .filter(Boolean)
+      const animInstances = getAnimationInstance(animItem.name, animItem.type)
       if (!animInstances.length) continue
 
       for (const inst of animInstances) {
@@ -80,10 +84,21 @@ export const createAnimationCollection = () => {
     return el
   }
 
+  function getAnimationDuration(
+    animation: AnimationType,
+    options: { type: Omit<AnimationCategory, 'loop'> }
+  ) {
+    if (animation.duration) return Math.max(0, animation.duration)
+    const fns = getAnimationInstance(animation.name, options.type as AnimationCategory)
+    if (!fns.length) return 0
+    return Math.max(0, ...fns.map(fn => fn?.defaultDuration || 0))
+  }
+
   return {
     animations,
     register,
     get,
     getElementWithBoxAnimation,
+    getAnimationDuration,
   }
 }
