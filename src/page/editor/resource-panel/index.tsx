@@ -10,7 +10,7 @@ interface IProps {
   className?: string
 }
 
-export const ToolPanel = memo((props: IProps) => {
+export const ResourcePanel = memo((props: IProps) => {
   const { className } = props
   const draftService = getDraftService()
   const playerService = getPlayerService()

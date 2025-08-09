@@ -1,7 +1,8 @@
 import { cn } from '@/common/util/css'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { AnimationPanel } from './animation'
 import { SettingPanelBootstrap } from './bootstrap/bootstrap'
+import { useEditorSelector } from '../hook/editor'
 
 interface IProps {
   className?: string
@@ -9,13 +10,13 @@ interface IProps {
 
 export const SettingPanel = memo((props: IProps) => {
   const { className } = props
-  const [open] = useState(true)
+  const open = useEditorSelector(s => s.selectElementId)
 
   return (
     <SettingPanelBootstrap>
       <div
         className={cn(
-          'relative h-full w-0 flex-shrink-0 duration-300',
+          'relative h-full w-0 flex-shrink-0 overflow-hidden duration-300',
           open && 'w-[360px]',
           className
         )}
