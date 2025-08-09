@@ -12,15 +12,22 @@ export type BoxRegisterParams = {
   ref?: RefObject<HTMLElement | null>
 }
 
+/**
+ * @description 渲染器上下文
+ * @property {Partial<Record<string, BoxRegisterParams>>} box 盒子注册参数
+ * @property {Partial<Record<string, Record<string, (...args: any[]) => void>>>} handler 事件注册参数
+ */
 export type RendererContextValue = {
   /** { [elementId]: {parent: ParentElementId, children: ChildElementId[], ref: ElementDomRef} } */
   box: Partial<Record<string, BoxRegisterParams>>
+  /** { [elementId]: { [eventName]: (...args: any[]) => void } } */
+  handler: Partial<Record<string, Record<string, (...args: any[]) => void>>>
 }
 
 const RendererContext = createContext<RendererContextValue | null>(null)
 
 export function getContextValue(): RendererContextValue {
-  return { box: {} }
+  return { box: {}, handler: {} }
 }
 
 export function RendererContextProvider(
@@ -61,6 +68,29 @@ export function useRegisterBox(params: BoxRegisterParams & { id: string }) {
     }
     return () => {
       delete context.box[id]
+    }
+  }, [])
+}
+
+export function useRegisterHandler(params: {
+  id: string
+  eventName: string
+  handler: (...args: any[]) => void
+}) {
+  const { id, eventName, handler } = params
+  const context = useRendererContext()
+
+  useLayoutEffect(() => {
+    if (!context) return
+    const { handler: handlerContext } = context
+    handlerContext[id] = handlerContext[id] ?? {}
+    handlerContext[id]![eventName] = handler
+
+    // 清理函数：组件卸载时执行
+    return () => {
+      if (handlerContext[id]?.[eventName]) {
+        delete handlerContext[id]?.[eventName]
+      }
     }
   }, [])
 }
