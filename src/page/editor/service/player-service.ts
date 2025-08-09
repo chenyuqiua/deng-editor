@@ -4,8 +4,13 @@ import type { DraftService } from './draft-service'
 import type { IPlayerService } from './player-service.type'
 import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { Point } from '@/lib/remotion/editor-render/schema/common'
-import { isDisplayElement, shallowWalkTracksElement } from '@/lib/remotion/editor-render/util/draft'
+import {
+  calcDraftDurationInSeconds,
+  isDisplayElement,
+  shallowWalkTracksElement,
+} from '@/lib/remotion/editor-render/util/draft'
 import { pointRotate } from '../util/interaction'
+import { noop } from 'lodash'
 
 const initialState = {
   isPlaying: false,
@@ -33,6 +38,10 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
 
   get isPlaying() {
     return this.state.isPlaying
+  }
+
+  get currentTime() {
+    return this.state.currentTime
   }
 
   play(): void {
@@ -209,6 +218,45 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
     const durationInFrame = Math.ceil(this._draftService.state.duration * this._draftService.fps)
     const validFrame = Math.min(durationInFrame, Math.max(0, Math.ceil(frame)))
     this._player?.seekTo(validFrame)
+  }
+
+  seekTo(duration: number) {
+    this.seekToFrame(duration * this._draftService.fps)
+  }
+
+  playerTemplateData(range: [number, number], offsetFps: number = 0) {
+    const [start, end] = range
+    const fps = this._draftService.fps
+    const naturalTime = this.state.currentTime
+    if (
+      start >= end ||
+      start < 0 ||
+      end > calcDraftDurationInSeconds(this._draftService.state.draft)
+    ) {
+      return noop
+    }
+
+    let isCancel = false
+    const startTime = performance.now() // 记录播放真实开始的时间
+
+    const run = () => {
+      const diff = performance.now() - startTime
+      const currentTime = start + diff / 1000 // 计算当前播放时间
+
+      if (currentTime > end + (1 / fps) * offsetFps) return
+      if (isCancel) return
+      this.seekTo(currentTime)
+      requestAnimationFrame(() => run())
+    }
+
+    run()
+
+    // 返回取消函数, 用于取消并还原播放时间
+    return () => {
+      if (isCancel) return
+      isCancel = true
+      this.seekTo(naturalTime)
+    }
   }
 
   private _onPlay(): void {

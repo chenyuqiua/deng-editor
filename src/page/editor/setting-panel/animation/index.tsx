@@ -1,12 +1,12 @@
 import { memo, useState } from 'react'
 import { getAnimationListByType } from '../../util/animation'
 import { Segment, SegmentItem } from '@/component/ui/segment'
-import type { AnimationCategory } from '../../type/animation'
 import { pick } from 'lodash'
 import { useSettingPanelViewController } from '../bootstrap/react-context'
 import { AnimationItem } from '../component/animation-item'
 import { useZustand } from 'use-zustand'
 import { Slider } from '@/component/ui/slider'
+import type { AnimationCategory } from '@/lib/remotion/editor-render/schema/animation'
 
 export const AnimationPanel = memo(() => {
   const [animationType, setAnimationType] = useState<AnimationCategory>('in')
@@ -14,7 +14,10 @@ export const AnimationPanel = memo(() => {
   const vc = useSettingPanelViewController()
   const [duration, setDuration] = useState(0.3)
 
-  const currentElementAnimation = useZustand(vc.store, s => s.currentElementAnimation)
+  const currentElementAnimation = useZustand(
+    vc.animationManager.store,
+    s => s.selectElement?.animation
+  )
   const hasActive = animationList.some(
     i => i.name === currentElementAnimation?.[animationType]?.name
   )
@@ -37,6 +40,8 @@ export const AnimationPanel = memo(() => {
 
         <div className="flex flex-wrap gap-4">
           {animationList.map(preset => {
+            const animation = pick(preset, ['name', 'start', 'duration'])
+
             return (
               <AnimationItem
                 key={preset.name}
@@ -44,10 +49,13 @@ export const AnimationPanel = memo(() => {
                 label={preset.label}
                 active={preset.name === currentElementAnimation?.[animationType]?.name}
                 onClick={() => {
-                  vc.updateAnimationByType(
-                    animationType,
-                    pick(preset, ['name', 'start', 'duration'])
-                  )
+                  vc.animationManager.updateByType(animationType, animation)
+                }}
+                onMouseEnter={() => {
+                  vc.animationManager.preview(animationType, animation)
+                }}
+                onMouseLeave={() => {
+                  vc.animationManager.previewEnd()
                 }}
               />
             )
@@ -57,7 +65,7 @@ export const AnimationPanel = memo(() => {
       {hasActive && (
         <div className="flex h-10 w-full items-center gap-2 bg-[#484848] px-4">
           <span className="text-sm text-white">Duration</span>
-          <div className="flex h-6 w-12 shrink-0 items-center justify-center rounded-lg bg-[#282828] px-2 py-1 text-xs text-white">
+          <div className="flex h-6 w-12 shrink-0 items-center justify-center rounded-lg bg-[#282828] px-2 py-1 text-xs text-white select-none">
             {duration}
           </div>
           <Slider

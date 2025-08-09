@@ -54,6 +54,7 @@ export default tseslint.config([
     rules: {
       'no-restricted-imports': ['error', { patterns: ['@/*'] }],
       '@typescript-eslint/no-unused-vars': ['warn'],
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
 ])

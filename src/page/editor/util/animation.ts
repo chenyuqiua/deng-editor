@@ -1,5 +1,6 @@
+import type { AnimationCategory } from '@/lib/remotion/editor-render/schema/animation'
 import { animationPresetList } from '../constant/animation'
-import type { AnimationCategory, AnimationPresetItem } from '../type/animation'
+import type { AnimationPresetItem } from '../type/animation'
 
 export const getAllAnimationList = () => {
   const inList = animationPresetList.filter(item => item.category.includes('in'))

@@ -49,5 +49,20 @@ export interface IPlayerService {
    */
   findElementsByPoint: (point: Point) => AllDisplayElement[]
   getElementDomById: (elementId: string) => HTMLElement | undefined
+  /**
+   * @description 根据帧数跳转
+   * @param frame 帧数
+   */
   seekToFrame: (frame: number) => void
+  /**
+   * @description 根据秒数跳转
+   * @param duration 秒数
+   */
+  seekTo: (duration: number) => void
+  /**
+   * @description 播放器模板数据
+   * @param range 时间范围
+   * @param offsetFps 偏移帧数
+   */
+  playerTemplateData: (range: [number, number], offsetFps?: number) => () => void
 }

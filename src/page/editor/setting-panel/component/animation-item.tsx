@@ -1,7 +1,7 @@
-import { memo } from 'react'
+import { memo, type HTMLAttributes } from 'react'
 import { cn } from '@/common/util/css'
 
-interface IProps {
+type IProps = HTMLAttributes<HTMLDivElement> & {
   iconUrl?: string
   label?: string
   active?: boolean
@@ -9,9 +9,13 @@ interface IProps {
 }
 
 export const AnimationItem = memo((props: IProps) => {
-  const { iconUrl, label, active, onClick } = props
+  const { iconUrl, label, active, className, onClick, ...rest } = props
   return (
-    <div className={cn('flex w-28 cursor-pointer flex-col items-center gap-2')} onClick={onClick}>
+    <div
+      className={cn('flex w-28 cursor-pointer flex-col items-center gap-2 select-none', className)}
+      onClick={onClick}
+      {...rest}
+    >
       <img
         src={iconUrl}
         alt={label}
