@@ -84,6 +84,12 @@ export const createAnimationCollection = () => {
     return el
   }
 
+  /**
+   * @description 获取动画的持续时间
+   * @param animation 动画
+   * @param options 动画类型
+   * @returns 动画的持续时间, 单位为秒
+   */
   function getAnimationDuration(
     animation: AnimationType,
     options: { type: Omit<AnimationCategory, 'loop'> }
