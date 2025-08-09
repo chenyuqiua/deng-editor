@@ -2,7 +2,7 @@ import type { DisplayElement } from '../../schema/element'
 import { AnimationBase } from '../animation-base'
 
 export class ImageSlideLeftLoop extends AnimationBase {
-  static AnimationName = 'imageSlideLeft-loop'
+  static AnimationName = 'slideLeft-loop'
   defaultDuration = 0
 
   getBoxAnimationProperty(box: DisplayElement, time: number, duration: number) {

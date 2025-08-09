@@ -11,6 +11,5 @@ export type AnimationPresetItem = Omit<AnimationType, 'name'> & {
   name: AnimationNameEnum | string
   label: string
   category: AnimationCategory[]
-  inIconUrl?: string
-  outIconUrl?: string
+  iconUrl: Partial<Record<AnimationCategory, string>>
 }

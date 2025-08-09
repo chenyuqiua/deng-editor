@@ -40,7 +40,7 @@ export const AnimationPanel = memo(() => {
           </SegmentItem>
         </Segment>
 
-        <div className="relative flex flex-1 flex-wrap gap-4 pb-10">
+        <div className="relative grid flex-1 auto-rows-min grid-cols-3 gap-4 overflow-hidden overflow-y-auto pb-10">
           {animationList.map(preset => {
             const animation = pick(preset, ['name', 'start', 'duration'])
             const defaultDuration = animations.getAnimationDuration(animation, {
@@ -52,7 +52,7 @@ export const AnimationPanel = memo(() => {
             return (
               <Fragment key={preset.name}>
                 <AnimationItem
-                  iconUrl={preset.inIconUrl}
+                  iconUrl={preset.iconUrl[animationType] || 'https://picsum.photos/200/200'}
                   label={preset.label}
                   active={preset.name === currentElementAnimation?.[animationType]?.name}
                   onClick={() => {

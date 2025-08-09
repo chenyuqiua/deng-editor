@@ -13,7 +13,7 @@ export const AnimationItem = memo((props: IProps) => {
   return (
     <div
       className={cn(
-        'flex h-fit w-28 cursor-pointer flex-col items-center gap-2 select-none',
+        'flex h-fit w-full cursor-pointer flex-col items-center gap-2 select-none',
         className
       )}
       onClick={onClick}
