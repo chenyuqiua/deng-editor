@@ -19,6 +19,11 @@ export function TimelineContextProvider({
 
 export function useTimelineViewController() {
   const { vc } = useContext(BootstrapContext)
+  if (!vc) {
+    throw new Error(
+      'TimelineViewController is not found, you should use TimelineContextProvider to wrap your component'
+    )
+  }
 
   return vc
 }

@@ -4,7 +4,7 @@ import { useDrop } from 'react-dnd'
 import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 import { getDraftService } from '../../util/service'
-import { useTimelineViewController } from '../bootstarp/react-context'
+import { useTimelineViewController } from '../bootstrap/react-context'
 import type { TimeRange } from '../../type/timeline'
 import { ClipDragPlaceholder } from './clip-drag-placeholder'
 

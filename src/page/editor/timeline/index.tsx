@@ -5,7 +5,7 @@ import { TimelineAction } from './block/timeline-action'
 import { TimeIndicator } from './block/timeline-indicator'
 import { TimelineScale } from './block/timeline-scale'
 import { TimelineTrack } from './block/timeline-track'
-import { TimelineBootstrap } from './bootstarp/bootstarp'
+import { TimelineBootstrap } from './bootstrap/bootstrap'
 
 interface IProps {
   className?: string

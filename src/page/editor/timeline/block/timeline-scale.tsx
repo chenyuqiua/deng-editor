@@ -5,7 +5,7 @@ import { useZustand } from 'use-zustand'
 import { useDraftSelector } from '../../hook/draft'
 import { usePlayerSelector } from '../../hook/player'
 import { getDraftService } from '../../util/service'
-import { useTimelineViewController } from '../bootstarp/react-context'
+import { useTimelineViewController } from '../bootstrap/react-context'
 
 type ScaleIntervalConfigType = { interval: number; intervalCount: number }
 

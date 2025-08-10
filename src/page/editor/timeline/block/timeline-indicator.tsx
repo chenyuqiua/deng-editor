@@ -1,6 +1,6 @@
 import { cn } from '@/common/util/css'
 import { useZustand } from 'use-zustand'
-import { useTimelineViewController } from '../bootstarp/react-context'
+import { useTimelineViewController } from '../bootstrap/react-context'
 import { useEffect, useRef, useState } from 'react'
 import { getDraftService, getPlayerService } from '../../util/service'
 import { usePlayerSelector } from '../../hook/player'

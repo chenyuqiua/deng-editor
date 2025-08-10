@@ -1,64 +1,40 @@
 import { cn } from '@/common/util/css'
-import { Button } from '@/component/ui/button'
-import { IconPark } from '@/lib/iconpark'
 import { memo } from 'react'
-import { useDraftSelector } from '../hook/draft'
-import { getDraftService, getEditorService, getPlayerService } from '../util/service'
-import { animationDraft } from '@/lib/remotion/editor-render/mock/animation-draft'
+import { SideBar } from './sidebar'
+import { ResourcePanelBootstrap } from './bootstrap/bootstrap'
+import { pageConfig } from './constant/page'
+import { useResourcePanelViewController } from './bootstrap/react-context'
+import { useZustand } from 'use-zustand'
 
 interface IProps {
   className?: string
 }
 
-export const ResourcePanel = memo((props: IProps) => {
+const ResourcePanelContent = memo((props: IProps) => {
   const { className } = props
-  const draftService = getDraftService()
-  const playerService = getPlayerService()
-  const editorService = getEditorService()
-  const draft = useDraftSelector(s => s.draft)
+  const vc = useResourcePanelViewController()
+  const currentPage = useZustand(vc.store, s => s.currentPage)
 
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
-      <IconPark icon="align-top" color="#fff" className="text-white" />
-      ToolPanel
-      <Button className="w-fit">{`${JSON.stringify(draft.name)}`}</Button>
-      <Button
-        className="w-fit"
-        onClick={() => {
-          draftService.setState(s => {
-            s.draft.name = '123321'
-          })
-        }}
-      >
-        btn
-      </Button>
-      <Button
-        className="w-fit"
-        onClick={() => {
-          draftService.setState(s => {
-            s.draft = animationDraft
-          })
-        }}
-      >
-        set mock draft
-      </Button>
-      <Button
-        className="w-fit"
-        onClick={() => {
-          editorService.setSelectElementId('test_image_1')
-        }}
-      >
-        set select element id
-      </Button>
-      <Button
-        className="w-fit"
-        variant="secondary"
-        onClick={() => {
-          playerService.toggle()
-        }}
-      >
-        play
-      </Button>
+    <div className={cn('flex', className)}>
+      <SideBar className="w-[88px]" />
+      <div className="flex-1 bg-[#262626]">
+        {pageConfig.map(item => {
+          return (
+            <div key={item.value} className={cn('hidden', currentPage === item.value && 'block')}>
+              {item.component}
+            </div>
+          )
+        })}
+      </div>
     </div>
+  )
+})
+
+export const ResourcePanel = memo((props: IProps) => {
+  return (
+    <ResourcePanelBootstrap>
+      <ResourcePanelContent {...props} />
+    </ResourcePanelBootstrap>
   )
 })

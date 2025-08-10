@@ -19,6 +19,11 @@ export function StageContextProvider({
 
 export function useStageViewController() {
   const { vc } = useContext(BootstrapContext)
+  if (!vc) {
+    throw new Error(
+      'StageViewController is not found, you should use StageContextProvider to wrap your component'
+    )
+  }
 
   return vc
 }

@@ -1,6 +1,6 @@
 import { Slider } from '@/component/ui/slider'
 import { memo, useEffect, useRef } from 'react'
-import { useTimelineViewController } from '../bootstarp/react-context'
+import { useTimelineViewController } from '../bootstrap/react-context'
 import { useZustand } from 'use-zustand'
 import { useDraftSelector } from '../../hook/draft'
 import _ from 'lodash'
