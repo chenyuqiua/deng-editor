@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { getAssetsList } from '../../mock/resource'
-import { Image } from '@/component/ui/image'
+import { AssetCard } from '../../component/asset-card'
 
 export const AssetPanel = memo(() => {
   return (
@@ -8,12 +8,7 @@ export const AssetPanel = memo(() => {
       <div className="flex h-[64px] shrink-0 items-center text-xl font-semibold">Assets</div>
       <div className="grid auto-rows-min grid-cols-2 gap-4">
         {getAssetsList().map(i => {
-          return (
-            <div key={i.id}>
-              <Image src={i.url} alt={i.name} />
-              {i.name}
-            </div>
-          )
+          return <AssetCard key={i.id} src={i.url} alt={i.name} />
         })}
       </div>
     </div>
