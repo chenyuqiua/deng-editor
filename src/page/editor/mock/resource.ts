@@ -4,19 +4,19 @@ export const getAssetsList = () => {
       id: 1,
       name: 'Asset 1',
       type: 'image',
-      url: '/assets/image/test1.png',
+      url: '/image/test1.jpg',
     },
     {
       id: 2,
       name: 'Asset 2',
       type: 'image',
-      url: '/assets/image/test2.png',
+      url: '/image/test2.jpg',
     },
     {
       id: 3,
       name: 'Asset 3',
       type: 'image',
-      url: '/assets/image/test3.png',
+      url: '/image/test3.jpg',
     },
   ]
 }
