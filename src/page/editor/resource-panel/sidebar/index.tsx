@@ -28,6 +28,7 @@ export const SideBar = memo((props: IProps) => {
                   s.panelFold = !s.panelFold
                 } else {
                   s.currentPage = item.value
+                  s.panelFold = false
                 }
               })
             }}

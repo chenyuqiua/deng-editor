@@ -13,12 +13,12 @@ interface IProps {
 const ResourcePanelContent = memo((props: IProps) => {
   const { className } = props
   const vc = useResourcePanelViewController()
-  const currentPage = useZustand(vc.store, s => s.currentPage)
+  const [currentPage, panelFold] = useZustand(vc.store, s => [s.currentPage, s.panelFold])
 
   return (
-    <div className={cn('flex', className)}>
+    <div className={cn('flex overflow-hidden', className)}>
       <SideBar className="w-[88px]" />
-      <div className="flex-1 bg-[#262626]">
+      <div className={cn('w-0 flex-1 bg-[#262626] duration-300', !panelFold && 'w-[360px]')}>
         {pageConfig.map(item => {
           return (
             <div key={item.value} className={cn('hidden', currentPage === item.value && 'block')}>
