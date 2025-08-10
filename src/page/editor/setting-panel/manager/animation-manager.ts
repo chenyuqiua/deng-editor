@@ -61,6 +61,9 @@ export class AnimationManager extends BasicState<AnimationManagerState> {
     if (!selectElement || !animation.name) return
 
     this._setAnimationTemplateData({ [animationType]: animation })
+    if (this._playerService.state.isPlaying) {
+      this._playerService.pause()
+    }
 
     if (animationType === 'loop') {
       const start = selectElement.start

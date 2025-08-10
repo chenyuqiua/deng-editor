@@ -118,7 +118,7 @@ export const textAndImageDraft: DraftDataType = {
     tracks: [
       {
         id: 'track-1',
-        type: 'caption',
+        type: 'text',
         clips: [{ elementId: 'test_text_1' }, { elementId: 'test_text_2' }],
       },
       {
@@ -128,7 +128,7 @@ export const textAndImageDraft: DraftDataType = {
       },
       {
         id: 'track-3',
-        type: 'caption',
+        type: 'text',
         clips: [{ elementId: 'test_text_3' }],
       },
     ],

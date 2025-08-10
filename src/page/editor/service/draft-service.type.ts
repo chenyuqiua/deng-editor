@@ -29,11 +29,14 @@ export interface IDraftService {
   onStateChange: (
     listener: (data: DraftStoreStateType, preData: DraftStoreStateType) => void
   ) => () => void
-  getElementById: <T extends AllElementTypeAttribute>(id: string, type?: T) => ElementOfType<T>
   getTrackById: (id: string) => Track | undefined
   getTrackByElementId: (id: string) => Track | undefined
   getAssetById: <T extends AllAssetTypeAttribute>(id: string, type?: T) => AssetOfType<T>
+  //#region element 相关的操作方法 未来也许会拆分出去
+  getElementById: <T extends AllElementTypeAttribute>(id: string, type?: T) => ElementOfType<T>
   updateElement: <T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) => void
   updateDisplayElement: (id: string, element: Partial<AllDisplayElement>) => void
   moveElementToTrack: (elementId: string, trackId: string) => void
+  insertElement: () => void
+  //#endregion
 }

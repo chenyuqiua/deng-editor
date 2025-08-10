@@ -75,7 +75,7 @@ export const onlyTextDraft: DraftDataType = {
     tracks: [
       {
         id: 'track-2',
-        type: 'caption',
+        type: 'text',
         clips: [{ elementId: 'test_text_1' }],
       },
       {

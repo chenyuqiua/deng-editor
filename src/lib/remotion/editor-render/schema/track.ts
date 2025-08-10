@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const TrackTypeSchema = z.enum(['caption', 'audio'])
+export const TrackTypeSchema = z.enum(['text', 'audio'])
 
 export const TrackClipSchema = z.object({ elementId: z.string() })
 

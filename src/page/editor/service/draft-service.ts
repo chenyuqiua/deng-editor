@@ -65,10 +65,6 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
     return this.state.duration
   }
 
-  getElementById = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
-    return getElementById(this.draft, id, type)
-  }
-
   getTrackById = (id: string) => {
     return this.draft.timeline.tracks.find(i => i.id === id)
   }
@@ -79,6 +75,11 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
 
   getAssetById = <T extends AllAssetTypeAttribute>(id: string, type?: T) => {
     return getAssetById(this.draft, id, type)
+  }
+
+  //#region element 相关的操作方法 未来也许会拆分出去
+  getElementById = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
+    return getElementById(this.draft, id, type)
   }
 
   updateElement<T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) {
@@ -119,4 +120,20 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
       targetTrack.clips.push(clip)
     })
   }
+
+  /**
+   * 插入text 
+找到最底层的text轨道 查看这个轨道是否能放下text 如果不能依次向上层查找text轨道 如果所有轨道在当前时间都不能放下 则在最顶层创建一个新的text轨道并插入text
+   */
+  insertElement() {
+    // const textTrack = this.draft.timeline.tracks.reverse().find(i => {
+    //   if (i.type === 'text') {
+    //     const textClip = i.clips.find(i => i.elementId === elementId)
+    //     if (!textClip) return true
+    //     const textClipDuration = calcDraftDurationInSeconds(textClip)
+    //   }
+    //   return false
+    // })
+  }
+  //#endregion
 }

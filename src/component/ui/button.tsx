@@ -114,13 +114,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const iconSize = _iconSize ?? (size ? buttonIconSizes[size] : undefined)
     function getIconComponent(iconName: string | React.ReactNode | undefined) {
       return typeof iconName === 'string' ? (
-        <IconPark icon={iconName} size={iconSize} />
+        <IconPark color="#fff" icon={iconName} size={iconSize} />
       ) : (
         iconName || null
       )
     }
     const iconComp = loading ? (
-      <IconPark icon="loading" size={iconSize} spin />
+      <IconPark color="#fff" icon="loading" size={iconSize} spin />
     ) : (
       getIconComponent(icon)
     )
@@ -144,4 +144,46 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   }
 )
 Button.displayName = 'Button'
-export { Button, buttonVariants }
+
+const iconButtonVariants = cva('p-0', {
+  variants: {
+    size: {
+      sm: 'size-6',
+      md: 'size-8',
+      lg: 'size-10',
+    },
+  },
+})
+
+const iconButtonIconSizes: { [K in NonNullable<ButtonProps['size']>]: number } = {
+  sm: 16,
+  md: 20,
+  lg: 24,
+}
+
+export type IconButtonProps = Omit<
+  ButtonProps,
+  'variant' | 'children' | 'trailingIcon' | 'icon'
+> & {
+  variant?: ButtonProps['variant']
+  icon: NonNullable<ButtonProps['icon']>
+}
+
+const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
+  ({ variant = 'secondary', size = 'md', iconSize, className, ...props }, ref) => {
+    return (
+      <Button
+        ref={ref}
+        variant={variant}
+        className={cn(iconButtonVariants({ size, className }))}
+        iconSize={iconSize ?? (size ? iconButtonIconSizes[size] : undefined)}
+        size={size}
+        {...props}
+      >
+        {null}
+      </Button>
+    )
+  }
+)
+IconButton.displayName = 'IconButton'
+export { Button, buttonVariants, IconButton }
