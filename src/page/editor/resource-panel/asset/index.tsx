@@ -3,10 +3,10 @@ import { getAssetsList } from '../../mock/resource'
 import { AssetCard } from '../../component/asset-card'
 import { IconButton } from '@/component/ui/button'
 import { cn } from '@/common/util/css'
-import { getDraftService } from '../../util/service'
+import { useResourcePanelViewController } from '../bootstrap/react-context'
 
 export const AssetPanel = memo(() => {
-  const draftService = getDraftService()
+  const vc = useResourcePanelViewController()
 
   return (
     <div className="flex flex-col px-6">
@@ -28,7 +28,7 @@ export const AssetPanel = memo(() => {
                   )}
                   onClick={e => {
                     e.stopPropagation()
-                    draftService.insertElement()
+                    vc.draftOperationManager.insertElement()
                   }}
                 />
               }

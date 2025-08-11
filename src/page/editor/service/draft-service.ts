@@ -15,6 +15,7 @@ import { getAssetById, getElementById, getTrackByElementId } from '../util/draft
 import type { IDraftService } from './draft-service.type'
 import _ from 'lodash'
 import { TrackNotFoundedError } from '../error/track-not-founded-error'
+import type { Track } from '@/lib/remotion/editor-render/schema/track'
 
 const initialState = {
   draft: {
@@ -73,6 +74,12 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
     return getTrackByElementId(this.draft, id)
   }
 
+  addTrack(track: Track) {
+    this.setState(state => {
+      state.draft.timeline.tracks.unshift(track)
+    })
+  }
+
   getAssetById = <T extends AllAssetTypeAttribute>(id: string, type?: T) => {
     return getAssetById(this.draft, id, type)
   }
@@ -80,6 +87,12 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
   //#region element 相关的操作方法 未来也许会拆分出去
   getElementById = <T extends AllElementTypeAttribute>(id: string, type?: T) => {
     return getElementById(this.draft, id, type)
+  }
+
+  addElement(element: AllElement) {
+    this.setState(state => {
+      state.draft.timeline.elements[element.id] = element
+    })
   }
 
   updateElement<T extends AllElement>(id: string, element: Partial<Omit<T, 'id'>>) {
@@ -121,19 +134,13 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
     })
   }
 
-  /**
-   * 插入text 
-找到最底层的text轨道 查看这个轨道是否能放下text 如果不能依次向上层查找text轨道 如果所有轨道在当前时间都不能放下 则在最顶层创建一个新的text轨道并插入text
-   */
-  insertElement() {
-    // const textTrack = this.draft.timeline.tracks.reverse().find(i => {
-    //   if (i.type === 'text') {
-    //     const textClip = i.clips.find(i => i.elementId === elementId)
-    //     if (!textClip) return true
-    //     const textClipDuration = calcDraftDurationInSeconds(textClip)
-    //   }
-    //   return false
-    // })
+  addElementToTrack(elementId: string, trackId: string) {
+    this.setState(state => {
+      const track = state.draft.timeline.tracks.find(i => i.id === trackId)
+      if (!track) throw new TrackNotFoundedError({ id: trackId })
+      track.clips.push({ elementId })
+    })
   }
+
   //#endregion
 }
