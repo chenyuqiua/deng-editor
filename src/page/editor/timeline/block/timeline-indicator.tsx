@@ -2,15 +2,13 @@ import { cn } from '@/common/util/css'
 import { useZustand } from 'use-zustand'
 import { useTimelineViewController } from '../bootstrap/react-context'
 import { useEffect, useRef, useState } from 'react'
-import { getDraftService, getPlayerService } from '../../util/service'
+import { getPlayerService } from '../../util/service'
 import { usePlayerSelector } from '../../hook/player'
 import { ResizeCursorFullScreen } from '../../component/resize-cursor-full-screen'
 import { flushSync } from 'react-dom'
-import _ from 'lodash'
 
 export function TimeIndicator() {
   const vc = useTimelineViewController()
-  const draftService = getDraftService()
   const playerService = getPlayerService()
   const currentTime = usePlayerSelector(s => s.currentTime)
   const pixelPerSecond = useZustand(vc.store, s => s.pixelPerSecond)
@@ -21,12 +19,7 @@ export function TimeIndicator() {
     const indicatorEl = indicatorRef.current
     if (!indicatorEl) return
 
-    const throttleSeekFrame = _.throttle(playerService.seekToFrame.bind(playerService), 100, {
-      leading: true,
-      trailing: true,
-    })
-
-    const handleMouseDown = () => {
+    const startListener = () => {
       document.addEventListener('pointermove', handlePointerMove)
       document.addEventListener(
         'pointerup',
@@ -36,20 +29,25 @@ export function TimeIndicator() {
         },
         { once: true }
       )
+    }
+
+    let isCanMove = false
+
+    const handleMouseDown = (e: MouseEvent) => {
+      isCanMove = true
+      startListener()
       flushSync(() => {
         setIsResizing(true)
       })
+      vc.moveIndicator(e.clientX)
     }
 
     const handlePointerMove = (e: MouseEvent) => {
-      const frameOffset = vc.getFrameOffset(e.clientX)
-      if (!frameOffset) return
-      const pixelPerFrame = vc.state.pixelPerSecond / draftService.fps
-      indicatorEl.style.left = `${frameOffset * pixelPerFrame}px`
-      throttleSeekFrame(frameOffset)
+      if (isCanMove) vc.moveIndicator(e.clientX)
     }
 
     const handlePointerUp = (e: MouseEvent) => {
+      isCanMove = false
       flushSync(() => {
         setIsResizing(false)
       })
@@ -71,7 +69,11 @@ export function TimeIndicator() {
     <>
       <ResizeCursorFullScreen show={isResizing} />
       <div
-        ref={indicatorRef}
+        ref={dom => {
+          if (!dom) return
+          indicatorRef.current = dom
+          vc.setIndicatorDom(dom)
+        }}
         className={cn('absolute top-0 left-0 z-1000 h-full w-3 -translate-x-1/2 cursor-ew-resize')}
         style={{ left: currentTime * pixelPerSecond }}
       >

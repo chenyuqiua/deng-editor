@@ -70,7 +70,12 @@ export const TimelineScale = memo((props: PropsWithChildren<{ className?: string
         className="flex flex-col gap-2 overflow-hidden text-xs"
         style={{ width: `${displayDuration * pixelPerSecond}px` }}
       >
-        <div className="relative flex h-5 w-full items-center justify-center bg-white/35 select-none">
+        <div
+          className="relative flex h-5 w-full items-center justify-center bg-white/35 select-none"
+          onPointerDown={e => {
+            vc.dispatchIndicatorPointerDown(e.clientX)
+          }}
+        >
           {/* 时间刻度尺 */}
           {intervalArray.map((_, intervalIndex) => {
             const time = intervalIndex * interval

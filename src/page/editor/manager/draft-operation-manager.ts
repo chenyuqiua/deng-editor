@@ -12,11 +12,12 @@ export class DraftOperationManager {
 
   // TODO: 这里是模拟创建一个元素 逻辑还需完善
   createElement() {
+    const currentTime = this._playerService.state.currentTime
     const element: AllElement = {
       id: generateUuid(),
       type: 'text',
       name: '',
-      start: 0,
+      start: currentTime,
       length: 0.4,
       x: 0,
       y: 0,
