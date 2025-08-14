@@ -16,6 +16,7 @@ import type { IDraftService } from './draft-service.type'
 import _ from 'lodash'
 import { TrackNotFoundedError } from '../error/track-not-founded-error'
 import type { Track } from '@/lib/remotion/editor-render/schema/track'
+import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 
 const initialState = {
   draft: {
@@ -139,6 +140,12 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
       const track = state.draft.timeline.tracks.find(i => i.id === trackId)
       if (!track) throw new TrackNotFoundedError({ id: trackId })
       track.clips.push({ elementId })
+    })
+  }
+
+  addAsset(asset: AllAsset) {
+    this.setState(state => {
+      state.draft.timeline.assets[asset.id] = asset
     })
   }
 

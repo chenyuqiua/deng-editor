@@ -28,7 +28,7 @@ export const AssetPanel = memo(() => {
                   )}
                   onClick={e => {
                     e.stopPropagation()
-                    vc.draftOperationManager.insertElement()
+                    vc.draftOperationManager.insertElement({ type: 'image', url: i.url })
                   }}
                 />
               }

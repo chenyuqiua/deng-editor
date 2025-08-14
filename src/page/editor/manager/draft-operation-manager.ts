@@ -3,6 +3,13 @@ import type { IDraftService } from '../service/draft-service.type'
 import type { IPlayerService } from '../service/player-service.type'
 import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import { generateUuid } from '@/common/util/uuid'
+import type {
+  AllAssetTypeAttribute,
+  AllElementTypeAttribute,
+} from '@/lib/remotion/editor-render/schema/util'
+import { createImageAssetByUrl, createImageElementByAsset, createTextElement } from '../util/asset'
+import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
+import { assert } from '@/common/util/assert'
 
 export class DraftOperationManager {
   constructor(
@@ -11,28 +18,29 @@ export class DraftOperationManager {
   ) {}
 
   // TODO: 这里是模拟创建一个元素 逻辑还需完善
-  createElement() {
+  async createElement({ type, url }: { type: AllElementTypeAttribute; url: string }) {
     const currentTime = this._playerService.state.currentTime
-    const element: AllElement = {
-      id: generateUuid(),
-      type: 'text',
-      name: '',
-      start: currentTime,
-      length: 0.4,
-      x: 0,
-      y: 0,
-      scaleX: 1,
-      scaleY: 1,
-      rotate: 0,
-      text: 'default text',
-      assetId: '',
+    let asset: AllAsset
+    let element: AllElement
+
+    switch (type) {
+      case 'image':
+        asset = await createImageAssetByUrl(url)
+        this._draftService.addAsset(asset)
+        element = await createImageElementByAsset(asset, { start: currentTime })
+        break
+      case 'text':
+        element = createTextElement('default text', { start: currentTime })
+        break
+      default:
+        assert(false, `Unsupported element type: ${type}`)
     }
 
     return element
   }
 
-  insertElement() {
-    const insertElement = this.createElement()
+  async insertElement({ type, url }: { type: AllAssetTypeAttribute; url: string }) {
+    const insertElement = await this.createElement({ type, url })
     this._draftService.addElement(insertElement)
     let insertTrack = this.getInsertTrackByElement(insertElement.length)
 

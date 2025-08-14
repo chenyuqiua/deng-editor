@@ -14,6 +14,7 @@ import type {
 } from '@/lib/remotion/editor-render/schema/util'
 import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { Track } from '@/lib/remotion/editor-render/schema/track'
+import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 
 export const IDraftService = createDecorator<IDraftService>('DraftService')
 export interface IDraftService {
@@ -40,5 +41,6 @@ export interface IDraftService {
   updateDisplayElement: (id: string, element: Partial<AllDisplayElement>) => void
   moveElementToTrack: (elementId: string, trackId: string) => void
   addElementToTrack: (elementId: string, trackId: string) => void
+  addAsset: (asset: AllAsset) => void
   //#endregion
 }
