@@ -9,15 +9,15 @@ export const AssetPanel = memo(() => {
   const vc = useResourcePanelViewController()
 
   return (
-    <div className="flex flex-col px-6">
+    <div className="flex h-full flex-col px-6">
       <div className="flex h-[64px] shrink-0 items-center text-xl font-semibold">Assets</div>
-      <div className="grid auto-rows-min grid-cols-2 gap-4">
+      <div className="grid h-[calc(100%-64px)] auto-rows-min grid-cols-2 gap-4 overflow-y-auto">
         {getAssetsList().map(i => {
           return (
             <AssetCard
               key={i.id}
-              src={i.url}
-              alt={i.name}
+              type={i.type}
+              url={i.url}
               extraElement={
                 <IconButton
                   icon="add"
@@ -28,7 +28,7 @@ export const AssetPanel = memo(() => {
                   )}
                   onClick={e => {
                     e.stopPropagation()
-                    vc.draftOperationManager.insertElement({ type: 'image', url: i.url })
+                    vc.draftOperationManager.insertElement({ type: i.type, url: i.url })
                   }}
                 />
               }

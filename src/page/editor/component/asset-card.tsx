@@ -1,14 +1,17 @@
 import { cn } from '@/common/util/css'
-import { Image, type ImageProps } from '@/component/ui/image'
+import { Image } from '@/component/ui/image'
 import { VirtualDiv } from '@/component/ui/virtual-div'
 import { memo } from 'react'
 
-type IProps = ImageProps & {
+type IProps = {
+  type: 'image' | 'video'
+  url: string
+  className?: string
   extraElement?: React.ReactNode
 }
 
 export const AssetCard = memo((props: IProps) => {
-  const { className, extraElement, ...rest } = props
+  const { className, extraElement, type, url } = props
   return (
     <VirtualDiv
       className={cn(
@@ -18,7 +21,12 @@ export const AssetCard = memo((props: IProps) => {
         className
       )}
     >
-      <Image className="rounded-none" {...rest} />
+      {type === 'image' ? (
+        <Image className="rounded-none" src={url} />
+      ) : (
+        // TODO: 增加视频播放器并替换
+        <video className="rounded-none" src={url} />
+      )}
       {extraElement}
     </VirtualDiv>
   )

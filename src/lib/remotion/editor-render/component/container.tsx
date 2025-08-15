@@ -5,6 +5,7 @@ import { AudioRenderer } from './audio-renderer'
 import { ImageRenderer } from './image-renderer'
 import { TextRenderer } from './text-renderer'
 import { useRegisterHandler } from '../react-context'
+import { VideoRenderer } from './video-renderer'
 
 interface IDisplayElementProps {
   element: AllDisplayElement
@@ -38,9 +39,11 @@ export const DisplayElement = memo((props: IDisplayElementProps) => {
   }, [originElement, templateData.element])
 
   const isImage = element.type === 'image' && asset?.type === 'image'
+  const isVideo = element.type === 'video' && asset?.type === 'video'
   const isText = element.type === 'text'
 
   if (isImage) return <ImageRenderer element={element} asset={asset} />
+  if (isVideo) return <VideoRenderer element={element} asset={asset} />
   if (isText) return <TextRenderer element={element} />
 
   return null

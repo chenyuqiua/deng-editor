@@ -1,5 +1,6 @@
 import { promiseWithResolvers } from './async'
 import type { MediaMetaDataOfType, SupportMediaType } from '@/page/editor/type/media'
+import { getVideoMetadata } from '@remotion/media-utils'
 
 export const getImageSize = (url: string): Promise<MediaMetaDataOfType<'image'>> => {
   const { promise, resolve, reject } = promiseWithResolvers<MediaMetaDataOfType<'image'>>()
@@ -31,6 +32,18 @@ export const getAudioInfo = (url: string): Promise<MediaMetaDataOfType<'audio'>>
   return promise
 }
 
+export const getVideoInfo = async (url: string): Promise<MediaMetaDataOfType<'video'>> => {
+  const { promise, resolve, reject } = promiseWithResolvers<MediaMetaDataOfType<'video'>>()
+  try {
+    // TODO: 这里需要优化，因为getVideoMetadata会下载视频，导致性能问题
+    const { width, height, durationInSeconds } = await getVideoMetadata(url)
+    resolve({ type: 'video', width, height, duration: durationInSeconds })
+  } catch (err) {
+    reject(err)
+  }
+  return promise
+}
+
 export const getMeta = async <T extends SupportMediaType>(
   type: T,
   url: string
@@ -40,6 +53,8 @@ export const getMeta = async <T extends SupportMediaType>(
       return (await getImageSize(url)) as MediaMetaDataOfType<T>
     case 'audio':
       return (await getAudioInfo(url)) as MediaMetaDataOfType<T>
+    case 'video':
+      return (await getVideoInfo(url)) as MediaMetaDataOfType<T>
     default:
       throw new Error(`Unsupported media type: ${type}`)
   }

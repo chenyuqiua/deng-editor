@@ -21,7 +21,10 @@ const ResourcePanelContent = memo((props: IProps) => {
       <div className={cn('w-0 flex-1 bg-[#262626] duration-300', !panelFold && 'w-[360px]')}>
         {pageConfig.map(item => {
           return (
-            <div key={item.value} className={cn('hidden', currentPage === item.value && 'block')}>
+            <div
+              key={item.value}
+              className={cn('hidden h-full', currentPage === item.value && 'block')}
+            >
               {item.component}
             </div>
           )

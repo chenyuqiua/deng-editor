@@ -78,15 +78,60 @@ export const AudioElementSchema = BaseElementSchema.extend({
   volume: z.number().optional(),
 })
 
+/**
+ * Video element schema for displaying video content
+ * Extends image element with video-specific playback properties
+ */
+export const VideoElementSchema = ImageElementSchema.extend({
+  type: z.literal('video'),
+  /**
+   * Audio volume level from 0 (muted) to 1 (full volume)
+   * Controls the video's audio output level
+   */
+  volume: z.number().optional(),
+  /**
+   * Audio effect applied to the video's audio track
+   * Examples: 'fade_in', 'fade_out', 'echo'
+   * Used for audio processing and effects
+   */
+  volumeEffect: z.string().optional(),
+  /**
+   * Playback speed multiplier
+   * Values > 1 speed up, < 1 slow down, 1 = normal speed
+   * Affects both video and audio playback
+   */
+  playbackRate: z.number().optional(),
+  /**
+   * Start time within the video asset (in seconds)
+   * Defines which part of the video file to begin playing from
+   * Used for trimming or selecting specific video segments
+   */
+  startFrom: z.number().optional(),
+  /**
+   * End time within the video asset (in seconds)
+   * Defines where to stop playing the video
+   * Used for trimming or selecting specific video segments
+   */
+  endAt: z.number().optional(),
+  /**
+   * Whether the video should loop continuously
+   * When true, video restarts from startFrom when reaching endAt
+   * Useful for background videos or repeating content
+   */
+  loop: z.boolean().optional(),
+})
+
 export const AllElementSchema = z.discriminatedUnion('type', [
   ImageElementSchema,
   TextElementSchema,
   AudioElementSchema,
+  VideoElementSchema,
 ])
 
 export const AllDisplayElementSchema = z.discriminatedUnion('type', [
   ImageElementSchema,
   TextElementSchema,
+  VideoElementSchema,
 ])
 
 // 方便未来扩展其他元素audio类型
@@ -98,6 +143,7 @@ export type DisplayElement = z.infer<typeof DisplayElementSchema>
 export type ImageElement = z.infer<typeof ImageElementSchema>
 export type TextElement = z.infer<typeof TextElementSchema>
 export type AudioElement = z.infer<typeof AudioElementSchema>
+export type VideoElement = z.infer<typeof VideoElementSchema>
 export type AllElement = z.infer<typeof AllElementSchema>
 export type AllDisplayElement = z.infer<typeof AllDisplayElementSchema>
 export type AllAudioElement = z.infer<typeof AllAudioElementSchema>

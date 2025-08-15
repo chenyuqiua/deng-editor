@@ -3,11 +3,12 @@ import type {
   AudioElement,
   ImageElement,
   TextElement,
+  VideoElement,
 } from '@/lib/remotion/editor-render/schema/element'
 import { generateUuid } from '@/common/util/uuid'
 import { DefaultElementDuration, defaultTextElementStyle } from '../constant/element'
-import type { AudioAsset, ImageAsset } from '@/lib/remotion/editor-render/schema/asset'
-import { createAudioAssetByUrl, createImageAssetByUrl } from '../util/asset'
+import type { AudioAsset, ImageAsset, VideoAsset } from '@/lib/remotion/editor-render/schema/asset'
+import { createAudioAssetByUrl, createImageAssetByUrl, createVideoAssetByUrl } from '../util/asset'
 import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 import { assert } from '@/common/util/assert'
 import type { InsertPayload } from '../type/element'
@@ -15,6 +16,7 @@ import type { InsertPayload } from '../type/element'
 type ImageVideoElementOptions = Partial<Omit<ImageElement, 'assetId' | 'type'>>
 type TextElementOptions = Partial<Omit<TextElement, 'assetId' | 'type'>>
 type AudioElementOptions = Partial<Omit<AudioElement, 'assetId' | 'type'>>
+type VideoElementOptions = Partial<Omit<VideoElement, 'assetId' | 'type'>>
 
 /**
  * 根据图片资源创建图片元素
@@ -70,6 +72,12 @@ export const createTextElement = (text: string, opts: TextElementOptions): TextE
   }
 }
 
+/**
+ * 根据音频资源创建音频元素
+ * @param asset 音频资源
+ * @param opts 音频元素其他配置项
+ * @returns 音频元素
+ */
 export const createAudioElementByAsset = async (
   asset: AudioAsset,
   opts: AudioElementOptions
@@ -85,7 +93,41 @@ export const createAudioElementByAsset = async (
   }
 }
 
-// TODO: 这里是模拟创建一个元素 逻辑还需完善
+/**
+ * 根据视频资源创建视频元素
+ * @param asset 视频资源
+ * @param opts 视频元素其他配置项
+ * @returns 视频元素
+ */
+export const createVideoElementByAsset = async (
+  asset: VideoAsset,
+  opts: VideoElementOptions
+): Promise<VideoElement> => {
+  return {
+    id: generateUuid('video'),
+    type: 'video',
+    assetId: asset.id,
+    width: asset.width,
+    height: asset.height,
+    opacity: 1,
+    start: 0,
+    length: asset.duration,
+    x: 0,
+    y: 0,
+    scaleX: 1,
+    scaleY: 1,
+    rotate: 0,
+    volume: 1,
+    ...opts,
+  }
+}
+
+/**
+ * 根据插入的元素类型和开始时间创建元素
+ * @param payload 插入的元素类型和位置
+ * @param start 开始时间
+ * @returns 创建的元素和资源
+ */
 export const createElement = async (
   payload: InsertPayload,
   start: number
@@ -104,6 +146,10 @@ export const createElement = async (
     case 'audio':
       asset = await createAudioAssetByUrl(payload.url)
       element = await createAudioElementByAsset(asset, { start: start })
+      break
+    case 'video':
+      asset = await createVideoAssetByUrl(payload.url)
+      element = await createVideoElementByAsset(asset, { start: start })
       break
     default:
       assert(false, 'Unsupported element')

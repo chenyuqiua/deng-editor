@@ -18,4 +18,5 @@ export const elementToTrackTypeMap: Record<AllElementTypeAttribute, TrackType> =
   text: 'text',
   audio: 'audio',
   image: 'image-video',
+  video: 'image-video',
 }

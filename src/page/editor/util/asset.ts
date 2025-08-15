@@ -1,5 +1,5 @@
 import { getMeta } from '@/common/util/media'
-import type { AudioAsset, ImageAsset } from '@/lib/remotion/editor-render/schema/asset'
+import type { AudioAsset, ImageAsset, VideoAsset } from '@/lib/remotion/editor-render/schema/asset'
 
 /**
  * 根据图片 url 创建图片资源
@@ -56,5 +56,41 @@ export const createAudioAssetByUrl = async (
     type: 'audio',
     src: url,
     duration: audioInfo.duration,
+  }
+}
+
+/**
+ * 根据视频 url 创建视频资源
+ * @param url 视频 url
+ * @param opts 视频资源选项可选，如果传入宽高，则使用传入的宽高，否则使用视频的原始宽高
+ * @returns 视频资源
+ */
+export const createVideoAssetByUrl = async (
+  url: string,
+  opts?: { poster?: string; width?: number; height?: number; duration?: number }
+): Promise<VideoAsset> => {
+  const { poster, width = 0, height = 0, duration = 0 } = opts || {}
+
+  let videoInfo = { width, height, duration }
+  if (!videoInfo.width && !videoInfo.height && !videoInfo.duration) {
+    const { width, height, duration } = await getMeta('video', url)
+    videoInfo = { width, height, duration }
+  }
+
+  return {
+    id: url,
+    type: 'video',
+    src: url,
+    poster,
+    duration: videoInfo.duration,
+    width: videoInfo.width,
+    height: videoInfo.height,
+    srcset: [
+      {
+        src: url,
+        width: videoInfo.width,
+        height: videoInfo.height,
+      },
+    ],
   }
 }
