@@ -2,8 +2,8 @@ import type { IDraftService } from '../service/draft-service.type'
 import type { IPlayerService } from '../service/player-service.type'
 import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import { generateUuid } from '@/common/util/uuid'
-import type { AllAssetTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
 import { createElement } from '../util/element'
+import type { InsertPayload } from '../type/element'
 
 export class DraftOperationManager {
   constructor(
@@ -11,12 +11,11 @@ export class DraftOperationManager {
     private readonly _playerService: IPlayerService
   ) {}
 
-  async insertElement({ type, url }: { type: AllAssetTypeAttribute; url: string }) {
-    const { asset, element: insertElement } = await createElement({
-      type,
-      url,
-      start: this._playerService.state.currentTime,
-    })
+  async insertElement(payload: InsertPayload) {
+    const { asset, element: insertElement } = await createElement(
+      payload,
+      this._playerService.state.currentTime
+    )
     if (asset) this._draftService.addAsset(asset)
     this._draftService.addElement(insertElement)
     let insertTrack = this.getInsertTrackByElement(insertElement.length)
@@ -25,6 +24,7 @@ export class DraftOperationManager {
     if (insertTrack) {
       this._draftService.addElementToTrack(insertElement.id, insertTrack.id)
     } else {
+      // TODO: 逻辑需要修改
       insertTrack = {
         id: generateUuid(),
         type: 'text',

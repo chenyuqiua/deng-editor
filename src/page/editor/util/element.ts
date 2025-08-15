@@ -6,10 +6,10 @@ import type {
 import { generateUuid } from '@/common/util/uuid'
 import { DefaultElementDuration, defaultTextElementStyle } from '../constant/element'
 import type { ImageAsset } from '@/lib/remotion/editor-render/schema/asset'
-import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
 import { createImageAssetByUrl } from '../util/asset'
 import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 import { assert } from '@/common/util/assert'
+import type { InsertPayload } from '../type/element'
 
 type ImageVideoElementOptions = Partial<Omit<ImageElement, 'assetId' | 'type'>>
 type TextElementOptions = Partial<Omit<TextElement, 'assetId' | 'type'>>
@@ -69,28 +69,23 @@ export const createTextElement = (text: string, opts: TextElementOptions): TextE
 }
 
 // TODO: 这里是模拟创建一个元素 逻辑还需完善
-export const createElement = async ({
-  type,
-  url,
-  start,
-}: {
-  type: AllElementTypeAttribute
-  url: string
+export const createElement = async (
+  payload: InsertPayload,
   start: number
-}): Promise<{ asset: AllAsset | undefined; element: AllElement }> => {
+): Promise<{ asset: AllAsset | undefined; element: AllElement }> => {
   let asset: AllAsset | undefined
   let element: AllElement | undefined
 
-  switch (type) {
+  switch (payload.type) {
     case 'image':
-      asset = await createImageAssetByUrl(url)
+      asset = await createImageAssetByUrl(payload.url)
       element = await createImageElementByAsset(asset, { start: start })
       break
     case 'text':
       element = createTextElement('default text', { start: start })
       break
     default:
-      assert(false, `Unsupported element type: ${type}`)
+      assert(false, 'Unsupported element')
   }
 
   return { asset, element }
