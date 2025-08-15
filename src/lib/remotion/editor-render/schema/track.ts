@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const TrackTypeSchema = z.enum(['text', 'audio'])
+export const TrackTypeSchema = z.enum(['text', 'audio', 'image-video'])
 
 export const TrackClipSchema = z.object({ elementId: z.string() })
 
@@ -16,3 +16,4 @@ export const TrackSchema = z.object({
 
 export type TrackClip = z.infer<typeof TrackClipSchema>
 export type Track = z.infer<typeof TrackSchema>
+export type TrackType = z.infer<typeof TrackTypeSchema>

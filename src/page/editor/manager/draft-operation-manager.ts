@@ -4,6 +4,8 @@ import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import { generateUuid } from '@/common/util/uuid'
 import { createElement } from '../util/element'
 import type { InsertPayload } from '../type/element'
+import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
+import { elementToTrackTypeMap } from '../constant/element'
 
 export class DraftOperationManager {
   constructor(
@@ -18,26 +20,33 @@ export class DraftOperationManager {
     )
     if (asset) this._draftService.addAsset(asset)
     this._draftService.addElement(insertElement)
-    let insertTrack = this.getInsertTrackByElement(insertElement.length)
+    let insertTrack = this.getInsertTrackByType(insertElement.type, insertElement.length)
 
     console.log(insertTrack, 'insertTrack')
     if (insertTrack) {
       this._draftService.addElementToTrack(insertElement.id, insertTrack.id)
     } else {
-      // TODO: 逻辑需要修改
       insertTrack = {
         id: generateUuid(),
-        type: 'text',
+        type: elementToTrackTypeMap[insertElement.type],
         clips: [{ elementId: insertElement.id }],
       }
       this._draftService.addTrack(insertTrack)
     }
   }
 
-  getInsertTrackByElement(insertLength: number): Track | undefined {
-    console.log(this._draftService.state.draft.timeline.tracks)
+  /**
+   * 根据元素类型和长度获取插入的轨道, 会对轨道进行空位检查, 从下层轨道往上层检查, 如果找到空位则返回该轨道, 否则返回 undefined
+   * @param insertType 元素类型
+   * @param insertLength 元素长度
+   * @returns 插入的轨道
+   */
+  getInsertTrackByType(
+    insertType: AllElementTypeAttribute,
+    insertLength: number
+  ): Track | undefined {
     const textTrack = [...this._draftService.state.draft.timeline.tracks].reverse().find(i => {
-      if (i.type === 'text') {
+      if (i.type === insertType) {
         const isCanInsert = i.clips.some((clip, index) => {
           const currentTime = this._playerService.state.currentTime
           const clipElement = this._draftService.getElementById(clip.elementId)

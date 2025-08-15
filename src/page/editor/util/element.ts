@@ -1,18 +1,20 @@
 import type {
   AllElement,
+  AudioElement,
   ImageElement,
   TextElement,
 } from '@/lib/remotion/editor-render/schema/element'
 import { generateUuid } from '@/common/util/uuid'
 import { DefaultElementDuration, defaultTextElementStyle } from '../constant/element'
-import type { ImageAsset } from '@/lib/remotion/editor-render/schema/asset'
-import { createImageAssetByUrl } from '../util/asset'
+import type { AudioAsset, ImageAsset } from '@/lib/remotion/editor-render/schema/asset'
+import { createAudioAssetByUrl, createImageAssetByUrl } from '../util/asset'
 import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 import { assert } from '@/common/util/assert'
 import type { InsertPayload } from '../type/element'
 
 type ImageVideoElementOptions = Partial<Omit<ImageElement, 'assetId' | 'type'>>
 type TextElementOptions = Partial<Omit<TextElement, 'assetId' | 'type'>>
+type AudioElementOptions = Partial<Omit<AudioElement, 'assetId' | 'type'>>
 
 /**
  * 根据图片资源创建图片元素
@@ -68,6 +70,21 @@ export const createTextElement = (text: string, opts: TextElementOptions): TextE
   }
 }
 
+export const createAudioElementByAsset = async (
+  asset: AudioAsset,
+  opts: AudioElementOptions
+): Promise<AudioElement> => {
+  return {
+    id: generateUuid('audio'),
+    type: 'audio',
+    assetId: asset.id,
+    start: 0,
+    length: DefaultElementDuration,
+    volume: 0.3,
+    ...opts,
+  }
+}
+
 // TODO: 这里是模拟创建一个元素 逻辑还需完善
 export const createElement = async (
   payload: InsertPayload,
@@ -82,7 +99,11 @@ export const createElement = async (
       element = await createImageElementByAsset(asset, { start: start })
       break
     case 'text':
-      element = createTextElement('default text', { start: start })
+      element = createTextElement(payload.text, { start: start })
+      break
+    case 'audio':
+      asset = await createAudioAssetByUrl(payload.url)
+      element = await createAudioElementByAsset(asset, { start: start })
       break
     default:
       assert(false, 'Unsupported element')
