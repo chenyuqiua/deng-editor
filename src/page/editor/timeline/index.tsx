@@ -24,7 +24,6 @@ export const Timeline = memo((props: IProps) => {
           {tracks.map(track => (
             <TimelineTrack key={track.id} track={track} />
           ))}
-          <div>test</div>
         </TimelineScale>
       </div>
     </TimelineBootstrap>

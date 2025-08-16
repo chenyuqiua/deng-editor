@@ -2,6 +2,7 @@ import { memo, useMemo } from 'react'
 import { getDraftService } from '../../../util/service'
 import { ThumbnailStyleWrapper } from './thumbnail-style-wrapper'
 import { IconPark } from '@/lib/iconpark'
+import { useVideoThumbnail } from '../../hook/use-video-thumbnail'
 
 export interface ElementThumbnailProps {
   elementId: string
@@ -52,4 +53,31 @@ export const AudioThumbnail = memo((props: ElementThumbnailProps) => {
   const element = useMemo(() => draftService.getElementById(elementId, 'audio'), [elementId])
 
   return <ThumbnailStyleWrapper elementId={elementId}>{element.id}</ThumbnailStyleWrapper>
+})
+
+export const VideoThumbnail = memo((props: ElementThumbnailProps) => {
+  const { elementId } = props
+  const draftService = getDraftService()
+  const element = useMemo(() => draftService.getElementById(elementId, 'video'), [elementId])
+  const asset = useMemo(() => draftService.getAssetById(element.assetId, 'video'), [elementId])
+  const thumbnail = useVideoThumbnail(asset.src)
+
+  console.log(thumbnail, 'thumbnailUrl')
+
+  return (
+    <ThumbnailStyleWrapper
+      elementId={elementId}
+      className="border-[#0C4D6E] bg-[#083349]"
+      style={{
+        backgroundImage: `url(${thumbnail.src})`,
+        backgroundSize: 'auto 100%',
+        backgroundRepeat: 'repeat-x',
+      }}
+    >
+      <div className="flex items-center gap-1 text-white">
+        <IconPark icon="image" color="#FFFFFF" size={16} />
+        <span className="text-xs">Video</span>
+      </div>
+    </ThumbnailStyleWrapper>
+  )
 })

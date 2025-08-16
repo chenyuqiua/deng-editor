@@ -96,14 +96,14 @@ export const ResizeWrapper = memo(
           <div
             ref={leftHandleRef}
             id={LEFT_HANDLER_ID}
-            className="absolute top-0 left-0 h-full w-fit cursor-ew-resize"
+            className="absolute top-0 left-0 z-10 h-full w-fit cursor-ew-resize"
           >
             {leftHandle}
           </div>
           <div
             ref={rightHandleRef}
             id={RIGHT_HANDLER_ID}
-            className="absolute top-0 right-0 h-full w-fit cursor-ew-resize"
+            className="absolute top-0 right-0 z-10 h-full w-fit cursor-ew-resize"
           >
             {rightHandle}
           </div>

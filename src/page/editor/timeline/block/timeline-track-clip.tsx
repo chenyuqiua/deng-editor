@@ -9,7 +9,12 @@ import type { PixelRange } from '../../type/timeline'
 import { getElementById } from '../../util/draft'
 import { getDraftService, getEditorService } from '../../util/service'
 import { useTimelineViewController } from '../bootstrap/react-context'
-import { AudioThumbnail, ImageThumbnail, TextThumbnail } from './thumbnail/timeline-thumbnail'
+import {
+  AudioThumbnail,
+  ImageThumbnail,
+  TextThumbnail,
+  VideoThumbnail,
+} from './thumbnail/timeline-thumbnail'
 import { useDrag } from 'react-dnd'
 import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 
@@ -23,6 +28,7 @@ const getElementThumbnail = (element: AllElement): React.ReactNode => {
     text: <TextThumbnail elementId={element.id} />,
     image: <ImageThumbnail elementId={element.id} />,
     audio: <AudioThumbnail elementId={element.id} />,
+    video: <VideoThumbnail elementId={element.id} />,
   }
 
   return <div className="size-full select-none">{map[element.type]}</div>
