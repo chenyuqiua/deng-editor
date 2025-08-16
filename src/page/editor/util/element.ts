@@ -11,12 +11,13 @@ import type { AudioAsset, ImageAsset, VideoAsset } from '@/lib/remotion/editor-r
 import { createAudioAssetByUrl, createImageAssetByUrl, createVideoAssetByUrl } from '../util/asset'
 import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 import { assert } from '@/common/util/assert'
-import type { InsertPayload } from '../type/element'
-
-type ImageVideoElementOptions = Partial<Omit<ImageElement, 'assetId' | 'type'>>
-type TextElementOptions = Partial<Omit<TextElement, 'assetId' | 'type'>>
-type AudioElementOptions = Partial<Omit<AudioElement, 'assetId' | 'type'>>
-type VideoElementOptions = Partial<Omit<VideoElement, 'assetId' | 'type'>>
+import type {
+  AudioElementOptions,
+  ImageVideoElementOptions,
+  InsertPayload,
+  TextElementOptions,
+  VideoElementOptions,
+} from '../type/element'
 
 /**
  * 根据图片资源创建图片元素
@@ -141,7 +142,7 @@ export const createElement = async (
       element = await createImageElementByAsset(asset, { start: start })
       break
     case 'text':
-      element = createTextElement(payload.text, { start: start })
+      element = createTextElement(payload.text, { start: start, ...payload.data })
       break
     case 'audio':
       asset = await createAudioAssetByUrl(payload.url)

@@ -10,7 +10,7 @@ export const defaultTextElementStyle: CSSProperties & Record<string, any> = {
   fontStyle: 'normal',
   fontWeight: 'normal',
   textDecoration: 'none',
-  color: 'black',
+  color: 'white',
   lineHeight: 1.2,
 }
 

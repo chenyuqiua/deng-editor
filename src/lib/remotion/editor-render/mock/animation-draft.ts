@@ -19,11 +19,11 @@ export const animationDraft: DraftDataType = {
       },
       test_video_1: {
         type: 'video',
-        width: 200,
-        height: 600,
+        width: 960,
+        height: 960,
         id: 'test_video_1',
         src: '/video/test1.mp4',
-        duration: 10,
+        duration: 5,
       },
     },
     elements: {
@@ -60,7 +60,7 @@ export const animationDraft: DraftDataType = {
         id: 'test_video_1',
         assetId: 'test_video_1',
         start: 0,
-        length: 4,
+        length: 5,
         x: 0,
         y: 0,
         scaleX: 1,

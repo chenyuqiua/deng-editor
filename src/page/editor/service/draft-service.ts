@@ -20,6 +20,7 @@ import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 
 const initialState = {
   draft: {
+    background: '#000',
     timeline: { elements: {}, assets: {}, tracks: [], fonts: [] },
     meta: { fps: 30, width: 1920, height: 1080 },
     name: '',

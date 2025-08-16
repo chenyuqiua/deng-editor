@@ -56,3 +56,95 @@ export const getAssetsList = () => {
     },
   ]
 }
+
+/**
+ * 
+ * @returns {
+    text: 'Body Text',
+    commonStyle: {
+      fontWeight: 500,
+    },
+    displayStyle: {
+      fontSize: 16,
+    },
+    elementStyle: {
+      fontSize: 16 * 5,
+    },
+  },
+  {
+    text: 'Description',
+    commonStyle: {
+      fontWeight: 400,
+    },
+    displayStyle: {
+      fontSize: 16,
+    },
+    elementStyle: {
+      fontSize: 16 * 4,
+    },
+  },
+ */
+export const getTextList = () => {
+  return [
+    {
+      id: 'Headline',
+      name: 'Headline',
+      styles: {
+        common: {
+          fontWeight: 700,
+        },
+        display: {
+          fontSize: 24,
+        },
+        element: {
+          fontSize: 24 * 6,
+        },
+      },
+    },
+    {
+      id: 'Subtitle',
+      name: 'Subtitle',
+      styles: {
+        common: {
+          fontWeight: 600,
+        },
+        display: {
+          fontSize: 18,
+        },
+        element: {
+          fontSize: 18 * 6,
+        },
+      },
+    },
+    {
+      id: 'Body Text',
+      name: 'Body Text',
+      styles: {
+        common: {
+          fontWeight: 500,
+        },
+        display: {
+          fontSize: 16,
+        },
+        element: {
+          fontSize: 16 * 5,
+        },
+      },
+    },
+    {
+      id: 'Description',
+      name: 'Description',
+      styles: {
+        common: {
+          fontWeight: 400,
+        },
+        display: {
+          fontSize: 16,
+        },
+        element: {
+          fontSize: 16 * 4,
+        },
+      },
+    },
+  ]
+}

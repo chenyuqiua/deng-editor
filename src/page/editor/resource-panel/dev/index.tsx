@@ -10,6 +10,7 @@ export const DevPanel = memo(() => {
   const playerService = getPlayerService()
   const editorService = getEditorService()
   const draft = useDraftSelector(s => s.draft)
+  console.log(draft, 'draft')
 
   return (
     <div className="flex flex-1 flex-col gap-2 bg-[#262626]">
