@@ -7,13 +7,15 @@ type IProps = { elementId: string } & React.HTMLAttributes<HTMLDivElement>
 export const ThumbnailStyleWrapper = memo((props: IProps) => {
   const { className, elementId, ...rest } = props
   const selectElementId = useEditorSelector(s => s.selectElementId)
+
   return (
     <div
       className={cn(
         'relative rounded-sm border-2 border-solid border-white/12 hover:border-[#47E7FF]',
-        selectElementId === elementId && 'border-[#47E7FF]',
         'flex size-full items-center overflow-hidden px-2 text-nowrap',
-        className
+        'transition-colors duration-150',
+        className,
+        selectElementId === elementId && 'border-[#47E7FF]'
       )}
       {...rest}
     ></div>

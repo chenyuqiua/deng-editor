@@ -36,11 +36,12 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
 
     this.onStateChange((state: typeof initialState, preState: typeof initialState) => {
       // TODO: frameDuration 也许也需要更新
-      // 监听 draft.timeline.tracks 变化，自动更新 duration
+      // 监听 draft.timeline.tracks 变化，自动更新 duration, 过滤掉没有元素的轨道
       if (!_.isEqual(state.draft.timeline.tracks, preState.draft.timeline.tracks)) {
         const duration = calcDraftDurationInSeconds(state.draft)
         this.setState(s => {
           s.duration = duration
+          s.draft.timeline.tracks = s.draft.timeline.tracks.filter(i => i.clips.length !== 0)
         })
       }
     })

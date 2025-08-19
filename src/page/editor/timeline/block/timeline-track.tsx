@@ -73,7 +73,7 @@ export const TimelineTrack = memo((props: IProps) => {
 
   return (
     <div
-      className="relative flex h-10 w-full bg-[#2f2f2f]"
+      className="relative flex h-10 w-full shrink-0 bg-[#2f2f2f]"
       ref={elem => {
         if (elem) drop(elem)
       }}
