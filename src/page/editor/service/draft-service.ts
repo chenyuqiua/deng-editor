@@ -34,18 +34,16 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
   constructor() {
     super(initialState)
 
-    // 监听 draft.timeline.elements 变化，自动更新 duration
-    this.onStateChange(
-      _.debounce((state: typeof initialState, preState: typeof initialState) => {
-        // TODO: frameDuration 需要更新
-        if (!_.isEqual(state.draft.timeline.elements, preState.draft.timeline.elements)) {
-          const duration = calcDraftDurationInSeconds(state.draft)
-          this.setState(s => {
-            s.duration = duration
-          })
-        }
-      }, 200)
-    )
+    this.onStateChange((state: typeof initialState, preState: typeof initialState) => {
+      // TODO: frameDuration 也许也需要更新
+      // 监听 draft.timeline.tracks 变化，自动更新 duration
+      if (!_.isEqual(state.draft.timeline.tracks, preState.draft.timeline.tracks)) {
+        const duration = calcDraftDurationInSeconds(state.draft)
+        this.setState(s => {
+          s.duration = duration
+        })
+      }
+    })
   }
 
   get draft() {
