@@ -31,6 +31,7 @@ export const TimelineTrack = memo((props: IProps) => {
         offsetLeft: monitor.getDifferenceFromInitialOffset()?.x,
         trackId: track.id,
       })
+
       if (!timeRange) return
 
       const elementTrack = draftService.getTrackByElementId(item.elementId)

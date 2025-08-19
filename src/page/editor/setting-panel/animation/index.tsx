@@ -23,8 +23,6 @@ export const AnimationPanel = memo(() => {
     i => i.name === currentElementAnimation?.[animationType]?.name
   )
 
-  console.log(currentElementAnimation, 'currentElementAnimation')
-
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-full flex-col gap-4 p-4">

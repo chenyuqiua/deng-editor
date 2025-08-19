@@ -62,8 +62,6 @@ export const VideoThumbnail = memo((props: ElementThumbnailProps) => {
   const asset = useMemo(() => draftService.getAssetById(element.assetId, 'video'), [elementId])
   const thumbnail = useVideoThumbnail(asset.src)
 
-  console.log(thumbnail, 'thumbnailUrl')
-
   return (
     <ThumbnailStyleWrapper
       elementId={elementId}

@@ -22,7 +22,6 @@ export class DraftOperationManager {
     this._draftService.addElement(insertElement)
     let insertTrack = this.getInsertTrackByType(insertElement.type, insertElement.length)
 
-    console.log(insertTrack, 'insertTrack')
     if (insertTrack) {
       this._draftService.addElementToTrack(insertElement.id, insertTrack.id)
     } else {
