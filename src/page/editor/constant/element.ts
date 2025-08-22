@@ -2,7 +2,7 @@ import type { TrackType } from '@/lib/remotion/editor-render/schema/track'
 import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
 import type { CSSProperties } from 'react'
 
-export const DefaultElementDuration = 0.3
+export const DefaultElementDuration = 0.45
 
 export const defaultTextElementStyle: CSSProperties & Record<string, any> = {
   display: 'inline-block',
