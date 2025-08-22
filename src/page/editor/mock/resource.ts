@@ -57,33 +57,6 @@ export const getAssetsList = () => {
   ]
 }
 
-/**
- * 
- * @returns {
-    text: 'Body Text',
-    commonStyle: {
-      fontWeight: 500,
-    },
-    displayStyle: {
-      fontSize: 16,
-    },
-    elementStyle: {
-      fontSize: 16 * 5,
-    },
-  },
-  {
-    text: 'Description',
-    commonStyle: {
-      fontWeight: 400,
-    },
-    displayStyle: {
-      fontSize: 16,
-    },
-    elementStyle: {
-      fontSize: 16 * 4,
-    },
-  },
- */
 export const getTextList = () => {
   return [
     {
@@ -145,6 +118,41 @@ export const getTextList = () => {
           fontSize: 16 * 4,
         },
       },
+    },
+  ]
+}
+
+export const getMusicList = () => {
+  return [
+    {
+      id: 'music1',
+      name: 'Music 1',
+      url: '/audio/audio1.mp3',
+      cover: '/image/audio-cover/audio-cover1.jpg',
+    },
+    {
+      id: 'music2',
+      name: 'Music 2',
+      url: '/audio/audio2.mp3',
+      cover: '/image/audio-cover/audio-cover2.jpg',
+    },
+    {
+      id: 'music3',
+      name: 'Music 3',
+      url: '/audio/audio3.mp3',
+      cover: '/image/audio-cover/audio-cover3.jpg',
+    },
+    {
+      id: 'music4',
+      name: 'Music 4',
+      url: '/audio/audio4.mp3',
+      cover: '/image/audio-cover/audio-cover4.jpg',
+    },
+    {
+      id: 'music5',
+      name: 'Music 5',
+      url: '/audio/audio5.mp3',
+      cover: '/image/audio-cover/audio-cover5.jpg',
     },
   ]
 }

@@ -13,7 +13,7 @@ export type VideoElementOptions = Partial<Omit<VideoElement, 'assetId' | 'type'>
 
 export type InsertPayload = { type: AllElementTypeAttribute } & (
   | { type: 'text'; text: string; data?: Partial<TextElementOptions> }
-  | { type: 'image'; url: string }
-  | { type: 'audio'; url: string }
-  | { type: 'video'; url: string }
+  | { type: 'image'; url: string; data?: Partial<ImageVideoElementOptions> }
+  | { type: 'audio'; url: string; data?: Partial<AudioElementOptions> }
+  | { type: 'video'; url: string; data?: Partial<VideoElementOptions> }
 )

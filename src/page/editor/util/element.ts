@@ -139,18 +139,26 @@ export const createElement = async (
   switch (payload.type) {
     case 'image':
       asset = await createImageAssetByUrl(payload.url)
-      element = await createImageElementByAsset(asset, { start: start })
+      element = await createImageElementByAsset(asset, { start: start, ...payload.data })
       break
     case 'text':
       element = createTextElement(payload.text, { start: start, ...payload.data })
       break
     case 'audio':
       asset = await createAudioAssetByUrl(payload.url)
-      element = await createAudioElementByAsset(asset, { start: start })
+      element = await createAudioElementByAsset(asset, {
+        start: start,
+        length: asset.duration,
+        ...payload.data,
+      })
       break
     case 'video':
       asset = await createVideoAssetByUrl(payload.url)
-      element = await createVideoElementByAsset(asset, { start: start })
+      element = await createVideoElementByAsset(asset, {
+        start: start,
+        length: asset.duration,
+        ...payload.data,
+      })
       break
     default:
       assert(false, 'Unsupported element')

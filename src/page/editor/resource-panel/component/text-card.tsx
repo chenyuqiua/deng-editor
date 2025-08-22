@@ -6,8 +6,8 @@ export const TextCard = memo((props: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div
       className={cn(
-        'flex h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-white/8 select-none',
-        'border-[2px] border-solid border-transparent duration-200 hover:border-[#6C6CF5]',
+        'flex h-12 w-full cursor-pointer items-center justify-center rounded-xl bg-white/10 select-none',
+        'border border-solid border-transparent duration-200 hover:border-[#6C6CF5]',
         className
       )}
       {...rest}
