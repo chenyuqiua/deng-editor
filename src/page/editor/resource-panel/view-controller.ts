@@ -1,9 +1,9 @@
 import { BasicState } from '@/common/class/basic-state'
-import { ResourcePanelPageEnum } from './type/page'
 import { DraftOperationManager } from '../manager/draft-operation-manager'
+import { MediaPlayerManager } from '../manager/media-player-service'
 import type { IDraftService } from '../service/draft-service.type'
 import type { IPlayerService } from '../service/player-service.type'
-import { MediaPlayerManager } from '../manager/media-player-service'
+import { ResourcePanelPageEnum } from './type/page'
 
 const initialState = {
   currentPage: ResourcePanelPageEnum.ASSETS as ResourcePanelPageEnum,

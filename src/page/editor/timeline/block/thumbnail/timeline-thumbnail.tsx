@@ -1,8 +1,8 @@
+import { IconPark } from '@/lib/iconpark'
 import { memo, useMemo } from 'react'
 import { getDraftService } from '../../../util/service'
-import { ThumbnailStyleWrapper } from './thumbnail-style-wrapper'
-import { IconPark } from '@/lib/iconpark'
 import { useVideoThumbnail } from '../../hook/use-video-thumbnail'
+import { ThumbnailStyleWrapper } from './thumbnail-style-wrapper'
 
 export interface ElementThumbnailProps {
   elementId: string
@@ -52,7 +52,14 @@ export const AudioThumbnail = memo((props: ElementThumbnailProps) => {
   const draftService = getDraftService()
   const element = useMemo(() => draftService.getElementById(elementId, 'audio'), [elementId])
 
-  return <ThumbnailStyleWrapper elementId={elementId}>{element.id}</ThumbnailStyleWrapper>
+  return (
+    <ThumbnailStyleWrapper className="border-[#14533E] bg-[#052E20]" elementId={elementId}>
+      <div className="flex items-center gap-1 text-white">
+        <IconPark icon="audio" color="#FFFFFF" size={16} />
+        <span className="text-xs">Audio</span>
+      </div>
+    </ThumbnailStyleWrapper>
+  )
 })
 
 export const VideoThumbnail = memo((props: ElementThumbnailProps) => {
