@@ -5,7 +5,10 @@ import { pick } from 'lodash'
 import { useSettingPanelViewController } from '../bootstrap/react-context'
 import { AnimationItem } from '../component/animation-item'
 import { useZustand } from 'use-zustand'
-import type { AnimationCategory } from '@/lib/remotion/editor-render/schema/animation'
+import type {
+  AnimationCategory,
+  AnimationType,
+} from '@/lib/remotion/editor-render/schema/animation'
 import { animations } from '@/lib/remotion/editor-render/animation/conllection'
 import { DurationSetBar } from '../block/duration-set-bar'
 
@@ -22,6 +25,11 @@ export const AnimationPanel = memo(() => {
   const hasActive = animationList.some(
     i => i.name === currentElementAnimation?.[animationType]?.name
   )
+
+  const handleDurationChange = (value: number, animation: AnimationType) => {
+    setDuration(value)
+    vc.animationManager.updateByType(animationType, animation)
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -67,7 +75,9 @@ export const AnimationPanel = memo(() => {
                   <DurationSetBar
                     defaultValue={defaultDuration}
                     value={duration}
-                    onChange={setDuration}
+                    onChange={value =>
+                      handleDurationChange(value, { ...animation, duration: value })
+                    }
                     className="absolute right-0 bottom-0 rounded-lg"
                   />
                 )}
