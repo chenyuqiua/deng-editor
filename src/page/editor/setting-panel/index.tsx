@@ -10,7 +10,9 @@ interface IProps {
 
 export const SettingPanel = memo((props: IProps) => {
   const { className } = props
-  const open = useEditorSelector(s => s.selectElementId)
+  const open = true // TODO: 目前先固定打开
+  const selectElementId = useEditorSelector(s => s.selectElementId)
+  const hasSelectElement = !!selectElementId
 
   return (
     <SettingPanelBootstrap>
@@ -21,7 +23,13 @@ export const SettingPanel = memo((props: IProps) => {
           className
         )}
       >
-        <AnimationPanel />
+        {hasSelectElement && <AnimationPanel />}
+        {!hasSelectElement && (
+          <div className="flex size-full flex-col items-center justify-center gap-4">
+            <img src="/empty/empty.png" className="size-[200px]" />
+            Please select an element
+          </div>
+        )}
       </div>
     </SettingPanelBootstrap>
   )
