@@ -46,6 +46,7 @@ export class RangeManager {
 
     // 计算出当前元素要resize的像素范围, 并将像素范围转换为时间范围
     const pixelRange = this._calcFrameAlignedPixelBounds({ offset, clipElementId })
+
     if (pixelRange.start < 0) return
     const timeRange = this._transformPixelRangeToTimeRange(pixelRange)
 
@@ -328,7 +329,7 @@ export class RangeManager {
     const elementStart = clipElement.start * pixelPerSecond
     const elementEnd = (clipElement.start + clipElement.length) * pixelPerSecond
 
-    const start = Math.min(elementStart + leftNewOffset, elementEnd - 20)
+    const start = Math.max(0, Math.min(elementStart + leftNewOffset, elementEnd - 20))
     const end = Math.max(elementEnd + rightNewOffset, start + 20)
     const width = end - start
 

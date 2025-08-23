@@ -45,7 +45,6 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
       0,
       Math.round((offset / this.state.pixelPerSecond) * this._draftService.fps)
     )
-    console.log(frameOffset, 'frameOffset')
 
     return frameOffset
   }

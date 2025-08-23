@@ -2,9 +2,11 @@ import { cn } from '@/common/util/css'
 import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { TrackClip } from '@/lib/remotion/editor-render/schema/track'
 import React, { memo, useState } from 'react'
+import { useDrag } from 'react-dnd'
 import { useZustand } from 'use-zustand'
 import { ResizeWrapper } from '../../component/resize-wrapper'
 import { useDraftSelector } from '../../hook/draft'
+import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 import type { PixelRange } from '../../type/timeline'
 import { getElementById } from '../../util/draft'
 import { getDraftService, getEditorService } from '../../util/service'
@@ -15,8 +17,6 @@ import {
   TextThumbnail,
   VideoThumbnail,
 } from './thumbnail/timeline-thumbnail'
-import { useDrag } from 'react-dnd'
-import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 
 interface IProps {
   clip: TrackClip
@@ -90,7 +90,7 @@ export const TimelineTrackClip = memo((props: IProps) => {
       rightHandle={<div className="h-full w-1" />}
       className={cn('absolute top-[2px] h-full w-fit', isDragging && 'opacity-0', className)}
       style={{
-        left: `${innerRange?.start || clipElement.start * pixelPerSecond}px`,
+        left: `${innerRange?.start ?? clipElement.start * pixelPerSecond}px`,
       }}
     >
       <div
