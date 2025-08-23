@@ -1,11 +1,11 @@
 import { cn } from '@/common/util/css'
-import { useZustand } from 'use-zustand'
-import { useTimelineViewController } from '../bootstrap/react-context'
 import { useEffect, useRef, useState } from 'react'
-import { getPlayerService } from '../../util/service'
-import { usePlayerSelector } from '../../hook/player'
-import { ResizeCursorFullScreen } from '../../component/resize-cursor-full-screen'
 import { flushSync } from 'react-dom'
+import { useZustand } from 'use-zustand'
+import { ResizeCursorFullScreen } from '../../component/resize-cursor-full-screen'
+import { usePlayerSelector } from '../../hook/player'
+import { getPlayerService } from '../../util/service'
+import { useTimelineViewController } from '../bootstrap/react-context'
 
 export function TimeIndicator() {
   const vc = useTimelineViewController()
@@ -33,7 +33,7 @@ export function TimeIndicator() {
 
     let isCanMove = false
 
-    const handleMouseDown = (e: MouseEvent) => {
+    const handlePointerDown = (e: MouseEvent) => {
       isCanMove = true
       startListener()
       flushSync(() => {
@@ -56,10 +56,10 @@ export function TimeIndicator() {
       playerService.seekToFrame(frameOffset)
     }
 
-    indicatorEl?.addEventListener('pointerdown', handleMouseDown)
+    indicatorEl?.addEventListener('pointerdown', handlePointerDown)
 
     return () => {
-      indicatorEl?.removeEventListener('pointerdown', handleMouseDown)
+      indicatorEl?.removeEventListener('pointerdown', handlePointerDown)
       document.removeEventListener('pointermove', handlePointerMove)
       document.removeEventListener('pointerup', handlePointerUp)
     }

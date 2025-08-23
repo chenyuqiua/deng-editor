@@ -1,8 +1,8 @@
 import { BasicState } from '@/common/class/basic-state'
-import type { IDraftService } from '../service/draft-service.type'
-import { RangeManager } from './manager/range-manager'
 import _ from 'lodash'
+import type { IDraftService } from '../service/draft-service.type'
 import type { IPlayerService } from '../service/player-service.type'
+import { RangeManager } from './manager/range-manager'
 
 const initialState = {
   // 1秒在Timeline上占多少像素
@@ -37,12 +37,15 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
   // 根据当前鼠标的clientX, 计算出对应的帧数偏移量(时间游标移动的帧数时长)
   getFrameOffset(clientX: number) {
     const rect = this._scaleDom?.getBoundingClientRect()
+    const scrollLeft = this._scaleDom?.scrollLeft ?? 0
     if (!rect) return
-    const offset = Math.min(Math.max(0, clientX - rect.left), rect.width)
+    const offset = Math.max(0, clientX + scrollLeft - rect.left)
+    this._autoScrollOnTimelineEdgeHover(clientX)
     const frameOffset = Math.max(
       0,
       Math.round((offset / this.state.pixelPerSecond) * this._draftService.fps)
     )
+    console.log(frameOffset, 'frameOffset')
 
     return frameOffset
   }
@@ -50,7 +53,7 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
   // 移动时间游标
   moveIndicator(clientX: number) {
     const frameOffset = this.getFrameOffset(clientX)
-    if (!frameOffset) return
+    if (typeof frameOffset === 'undefined') return
     const pixelPerFrame = this.state.pixelPerSecond / this._draftService.fps
     if (!this._indicatorDom) return
     this._indicatorDom.style.left = `${frameOffset * pixelPerFrame}px`
@@ -87,5 +90,24 @@ export class TimelineViewController extends BasicState<TimelineViewControllerSta
       trailing: true,
     })
     seekFrame(frameOffset)
+  }
+
+  /**
+   * 当鼠标移动到时间轴的边缘时, 如果可以滚动, 则需要自动滚动时间轴
+   */
+  private _autoScrollOnTimelineEdgeHover(clientX: number) {
+    if (!this._scaleDom) return
+    const scrollLeft = this._scaleDom?.scrollLeft ?? 0
+    const rect = this._scaleDom?.getBoundingClientRect()
+    if (!rect) return
+
+    // 如果鼠标在时间轴的左侧, 则需要根据鼠标位置的偏移量, 向左滚动时间轴
+    if (clientX <= rect.left) this._scaleDom.scrollLeft = scrollLeft - (rect.left - clientX)
+    // 如果鼠标在时间轴的右侧, 由于时间轴右侧贴着屏幕, 而鼠标无法移动到时间轴右侧, 所以自定义每次滚动20px
+    if (clientX >= rect.right - 2) {
+      const maxScrollLeft = this._scaleDom.scrollWidth - this._scaleDom.clientWidth
+      const newScrollLeft = Math.min(scrollLeft + 20, maxScrollLeft)
+      if (newScrollLeft < maxScrollLeft) this._scaleDom.scrollLeft = newScrollLeft
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { getMusicList } from '../../mock/resource'
-import { useResourcePanelViewController } from '../bootstrap/react-context'
 import { AudioCard } from '../block/audio-card'
+import { useResourcePanelViewController } from '../bootstrap/react-context'
 
 export const MusicPanel = memo(() => {
   const vc = useResourcePanelViewController()
@@ -13,6 +13,7 @@ export const MusicPanel = memo(() => {
         {getMusicList().map(music => {
           return (
             <AudioCard
+              key={music.id}
               onInsert={() => {
                 vc.draftOperationManager.insertElement({
                   type: 'audio',
