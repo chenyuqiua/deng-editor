@@ -1,6 +1,6 @@
 import type { AllAsset } from '../schema/asset'
 import type { DraftDataType } from '../schema/draft'
-import type { AllElement, AllDisplayElement } from '../schema/element'
+import type { AllDisplayElement, AllElement } from '../schema/element'
 import type { Track } from '../schema/track'
 import type { AllElementTypeAttribute } from '../schema/util'
 
@@ -13,15 +13,16 @@ import type { AllElementTypeAttribute } from '../schema/util'
 export const shallowWalkTracksElement = (
   draft: DraftDataType,
   tracks: Track[],
-  callback: (element: AllElement, track: Track) => boolean | void
+  callback: (element: AllElement, track: Track, clipIndex: number) => boolean | void
 ) => {
   const { timeline } = draft
   Outer: for (const track of tracks) {
     const { clips } = track
-    for (const clip of clips) {
+    for (let clipIndex = 0; clipIndex < clips.length; clipIndex++) {
+      const clip = clips[clipIndex]
       const element = timeline.elements[clip.elementId]
       if (!element) continue
-      const result = callback(element, track)
+      const result = callback(element, track, clipIndex)
       if (result) break Outer
     }
   }
@@ -39,6 +40,15 @@ export const checkElementType = <T extends AllElementTypeAttribute>(
 ): element is AllElement & { type: T } => {
   if (!element) return false
   return element.type === type
+}
+
+/**
+ * @description 检查element的类型是否为显示元素
+ * @param element 要检查的element
+ * @returns 是否为显示元素
+ */
+export const isDisplayElementType = (element: AllElement): element is AllDisplayElement => {
+  return !checkElementType(element, 'audio')
 }
 
 /**

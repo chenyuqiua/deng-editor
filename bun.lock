@@ -9,6 +9,7 @@
         "@radix-ui/react-toggle-group": "^1.1.10",
         "@remotion/cli": "4.0.324",
         "@remotion/eslint-plugin": "^4.0.324",
+        "@remotion/transitions": "4.0.324",
         "@tailwindcss/vite": "^4.1.11",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -460,9 +461,13 @@
 
     "@remotion/media-utils": ["@remotion/media-utils@4.0.324", "https://registry.npmmirror.com/@remotion/media-utils/-/media-utils-4.0.324.tgz", { "dependencies": { "remotion": "4.0.324" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-3J2C9SrnpNF/fRR27elqME1u4ifJBE+jZ9wBSg8GGRl4UWl5HjEeC0zpyj/Y1Ub4FsQDD9s3sbKzcRSr4Pi7jw=="],
 
+    "@remotion/paths": ["@remotion/paths@4.0.324", "https://registry.npmmirror.com/@remotion/paths/-/paths-4.0.324.tgz", {}, "sha512-nqRAdom1vU1wQ/g9XxNG4BodtjJy2t1lBThDp7xzBPIfLQpUIIC3BTNXUKRShaZPKtTRQcKOMDlauobIinnA9Q=="],
+
     "@remotion/player": ["@remotion/player@4.0.324", "https://registry.npmmirror.com/@remotion/player/-/player-4.0.324.tgz", { "dependencies": { "remotion": "4.0.324" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-Lhr97/0WbeoUzSDgsccwAwF9yuP6elldXMmDFAozK5imgZBjf82XRSJgYr9LFRN8p9W3BMsulxi/FfIbqjgIUQ=="],
 
     "@remotion/renderer": ["@remotion/renderer@4.0.324", "https://registry.npmmirror.com/@remotion/renderer/-/renderer-4.0.324.tgz", { "dependencies": { "@remotion/streaming": "4.0.324", "execa": "5.1.1", "extract-zip": "2.0.1", "remotion": "4.0.324", "source-map": "^0.8.0-beta.0", "ws": "8.17.1" }, "optionalDependencies": { "@remotion/compositor-darwin-arm64": "4.0.324", "@remotion/compositor-darwin-x64": "4.0.324", "@remotion/compositor-linux-arm64-gnu": "4.0.324", "@remotion/compositor-linux-arm64-musl": "4.0.324", "@remotion/compositor-linux-x64-gnu": "4.0.324", "@remotion/compositor-linux-x64-musl": "4.0.324", "@remotion/compositor-win32-x64-msvc": "4.0.324" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-DGyQvya1E//ygxr0unnH4gWwwy4188deyfgL0zN2w9oudS/AFpENaANePrz+xCgc2kHlmhSvF+ARMxLFmGAL8Q=="],
+
+    "@remotion/shapes": ["@remotion/shapes@4.0.324", "https://registry.npmmirror.com/@remotion/shapes/-/shapes-4.0.324.tgz", { "dependencies": { "@remotion/paths": "4.0.324" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-+p2oQUP5ENAhWhuI8cFbfjpqjhV+E1nLrecSTWI9KoJuBkhGNEiwCNJTyljvZ/9UprLWPUKukxLcBUoG//JA0w=="],
 
     "@remotion/streaming": ["@remotion/streaming@4.0.324", "https://registry.npmmirror.com/@remotion/streaming/-/streaming-4.0.324.tgz", {}, "sha512-HhCAK9WOo4S82THsGMTneKydgX10Pi819t4AuzuFknWnv9HMjY8rDZUjciB2x9ZG+IZeWTw+P0qdS+4MyjIcQA=="],
 
@@ -471,6 +476,8 @@
     "@remotion/studio-server": ["@remotion/studio-server@4.0.324", "https://registry.npmmirror.com/@remotion/studio-server/-/studio-server-4.0.324.tgz", { "dependencies": { "@babel/parser": "7.24.1", "@remotion/bundler": "4.0.324", "@remotion/renderer": "4.0.324", "@remotion/studio-shared": "4.0.324", "memfs": "3.4.3", "open": "^8.4.2", "recast": "0.23.11", "remotion": "4.0.324", "semver": "7.5.3", "source-map": "0.7.3" } }, "sha512-8rezYHEskyRjHHGH4h+fZBbT8+AdXicEHNMNfi9Xk9klGQ42Hsx4Fr+lnS5sJJOSU0kWhJGTOOdzaHvWZzkxqg=="],
 
     "@remotion/studio-shared": ["@remotion/studio-shared@4.0.324", "https://registry.npmmirror.com/@remotion/studio-shared/-/studio-shared-4.0.324.tgz", { "dependencies": { "remotion": "4.0.324" } }, "sha512-zVhFuAdKymNcS0kyuFbuLTS0AKOh2hVXQbsGcC8KFhkrnX2YvKEdTvVgxQcYoMQRRwF7GlY5dIm0rPaw3JdCjQ=="],
+
+    "@remotion/transitions": ["@remotion/transitions@4.0.324", "https://registry.npmmirror.com/@remotion/transitions/-/transitions-4.0.324.tgz", { "dependencies": { "@remotion/paths": "4.0.324", "@remotion/shapes": "4.0.324", "remotion": "4.0.324" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-6TcKMzBxKYvSJnVOuibPWMotkpUMSR3OfLlEaDcnju4sQ9YxBM7jEQH8BzlLLdQdVyPsFvGFKoIqOZxuNpB7sA=="],
 
     "@remotion/webcodecs": ["@remotion/webcodecs@4.0.324", "https://registry.npmmirror.com/@remotion/webcodecs/-/webcodecs-4.0.324.tgz", { "dependencies": { "@remotion/licensing": "4.0.324", "@remotion/media-parser": "4.0.324" } }, "sha512-v8Jy6jr4eXLJ1+1YVyJOamSuX1S3V0G/rImJ1IVrlXZIL7xDiJ2nnf1+gc6TkRcK9Gct/7ZuGUUuME6lPYobGQ=="],
 

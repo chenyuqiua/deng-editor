@@ -2,6 +2,7 @@ import z from 'zod'
 import { AllAssetSchema } from './asset'
 import { AllElementSchema } from './element'
 import { TrackSchema } from './track'
+import { TransitionSchema } from './transition'
 
 export const FontSchema = z.object({
   src: z.string(),
@@ -12,7 +13,11 @@ export const TimelineSchema = z.object({
   assets: z.record(z.string(), AllAssetSchema),
   elements: z.record(z.string(), AllElementSchema),
   fonts: z.array(FontSchema).optional(),
+  /**
+   * 轨道的顺序很重要，第一个元素是在最顶层，最后一个元素是在最底层
+   */
   tracks: z.array(TrackSchema),
+  transitions: z.record(z.string(), TransitionSchema).optional(),
 })
 
 export const MetaSchema = z.object({
