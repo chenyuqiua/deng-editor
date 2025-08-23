@@ -1,8 +1,9 @@
+import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
 import _ from 'lodash'
-import type { PixelRange, TimeRange } from '../../type/timeline'
 import type { IDraftService } from '../../service/draft-service.type'
-import type { TimelineViewController } from '../view-controller'
+import type { PixelRange, TimeRange } from '../../type/timeline'
 import { isOverlap } from '../../util/timeline'
+import type { TimelineViewController } from '../view-controller'
 
 export class RangeManager {
   constructor(
@@ -41,6 +42,7 @@ export class RangeManager {
     const clipElement = this._draftService.getElementById(clipElementId)
     const pixelPerSecond = this._vc.state.pixelPerSecond
     if (!clipElement) return
+    if (!this._canExtendElementDuration({ offset, clipElement })) return
 
     // 计算出当前元素要resize的像素范围, 并将像素范围转换为时间范围
     const pixelRange = this._calcFrameAlignedPixelBounds({ offset, clipElementId })
@@ -96,6 +98,29 @@ export class RangeManager {
     if (!dropEditableRange) return
 
     return dropEditableRange
+  }
+
+  /**
+   * 检查元素是否超出原始资源长度, 如果超出, 则不允许继续将元素的时长延长
+   * @param props.offset 偏移量, 单位为像素
+   * @param props.clipElement 要检查的元素
+   * @returns 如果元素可以继续延长, 则返回true; 否则返回false
+   */
+  private _canExtendElementDuration(props: {
+    offset: { left: number; right: number }
+    clipElement: AllElement
+  }) {
+    const { offset, clipElement } = props
+
+    if (clipElement.type !== 'video' && clipElement.type !== 'audio') return true
+    const asset = this._draftService.getAssetById(clipElement.assetId)
+    if (asset.type !== 'video' && asset.type !== 'audio') return true
+
+    const originalDuration = asset.duration
+    const currentDuration = clipElement.length
+    if (currentDuration >= originalDuration && (offset.left < 0 || offset.right > 0)) return false
+
+    return true
   }
 
   /**
