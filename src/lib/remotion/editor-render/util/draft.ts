@@ -1,7 +1,7 @@
 import type { AllAsset } from '../schema/asset'
 import type { DraftDataType } from '../schema/draft'
 import type { AllDisplayElement, AllElement } from '../schema/element'
-import type { Track } from '../schema/track'
+import type { DisplayTrackType, Track, TrackType } from '../schema/track'
 import type { AllElementTypeAttribute } from '../schema/util'
 
 /**
@@ -113,4 +113,28 @@ export const calcDraftDurationInFrames = (draft: DraftDataType) => {
 export function isDisplayElement(element: AllElement): element is AllDisplayElement {
   const notDisplayElementType: AllElementTypeAttribute[] = ['audio']
   return !notDisplayElementType.includes(element.type)
+}
+
+/**
+ * @description 检查track是否为显示轨道
+ * @param track 要检查的track
+ * @returns 是否为显示轨道
+ */
+export const isDisplayTrack = (track: Track): track is Track & { type: DisplayTrackType } => {
+  const notDisplayTrackType: TrackType[] = ['audio']
+  return !notDisplayTrackType.includes(track.type)
+}
+
+/**
+ * @description 根据track获取对应的element
+ * @param draft 草稿数据
+ * @param track 要获取的track
+ * @returns 获取到的element
+ */
+export const getElementByTrack = (draft: DraftDataType, track: Track) => {
+  return track.clips
+    .map(clip => {
+      return draft.timeline.elements[clip.elementId]
+    })
+    .filter(Boolean)
 }

@@ -1,9 +1,9 @@
-import React, { memo } from 'react'
 import { Button } from '@/component/ui/button'
 import { IconPark } from '@/lib/iconpark'
-import { animationDraft } from '@/lib/remotion/editor-render/mock/animation-draft'
-import { getDraftService, getEditorService, getPlayerService } from '../../util/service'
+import { transitionDraft } from '@/lib/remotion/editor-render/mock/transition-draft'
+import { memo } from 'react'
 import { useDraftSelector } from '../../hook/draft'
+import { getDraftService, getEditorService, getPlayerService } from '../../util/service'
 
 export const DevPanel = memo(() => {
   const draftService = getDraftService()
@@ -31,7 +31,7 @@ export const DevPanel = memo(() => {
         className="w-fit"
         onClick={() => {
           draftService.setState(s => {
-            s.draft = animationDraft
+            s.draft = transitionDraft
           })
         }}
       >
@@ -53,6 +53,21 @@ export const DevPanel = memo(() => {
         }}
       >
         play
+      </Button>
+      <Button
+        onClick={() => {
+          const id = `${draft.timeline.tracks[0].clips[0].elementId}&${draft.timeline.tracks[0].clips[1].elementId}`
+          draftService.setState(s => {
+            s.draft.timeline.transitions = {
+              [id]: {
+                name: 'slide',
+                duration: 1,
+              },
+            }
+          })
+        }}
+      >
+        add transition
       </Button>
     </div>
   )

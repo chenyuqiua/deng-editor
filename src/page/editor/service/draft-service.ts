@@ -1,6 +1,8 @@
 import { BasicState } from '@/common/class/basic-state'
+import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
 import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
+import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import type {
   AllAssetTypeAttribute,
   AllElementTypeAttribute,
@@ -9,14 +11,12 @@ import {
   calcDraftDurationInSeconds,
   isDisplayElement,
 } from '@/lib/remotion/editor-render/util/draft'
+import _ from 'lodash'
 import { ElementNotFoundError } from '../error/element-not-found-error'
 import { ElementTypeError } from '../error/element-type-error'
+import { TrackNotFoundedError } from '../error/track-not-founded-error'
 import { getAssetById, getElementById, getTrackByElementId } from '../util/draft'
 import type { IDraftService } from './draft-service.type'
-import _ from 'lodash'
-import { TrackNotFoundedError } from '../error/track-not-founded-error'
-import type { Track } from '@/lib/remotion/editor-render/schema/track'
-import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 
 const initialState = {
   draft: {
@@ -87,7 +87,7 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
 
   addTrack(track: Track) {
     this.setState(state => {
-      state.draft.timeline.tracks.unshift(track)
+      state.draft.timeline.tracks.push(track)
     })
   }
 

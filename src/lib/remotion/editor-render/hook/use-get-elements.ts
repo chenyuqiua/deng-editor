@@ -13,6 +13,7 @@ export const useGetElements = (draft: DraftDataType) => {
     const displayElements: DisplayElement[] = []
     const audioElements: AllAudioElement[] = []
 
+    // 因为remotion中越靠后渲染的元素层级越高(显示在更顶层)，所以这里需要将轨道反转一下, 让轨道数组中前面的元素展示在更顶层
     shallowWalkTracksElement(draft, draft.timeline.tracks, (element, track, currentClipIndex) => {
       if (isDisplayElementType(element)) {
         const preClip = currentClipIndex > 0 ? track.clips[currentClipIndex - 1] : undefined
@@ -33,8 +34,7 @@ export const useGetElements = (draft: DraftDataType) => {
     })
 
     return {
-      // 因为 remotion 的渲染顺序是自下而上的，所以需要反转一下, 让数组前面的元素在上面
-      displayElements: displayElements.reverse(),
+      displayElements,
       audioElements,
     }
   }, [draft])

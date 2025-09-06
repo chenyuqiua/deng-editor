@@ -1,3 +1,11 @@
+import { assert } from '@/common/util/assert'
+import { generateUuid } from '@/common/util/uuid'
+import type {
+  AllAsset,
+  AudioAsset,
+  ImageAsset,
+  VideoAsset,
+} from '@/lib/remotion/editor-render/schema/asset'
 import type {
   AllElement,
   AudioElement,
@@ -5,12 +13,7 @@ import type {
   TextElement,
   VideoElement,
 } from '@/lib/remotion/editor-render/schema/element'
-import { generateUuid } from '@/common/util/uuid'
 import { DefaultElementDuration, defaultTextElementStyle } from '../constant/element'
-import type { AudioAsset, ImageAsset, VideoAsset } from '@/lib/remotion/editor-render/schema/asset'
-import { createAudioAssetByUrl, createImageAssetByUrl, createVideoAssetByUrl } from '../util/asset'
-import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
-import { assert } from '@/common/util/assert'
 import type {
   AudioElementOptions,
   ImageVideoElementOptions,
@@ -18,6 +21,7 @@ import type {
   TextElementOptions,
   VideoElementOptions,
 } from '../type/element'
+import { createAudioAssetByUrl, createImageAssetByUrl, createVideoAssetByUrl } from '../util/asset'
 
 /**
  * 根据图片资源创建图片元素

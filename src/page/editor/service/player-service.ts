@@ -1,16 +1,16 @@
 import { BasicState } from '@/common/class/basic-state'
 import type { EditorPlayerRef } from '@/lib/remotion/editor-render/player'
-import type { DraftService } from './draft-service'
-import type { IPlayerService } from './player-service.type'
-import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { Point } from '@/lib/remotion/editor-render/schema/common'
+import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
 import {
   calcDraftDurationInSeconds,
   isDisplayElement,
   shallowWalkTracksElement,
 } from '@/lib/remotion/editor-render/util/draft'
-import { pointRotate } from '../util/interaction'
 import { noop } from 'lodash'
+import { pointRotate } from '../util/interaction'
+import type { DraftService } from './draft-service'
+import type { IPlayerService } from './player-service.type'
 
 const initialState = {
   isPlaying: false,
@@ -166,7 +166,8 @@ export class PlayerService extends BasicState<PlayerStoreStateType> implements I
 
     const elements: AllDisplayElement[] = []
     const draft = this._draftService.state.draft
-    shallowWalkTracksElement(draft, draft.timeline.tracks, el => {
+    // 从顶层中查找, track中越靠后的元素层级越高, 所以需要反转一下
+    shallowWalkTracksElement(draft, [...draft.timeline.tracks].reverse(), el => {
       if (
         !isDisplayElement(el) ||
         !this.checkElementDisplayInCurrentTime(el) ||

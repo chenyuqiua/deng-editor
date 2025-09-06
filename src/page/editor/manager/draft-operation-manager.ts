@@ -1,11 +1,12 @@
-import type { IDraftService } from '../service/draft-service.type'
-import type { IPlayerService } from '../service/player-service.type'
-import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import { generateUuid } from '@/common/util/uuid'
-import { createElement } from '../util/element'
-import type { InsertPayload } from '../type/element'
+import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import type { AllElementTypeAttribute } from '@/lib/remotion/editor-render/schema/util'
 import { elementToTrackTypeMap } from '../constant/element'
+import type { IDraftService } from '../service/draft-service.type'
+import type { IPlayerService } from '../service/player-service.type'
+import type { InsertPayload } from '../type/element'
+import { createElement } from '../util/element'
+import { isOverlap } from '../util/timeline'
 
 export class DraftOperationManager {
   constructor(
@@ -21,6 +22,7 @@ export class DraftOperationManager {
     if (asset) this._draftService.addAsset(asset)
     this._draftService.addElement(insertElement)
     let insertTrack = this.getInsertTrackByType(insertElement.type, insertElement.length)
+    console.log(insertTrack, 'insertTrack')
 
     if (insertTrack) {
       this._draftService.addElementToTrack(insertElement.id, insertTrack.id)
@@ -44,29 +46,23 @@ export class DraftOperationManager {
     insertType: AllElementTypeAttribute,
     insertLength: number
   ): Track | undefined {
-    const textTrack = [...this._draftService.state.draft.timeline.tracks].reverse().find(i => {
-      if (i.type === insertType) {
-        const isCanInsert = i.clips.some((clip, index) => {
-          const currentTime = this._playerService.state.currentTime
+    const insertTrack = this._draftService.timeline.tracks.find(i => {
+      const currentTrackType = elementToTrackTypeMap[insertType]
+      const currentTime = this._playerService.state.currentTime
+      const insertTimeRange = { start: currentTime, end: currentTime + insertLength }
+
+      if (i.type === currentTrackType) {
+        const isCanInsert = i.clips.every(clip => {
           const clipElement = this._draftService.getElementById(clip.elementId)
-
-          const nextClip = i.clips.at(index + 1)
-          if (!nextClip)
-            return (
-              clipElement.start + clipElement.length <= currentTime ||
-              clipElement.start >= currentTime + insertLength
-            )
-          const nextClipElement = this._draftService.getElementById(nextClip.elementId)
-
-          return (
-            clipElement.start + clipElement.length <= currentTime &&
-            nextClipElement.start >= currentTime + insertLength
+          return !isOverlap(
+            { start: clipElement.start, end: clipElement.start + clipElement.length },
+            insertTimeRange
           )
         })
         return isCanInsert
       }
       return false
     })
-    return textTrack
+    return insertTrack
   }
 }

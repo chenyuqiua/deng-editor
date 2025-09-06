@@ -1,23 +1,30 @@
 import { memo, useEffect, useMemo, useState } from 'react'
+import { useVideoConfig } from 'remotion'
+import { PreMountSeconds } from '../constant/remotion-config'
+import { useRegisterHandler } from '../react-context'
 import type { AllAsset } from '../schema/asset'
 import type { AllAudioElement, AllDisplayElement } from '../schema/element'
 import { AudioRenderer } from './audio-renderer'
 import { ImageRenderer } from './image-renderer'
+import { SequenceController } from './sequence-controller'
 import { TextRenderer } from './text-renderer'
-import { useRegisterHandler } from '../react-context'
 import { VideoRenderer } from './video-renderer'
 
 interface IDisplayElementProps {
   element: AllDisplayElement
   asset?: AllAsset
+  fromFrame: number
+  durationInFrames: number
 }
 
 export const DisplayElement = memo((props: IDisplayElementProps) => {
-  const { element: originElement, asset } = props
+  const { element: originElement, asset, fromFrame, durationInFrames } = props
 
   const [templateData, setTemplateData] = useState({
     element: null as null | Partial<AllDisplayElement>,
   })
+
+  const { fps } = useVideoConfig()
 
   useRegisterHandler({
     id: originElement.id,
@@ -42,11 +49,23 @@ export const DisplayElement = memo((props: IDisplayElementProps) => {
   const isVideo = element.type === 'video' && asset?.type === 'video'
   const isText = element.type === 'text'
 
-  if (isImage) return <ImageRenderer element={element} asset={asset} />
-  if (isVideo) return <VideoRenderer element={element} asset={asset} />
-  if (isText) return <TextRenderer element={element} />
+  let returnElement = null
+  if (isImage) returnElement = <ImageRenderer element={element} asset={asset} />
+  if (isVideo) returnElement = <VideoRenderer element={element} asset={asset} />
+  if (isText) returnElement = <TextRenderer element={element} />
 
-  return null
+  if (!returnElement) return null
+
+  return (
+    <SequenceController
+      from={fromFrame}
+      durationInFrames={durationInFrames}
+      element={element}
+      premountFor={PreMountSeconds * fps}
+    >
+      {returnElement}
+    </SequenceController>
+  )
 })
 
 interface IAudioElementProps {

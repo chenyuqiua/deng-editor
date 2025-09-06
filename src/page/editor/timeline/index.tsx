@@ -33,7 +33,7 @@ export const Timeline = memo((props: IProps) => {
         <TimelineScale className="relative flex-1">
           <TimeIndicator />
           <div className="flex h-full flex-col gap-2 overflow-y-auto">
-            {tracks.map(track => (
+            {[...tracks].reverse().map(track => (
               <TimelineTrack key={track.id} track={track} />
             ))}
           </div>

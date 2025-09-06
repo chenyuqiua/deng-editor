@@ -1,9 +1,7 @@
 import { memo } from 'react'
-import { Img, useVideoConfig } from 'remotion'
-import { PreMountSeconds } from '../constant/remotion-config'
+import { Img } from 'remotion'
 import type { ImageAsset } from '../schema/asset'
 import type { ImageElement } from '../schema/element'
-import { SequenceController } from './sequence-controller'
 import { VisualContainer } from './visual-container'
 
 interface IProps {
@@ -13,29 +11,26 @@ interface IProps {
 
 export const ImageRenderer = memo((props: IProps) => {
   const { element, asset } = props
-  const { fps } = useVideoConfig()
 
   return (
-    <SequenceController element={element} premountFor={PreMountSeconds * fps}>
-      <VisualContainer element={element}>
-        <div
+    <VisualContainer element={element}>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+        <Img
+          draggable={false}
+          src={asset?.src}
           style={{
-            width: '100%',
-            height: '100%',
-            overflow: 'hidden',
+            userSelect: 'none',
             position: 'relative',
           }}
-        >
-          <Img
-            draggable={false}
-            src={asset?.src}
-            style={{
-              userSelect: 'none',
-              position: 'relative',
-            }}
-          />
-        </div>
-      </VisualContainer>
-    </SequenceController>
+        />
+      </div>
+    </VisualContainer>
   )
 })

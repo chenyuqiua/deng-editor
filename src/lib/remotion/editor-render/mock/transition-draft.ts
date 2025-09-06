@@ -1,0 +1,110 @@
+import type { DraftDataType } from '../schema/draft'
+
+export const transitionDraft: DraftDataType = {
+  name: 'test',
+  background: '#000',
+  meta: {
+    width: 400,
+    height: 200,
+    fps: 30,
+  },
+  timeline: {
+    assets: {
+      test_image_1: {
+        type: 'image',
+        width: 200,
+        height: 600,
+        id: 'test_image_1',
+        src: '/image/test1.jpg',
+      },
+      test_image_2: {
+        type: 'image',
+        width: 400,
+        height: 800,
+        id: 'test_image_2',
+        src: '/image/test2.jpg',
+      },
+      test_image_3: {
+        type: 'image',
+        width: 600,
+        height: 400,
+        id: 'test_image_3',
+        src: '/image/test3.jpg',
+      },
+      test_video_1: {
+        type: 'video',
+        width: 960,
+        height: 960,
+        id: 'test_video_1',
+        src: '/video/test1.mp4',
+        duration: 5,
+      },
+    },
+    elements: {
+      test_image_1: {
+        type: 'image',
+        id: 'test_image_1',
+        assetId: 'test_image_1',
+        start: 0.5,
+        length: 0.5,
+        width: 200,
+        height: 100,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        rotate: 0,
+      },
+      test_image_2: {
+        type: 'image',
+        id: 'test_image_2',
+        assetId: 'test_image_2',
+        width: 200,
+        height: 200,
+        start: 1,
+        length: 2,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        rotate: 0,
+      },
+      test_image_3: {
+        type: 'image',
+        id: 'test_image_3',
+        assetId: 'test_image_3',
+        width: 200,
+        height: 200,
+        start: 3,
+        length: 4,
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        rotate: 0,
+      },
+    },
+    tracks: [
+      {
+        id: 'track-1',
+        type: 'image-video',
+        clips: [
+          { elementId: 'test_image_1' },
+          { elementId: 'test_image_2' },
+          { elementId: 'test_image_3' },
+        ],
+      },
+    ],
+    transitions: {
+      'test_image_1&test_image_2': {
+        name: 'slide',
+        duration: 1,
+      },
+      'test_image_2&test_image_3': {
+        name: 'slide',
+        duration: 1.5,
+      },
+    },
+    fonts: [],
+  },
+}
