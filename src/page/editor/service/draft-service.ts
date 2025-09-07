@@ -3,6 +3,7 @@ import type { AllAsset } from '@/lib/remotion/editor-render/schema/asset'
 import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
 import type { AllDisplayElement, AllElement } from '@/lib/remotion/editor-render/schema/element'
 import type { Track } from '@/lib/remotion/editor-render/schema/track'
+import type { TransitionType } from '@/lib/remotion/editor-render/schema/transition'
 import type {
   AllAssetTypeAttribute,
   AllElementTypeAttribute,
@@ -15,16 +16,22 @@ import _ from 'lodash'
 import { ElementNotFoundError } from '../error/element-not-found-error'
 import { ElementTypeError } from '../error/element-type-error'
 import { TrackNotFoundedError } from '../error/track-not-founded-error'
-import { getAssetById, getElementById, getTrackByElementId } from '../util/draft'
+import {
+  getAssetById,
+  getElementById,
+  getTrackAllElements,
+  getTrackByElementId,
+} from '../util/draft'
 import type { IDraftService } from './draft-service.type'
 
 const initialState = {
   draft: {
     background: '#000',
-    timeline: { elements: {}, assets: {}, tracks: [], fonts: [] },
+    timeline: { elements: {}, assets: {}, tracks: [], fonts: [], transitions: {} },
     meta: { fps: 30, width: 1920, height: 1080 },
     name: '',
   } as DraftDataType,
+
   duration: 0,
   frameDuration: 0,
 }
@@ -156,6 +163,16 @@ export class DraftService extends BasicState<DraftStoreStateType> implements IDr
   addAsset(asset: AllAsset) {
     this.setState(state => {
       state.draft.timeline.assets[asset.id] = asset
+    })
+  }
+
+  getTrackAllElements = (track: Track) => {
+    return getTrackAllElements(this.draft, track)
+  }
+
+  addTransition(id: string, transition: TransitionType) {
+    this.setState(state => {
+      state.draft.timeline.transitions[id] = transition
     })
   }
 

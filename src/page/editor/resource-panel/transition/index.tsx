@@ -14,7 +14,7 @@ export const TransitionPanel = memo(() => {
       <div className="grid grid-cols-3 gap-2">
         {getTransitionList().map(item => {
           return (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2" key={item.id}>
               <div className="group relative overflow-hidden rounded-lg">
                 <HoverVideoPlayer poster={item.cover} key={item.id} src={item.url} />
                 <IconButton

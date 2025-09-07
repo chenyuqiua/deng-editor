@@ -1,14 +1,15 @@
 import type { DraftDataType } from '@/lib/remotion/editor-render/schema/draft'
+import type { AllElement } from '@/lib/remotion/editor-render/schema/element'
+import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import type {
   AllAssetTypeAttribute,
   AllElementTypeAttribute,
   AssetOfType,
   ElementOfType,
 } from '@/lib/remotion/editor-render/schema/util'
-import { ElementNotFoundError } from '../error/element-not-found-error'
-import type { Track } from '@/lib/remotion/editor-render/schema/track'
 import { shallowWalkTracksElement } from '@/lib/remotion/editor-render/util/draft'
 import { AssetNotFoundError } from '../error/asset-not-found-error'
+import { ElementNotFoundError } from '../error/element-not-found-error'
 
 /**
  * @description 根据id获取元素, 如果type不为空, 则需要匹配type
@@ -65,4 +66,18 @@ export function getAssetById<T extends AllAssetTypeAttribute>(
   if (type && asset.type !== type) throw new AssetNotFoundError({ id, type })
 
   return asset as AssetOfType<T>
+}
+
+/**
+ * @description 获取轨道上的所有元素
+ * @param draft 草稿数据
+ * @param track 目标轨道
+ * @returns 轨道上的所有元素
+ */
+export const getTrackAllElements = (draft: DraftDataType, track: Track) => {
+  const elements: AllElement[] = []
+  shallowWalkTracksElement(draft, [track], (el, _track) => {
+    elements.push(el)
+  })
+  return elements
 }

@@ -17,7 +17,7 @@ export const TimelineSchema = z.object({
    * 轨道的顺序很重要，第一个元素是在最顶层，最后一个元素是在最底层
    */
   tracks: z.array(TrackSchema),
-  transitions: z.record(z.string(), TransitionSchema).optional(),
+  transitions: z.record(z.string(), TransitionSchema),
 })
 
 export const MetaSchema = z.object({
