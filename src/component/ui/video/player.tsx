@@ -44,7 +44,6 @@ export type VideoPlayerProps = React.ComponentPropsWithoutRef<'video'> & {
   hiddenVolumeButton?: boolean
   disableDefaultClick?: boolean
   showBlurBackground?: boolean
-  wrapperClassName?: string
   renderExtra?: (videoInfo: VideoInfo) => React.ReactNode
   errorElement?: React.ReactNode
   /** only called when lazyFetch is true */
@@ -55,7 +54,6 @@ export const VideoPlayer = memo(
   forwardRef<VideoPlayerRef, VideoPlayerProps>((props, ref) => {
     const {
       clip: _clip,
-      wrapperClassName,
       controls: _controls,
       onError,
       onCanPlay,
@@ -127,7 +125,7 @@ export const VideoPlayer = memo(
         onError={handleOnError}
         onLoadedMetadata={handleOnLoadedMetadata}
         onTimeUpdate={handleOnTimeUpdate}
-        className={cn('size-full', className)}
+        className={cn('size-full')}
         {...rest}
       />
     )
@@ -185,7 +183,7 @@ export const VideoPlayer = memo(
 
     return (
       <div
-        className={cn('group/video-player relative', wrapperClassName)}
+        className={cn('group/video-player relative', className)}
         onClick={handleClick}
         ref={containerRef}
         // onDoubleClick={() => toggle()}

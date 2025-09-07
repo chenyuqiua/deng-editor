@@ -156,3 +156,20 @@ export const getMusicList = () => {
     },
   ]
 }
+
+export const getTransitionList = () => {
+  return [
+    {
+      id: 'transition1',
+      name: 'slide',
+      cover: '/transition/slide-left-preview.jpg',
+      url: '/transition/slide-left.mp4',
+    },
+    // {
+    //   id: 'transition2',
+    //   name: 'Transition 2',
+    //   cover: '/transition/slide-right-preview.png',
+    //   url: '/transition/slide-right.mp4',
+    // },
+  ]
+}

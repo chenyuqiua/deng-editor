@@ -35,6 +35,8 @@ export class DraftOperationManager {
     }
   }
 
+  async insertTransition() {}
+
   /**
    * 根据元素类型和长度获取插入的轨道, 会对轨道进行空位检查, 从下层轨道往上层检查, 如果找到空位则返回该轨道, 否则返回 undefined
    * @param insertType 元素类型
