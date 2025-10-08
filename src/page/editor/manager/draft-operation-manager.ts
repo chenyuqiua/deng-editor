@@ -70,7 +70,7 @@ export class DraftOperationManager {
   }
 
   /**
-   * @description 插入转场动画
+   * @description 插入转场动画, 默认根据currentTime找到有连续片段的元素, 插入转场动画(从下层轨道往上层轨道依次检查)
    */
   async insertTransition() {
     const elements = this.getInsertTransitionElements()
@@ -86,6 +86,7 @@ export class DraftOperationManager {
 
   /**
    * @description 根据当前位置(currentTime), 获取插入转场动画的元素
+   * 规则: 从下层轨道往上层轨道依次检查, 查找轨道中是否有在当前时间点上显示的连续片段, 如果有则返回该片段
    * @returns 可以插入转场动画的元素
    */
   getInsertTransitionElements() {
@@ -98,6 +99,8 @@ export class DraftOperationManager {
       // 获取当前时间点上显示的元素, 以及当前时间点上显示的元素的下一个元素
       let currentElement: AllDisplayElement | undefined
       let nextElement: AllDisplayElement | undefined
+
+      // 根据当前时间点, 获取当前时间点上显示的元素, 以及当前时间点上显示的元素的下一个元素
       allElements.forEach((el, index) => {
         if (el.start <= currentTime && el.start + el.length >= currentTime) {
           currentElement = el
@@ -105,6 +108,7 @@ export class DraftOperationManager {
         }
       })
 
+      // 检查当前元素和下一个元素是否连续
       if (
         !currentElement ||
         !nextElement ||
