@@ -3,7 +3,7 @@ import { getAssetsList } from '../../mock/resource'
 import { AssetCard } from '../../component/asset-card'
 import { IconButton } from '@/component/ui/button'
 import { cn } from '@/common/util/css'
-import { useResourcePanelViewController } from '../bootstrap/react-context'
+import { useResourcePanelViewController } from '../context/resource-panel.context'
 
 export const AssetPanel = memo(() => {
   const vc = useResourcePanelViewController()

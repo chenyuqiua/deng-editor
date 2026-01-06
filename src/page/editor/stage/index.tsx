@@ -4,7 +4,7 @@ import { cn } from '../../../common/util/css'
 import { useDraftSelector } from '../hook/draft'
 import { getPlayerService } from '../util/service'
 import { StageInteraction } from './block/interaction'
-import { StageBootstrap } from './bootstrap/bootstrap'
+import { StageBootstrap } from './bootstrap/stage.bootstrap'
 
 interface IProps {
   className?: string

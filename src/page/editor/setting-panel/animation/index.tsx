@@ -2,7 +2,7 @@ import { Fragment, memo, useState } from 'react'
 import { getAnimationListByType } from '../../util/animation'
 import { Segment, SegmentItem } from '@/component/ui/segment'
 import { pick } from 'lodash'
-import { useSettingPanelViewController } from '../bootstrap/react-context'
+import { useSettingPanelViewController } from '../context/setting-panel.context'
 import { AnimationItem } from '../component/animation-item'
 import { useZustand } from 'use-zustand'
 import type {

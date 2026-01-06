@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { getDraftService, getPlayerService } from '../../util/service'
 import { TimelineViewController } from '../view-controller'
-import { TimelineContextProvider } from './react-context'
+import { TimelineContextProvider } from '../context/timeline.context'
 
 export function TimelineBootstrap({ children }: { children: React.ReactNode }) {
   const draftService = getDraftService()
@@ -10,3 +10,4 @@ export function TimelineBootstrap({ children }: { children: React.ReactNode }) {
 
   return <TimelineContextProvider vc={vc}>{children}</TimelineContextProvider>
 }
+

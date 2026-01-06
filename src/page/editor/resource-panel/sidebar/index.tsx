@@ -2,7 +2,7 @@ import { cn } from '@/common/util/css'
 import { memo } from 'react'
 import { VerticalIconButton } from '../component/vertical-icon-button'
 import { pageConfig } from '../constant/page'
-import { useResourcePanelViewController } from '../bootstrap/react-context'
+import { useResourcePanelViewController } from '../context/resource-panel.context'
 import { useZustand } from 'use-zustand'
 
 interface IProps {

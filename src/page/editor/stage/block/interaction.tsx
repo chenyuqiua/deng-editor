@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from 'react'
-import { useStageViewController } from '../bootstrap/react-context'
+import { useStageViewController } from '../context/stage.context'
 
 export const StageInteraction = memo(() => {
   const interactionRef = useRef<HTMLDivElement>(null)

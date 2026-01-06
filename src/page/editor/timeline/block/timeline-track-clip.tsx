@@ -10,7 +10,7 @@ import { EditorDragType, type TrackClipDragItem } from '../../type/drag'
 import type { PixelRange } from '../../type/timeline'
 import { getElementById } from '../../util/draft'
 import { getDraftService, getEditorService } from '../../util/service'
-import { useTimelineViewController } from '../bootstrap/react-context'
+import { useTimelineViewController } from '../context/timeline.context'
 import {
   AudioThumbnail,
   ImageThumbnail,

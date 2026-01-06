@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { getTextList } from '../../mock/resource'
-import { useResourcePanelViewController } from '../bootstrap/react-context'
+import { useResourcePanelViewController } from '../context/resource-panel.context'
 import { TextCard } from '../component/text-card'
 
 export const TextPanel = memo(() => {

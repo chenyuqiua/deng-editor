@@ -1,29 +1,30 @@
 import { createContext, useContext } from 'react'
-import { TimelineViewController } from '../view-controller'
+import type { StageViewController } from '../view-controller'
 
 const BootstrapContext = createContext<{
-  vc: TimelineViewController
+  vc: StageViewController
 }>({
-  vc: {} as TimelineViewController,
+  vc: {} as StageViewController,
 })
 
-export function TimelineContextProvider({
+export function StageContextProvider({
   vc,
   children,
 }: {
-  vc: TimelineViewController
+  vc: StageViewController
   children: React.ReactNode
 }) {
   return <BootstrapContext.Provider value={{ vc }}>{children}</BootstrapContext.Provider>
 }
 
-export function useTimelineViewController() {
+export function useStageViewController() {
   const { vc } = useContext(BootstrapContext)
   if (!vc) {
     throw new Error(
-      'TimelineViewController is not found, you should use TimelineContextProvider to wrap your component'
+      'StageViewController is not found, you should use StageContextProvider to wrap your component'
     )
   }
 
   return vc
 }
+

@@ -1,7 +1,7 @@
 import { cn } from '@/common/util/css'
 import { memo } from 'react'
 import { AnimationPanel } from './animation'
-import { SettingPanelBootstrap } from './bootstrap/bootstrap'
+import { SettingPanelBootstrap } from './bootstrap/setting-panel.bootstrap'
 import { useEditorSelector } from '../hook/editor'
 
 interface IProps {

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { getMusicList } from '../../mock/resource'
 import { AudioCard } from '../block/audio-card'
-import { useResourcePanelViewController } from '../bootstrap/react-context'
+import { useResourcePanelViewController } from '../context/resource-panel.context'
 
 export const MusicPanel = memo(() => {
   const vc = useResourcePanelViewController()

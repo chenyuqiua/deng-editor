@@ -5,7 +5,7 @@ import { IconButton } from '@/component/ui/button'
 import { IconPark } from '@/lib/iconpark'
 import { format } from 'date-fns'
 import { VirtualDiv } from '@/component/ui/virtual-div'
-import { useResourcePanelViewController } from '../bootstrap/react-context'
+import { useResourcePanelViewController } from '../context/resource-panel.context'
 
 interface AudioCardProps extends HTMLAttributes<HTMLDivElement> {
   src: string

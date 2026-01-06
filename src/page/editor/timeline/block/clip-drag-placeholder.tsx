@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import type { TimeRange } from '../../type/timeline'
 import { cn } from '@/common/util/css'
-import { useTimelineViewController } from '../bootstrap/react-context'
+import { useTimelineViewController } from '../context/timeline.context'
 import { useZustand } from 'use-zustand'
 
 type IProps = React.HTMLAttributes<HTMLDivElement> & {

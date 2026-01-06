@@ -5,7 +5,7 @@ import { useZustand } from 'use-zustand'
 import { ResizeCursorFullScreen } from '../../component/resize-cursor-full-screen'
 import { usePlayerSelector } from '../../hook/player'
 import { getPlayerService } from '../../util/service'
-import { useTimelineViewController } from '../bootstrap/react-context'
+import { useTimelineViewController } from '../context/timeline.context'
 
 export function TimeIndicator() {
   const vc = useTimelineViewController()

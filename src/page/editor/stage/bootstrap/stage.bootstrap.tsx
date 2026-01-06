@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { getDraftService, getEditorService, getPlayerService } from '../../util/service'
 import { StageViewController } from '../view-controller'
-import { StageContextProvider } from './react-context'
+import { StageContextProvider } from '../context/stage.context'
 
 export function StageBootstrap({ children }: { children: React.ReactNode }) {
   const draftService = getDraftService()
@@ -11,3 +11,4 @@ export function StageBootstrap({ children }: { children: React.ReactNode }) {
 
   return <StageContextProvider vc={vc}>{children}</StageContextProvider>
 }
+

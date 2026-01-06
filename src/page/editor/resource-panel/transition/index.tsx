@@ -3,7 +3,7 @@ import { IconButton } from '@/component/ui/button'
 import { HoverVideoPlayer } from '@/component/ui/video/hover-player'
 import { memo } from 'react'
 import { getTransitionList } from '../../mock/resource'
-import { useResourcePanelViewController } from '../bootstrap/react-context'
+import { useResourcePanelViewController } from '../context/resource-panel.context'
 
 export const TransitionPanel = memo(() => {
   const vc = useResourcePanelViewController()
