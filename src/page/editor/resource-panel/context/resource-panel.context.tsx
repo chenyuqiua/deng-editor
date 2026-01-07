@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { ResourcePanelViewController } from '../view-controller'
+import type { ResourcePanelViewController } from '../view-controller'
 
 const BootstrapContext = createContext<{
   vc: ResourcePanelViewController

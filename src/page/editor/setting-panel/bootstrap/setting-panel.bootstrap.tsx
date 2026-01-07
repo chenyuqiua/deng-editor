@@ -13,4 +13,3 @@ export function SettingPanelBootstrap({ children }: { children: React.ReactNode 
 
   return <SettingPanelContextProvider vc={vc}>{children}</SettingPanelContextProvider>
 }
-

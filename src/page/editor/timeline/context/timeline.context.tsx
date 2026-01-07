@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { TimelineViewController } from '../view-controller'
+import type { TimelineViewController } from '../view-controller'
 
 const BootstrapContext = createContext<{
   vc: TimelineViewController
@@ -27,4 +27,3 @@ export function useTimelineViewController() {
 
   return vc
 }
-

@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { SettingPanelViewController } from '../view-controller'
+import type { SettingPanelViewController } from '../view-controller'
 
 const BootstrapContext = createContext<{
   vc: SettingPanelViewController
@@ -26,4 +26,3 @@ export function useSettingPanelViewController() {
   }
   return vc
 }
-

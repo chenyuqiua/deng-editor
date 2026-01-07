@@ -11,4 +11,3 @@ export function StageBootstrap({ children }: { children: React.ReactNode }) {
 
   return <StageContextProvider vc={vc}>{children}</StageContextProvider>
 }
-

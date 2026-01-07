@@ -10,4 +10,3 @@ export function TimelineBootstrap({ children }: { children: React.ReactNode }) {
 
   return <TimelineContextProvider vc={vc}>{children}</TimelineContextProvider>
 }
-
